@@ -1,39 +1,36 @@
 <template lang="">
   <div class="auth-menu" v-if="!AuthPerson">
-    <button class="auth-menu__btn">Войти</button>
+    <button class="auth-menu__btn" @click="test">Войти</button>
     <button class="auth-menu__btn">Регистрация</button>
   </div>
   <div class="person-menu" v-if="AuthPerson">
     <p class="person-menu__item">{{person}}</p>
     <button>change</button>
   </div>
+
+  <transition>
+    <LoginModal v-if="loginFlag" v-model = "loginFlag"></LoginModal>
+  </transition>
+
 </template>
 <script setup>
   import { ref, onMounted} from 'vue'
-  //import UserService from "../../service/UserService"
+  import LoginModal from "./LoginModal"
 
   let AuthPerson = ref(false);
   let person = ref("");
-  //const userService = ref(new UserService());
+  const loginFlag = ref(false);
+
+  const test = function test() {
+    if(loginFlag.value == true) return
+    loginFlag.value = true;
+  }
 
   onMounted(() =>{
-    let authStorage = localStorage.getItem('person');
-    let authSession;
-    if(authStorage){
-      authSession = authStorage;
-    }
-    else {
-      authSession = sessionStorage.getItem('person')
-    }
-    if(authSession) {
-      person.value = authSession;
-      AuthPerson.value = true
-    }
-    console.log(person.value)
-   //console.log(userService.value.getUser(1))
+    
   })
 </script>
-<style>
+<style scoped>
 
   .auth-menu {
     display: flex;
@@ -47,5 +44,19 @@
     color: #FFFFFF;
     border-radius: 10px;
     border: 1px solid #708090;
+  }
+
+  .auth-menu__btn:hover {
+    transform: scale(1.2);
+  }
+
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 2s
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
   }
 </style>

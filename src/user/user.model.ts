@@ -1,20 +1,20 @@
-import {Column, DataType, Model,Table, BelongsToMany} from 'sequelize-typescript' 
+import {Column, DataType, Model,Table, BelongsToMany, BelongsTo} from 'sequelize-typescript' 
+import { Publication } from 'src/publication/publication.model';
 import { Roles } from 'src/roles/roles.model';
 import { UserRoles } from 'src/roles/user-roles.model';
 
 interface UserCreate {
-  FIO: string;
   nickname:string;
   email:string;
   password:string;
 }
 
-@Table({tableName: "Users"})
+@Table({tableName: "users"})
 export class User extends Model<User,UserCreate>{
   @Column({type:DataType.INTEGER,unique: true,autoIncrement: true, primaryKey: true, allowNull: false})
   id: number;
 
-  @Column({type:DataType.STRING,unique: false,allowNull: false})
+  @Column({type:DataType.STRING,unique: false})
   FIO: string;
 
   @Column({type:DataType.STRING,unique: true,allowNull: false})
@@ -28,7 +28,7 @@ export class User extends Model<User,UserCreate>{
 
   @Column({type:DataType.STRING,unique: false,allowNull: false})
   password: string;
-
+  
   @BelongsToMany(() => Roles, ()=> UserRoles)
   roles: Roles[];
 }

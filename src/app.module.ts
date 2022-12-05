@@ -12,6 +12,12 @@ import { PublicationModule } from './publication/publication.module';
 import { CategoryController } from './category/category.controller';
 import { CategoryModule } from './category/category.module';
 import { CommentModule } from './comment/comment.module';
+import { Publication } from "./publication/publication.model";
+import { Category } from "./category/category-model";
+import { News } from "./news/news.model";
+import { Comment } from "./comment/comment.model";
+import { PublicComment } from "./comment/public-comment.model";
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -28,7 +34,7 @@ import { CommentModule } from './comment/comment.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      models: [User,Roles,UserRoles],
+      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment],
       autoLoadModels: true,
     }),
     UserModule,
@@ -37,6 +43,7 @@ import { CommentModule } from './comment/comment.module';
     PublicationModule,
     CategoryModule,
     CommentModule,
+    AuthModule,
   ],
 })
 export class AppModule{}

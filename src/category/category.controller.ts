@@ -1,4 +1,4 @@
-import { Controller,Get,Post,Param, Body } from '@nestjs/common';
+import { Controller,Get,Post,Param, Body, Delete } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/category-create.dto';
 
@@ -20,4 +20,6 @@ export class CategoryController {
   getAllCategory(){
     return this.categoryService.getAllCaterory();
   }
+
+  
 }

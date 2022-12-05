@@ -1,4 +1,5 @@
-import { Model,Table, Column, DataType  } from "sequelize-typescript";
+import { Model,Table, Column, DataType,BelongsTo} from "sequelize-typescript";
+import { Publication } from "src/publication/publication.model";
 
 interface NewsCreate{
   id: number;
@@ -13,4 +14,5 @@ export class News extends Model<News,NewsCreate> {
 
   @Column({type: DataType.STRING})
   filePath: string;
+
 }

@@ -15,15 +15,7 @@ export class UserController {
 
   @Get()
   getAll() {
-    console.log("all")
     return this.userService.getAllUser()
   }
 
-  //Предем почту и пароль, если есть возвращает иначе 0
-  @Get(":email&:pass")
-  getUser(@Param("email") email, @Param("pass") pass) {
-    let responce = this.userService.getUser(email,pass)
-    if(responce){ return responce}
-    return 0;
-  }
 }

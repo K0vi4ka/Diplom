@@ -13,7 +13,7 @@ export class UserService {
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
 
-    const role = await this.roleService.getRollByValue(2);
+    const role = await this.roleService.getRollByValue(1);
     await user.$set('roles',[role.id])
     user.roles = [role]
     return user;
@@ -24,11 +24,8 @@ export class UserService {
     return users;
   }
 
-  async getUser(emailU, passwordU){
-    const user = await this.userRepository.findOne({where:{
-      email : emailU,
-      password: passwordU
-    }});
+  async getUserByEmail(email){
+    const user = await this.userRepository.findOne({where:{email}});
     return user;
   }
 }

@@ -1,4 +1,6 @@
-import { Column, Table, DataType, Model, BelongsToMany } from "sequelize-typescript";
+import { Column, Table, DataType, Model, BelongsToMany, BelongsTo } from "sequelize-typescript";
+import { Publication } from "src/publication/publication.model";
+import { User } from "src/user/user.model";
 
 interface CreateCategory{
   id: number;
@@ -13,4 +15,5 @@ export class Category extends Model<Category,CreateCategory>{
 
   @Column({type: DataType.STRING, unique: true})
   value: string;
+
 }
