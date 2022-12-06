@@ -18,6 +18,7 @@ import { News } from "./news/news.model";
 import { Comment } from "./comment/comment.model";
 import { PublicComment } from "./comment/public-comment.model";
 import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
 
 
 @Module({
@@ -44,6 +45,7 @@ import { AuthModule } from './auth/auth.module';
     CategoryModule,
     CommentModule,
     AuthModule,
+    TokenModule,
   ],
 })
 export class AppModule{}

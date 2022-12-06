@@ -31,6 +31,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "axios": "^1.2.0",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

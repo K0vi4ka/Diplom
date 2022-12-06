@@ -7,16 +7,19 @@ import { User } from 'src/user/user.model';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from "bcryptjs"
 import { AuthDto } from 'src/roles/dto/auth.dto';
+import { TokenService } from 'src/token/token.service';
+import { JwtDto } from './dto/create-jwt.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private userService: UserService,
-    private jwtService: JwtService){}
+    private jwtService: JwtService,
+    private tokenService: TokenService){}
 
   async login(userdto: AuthDto){
     const user = await this.validateUser(userdto)
     console.log(user)
-    return this.generateToken(user)
+    return this.tokenService.generateToken(user)
   }
 
   async registration(userdto: CreateUserDto){
@@ -27,14 +30,15 @@ export class AuthService {
 
     const hashPassword = await bcrypt.hash(userdto.password,5);
     const user = await this.userService.createUser({...userdto,password: hashPassword})
-    return this.generateToken(user)
-  }
+    const userDto = new JwtDto(user.id, user.email)
+    const tokens = await this.tokenService.generateToken(user)
+    console.log(tokens+"THIS TOKEN")
+    console.log(user)
+    await this.tokenService.saveToken(user.id, (await tokens).refreshToken)
 
-  private async generateToken(user: User){
-    const payload = {email: user.email, id: user.id, roles: user.roles, nickname: user.nickname}
-
-    return{
-      token: this.jwtService.sign(payload)
+    return {
+      ...tokens,
+      user: userDto
     }
   }
 
