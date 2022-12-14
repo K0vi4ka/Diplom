@@ -3,13 +3,9 @@
     <button class="auth-menu__btn" @click="test">Войти</button>
     <button class="auth-menu__btn">Регистрация</button>
   </div>
-  <div class="person-menu" v-if="AuthPerson">
-    <p class="person-menu__item">{{person}}</p>
-    <button>change</button>
-  </div>
-
+  
   <transition>
-    <LoginModal v-if="loginFlag" v-model = "loginFlag"></LoginModal>
+    <LoginModal v-if="loginFlag" v-model ="loginFlag"></LoginModal>
   </transition>
 
 </template>
@@ -18,7 +14,6 @@
   import LoginModal from "./LoginModal"
 
   let AuthPerson = ref(false);
-  let person = ref("");
   const loginFlag = ref(false);
 
   const test = function test() {

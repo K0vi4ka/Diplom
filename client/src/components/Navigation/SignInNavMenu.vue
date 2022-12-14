@@ -8,13 +8,14 @@
       <p class="header-nav__item">Наука</p>
     </div>
 
-    <AuthItem/>
+    <p>{{userName}}</p>
   </header>
 </template>
 
 <script setup>
+  import {ref, onMounted} from 'vue'
+  import UserService from '@/service/UserService';
 //import {ref} from 'vue'
-import AuthItem from './AuthItem';
 // const navComp ={
 //   "Главная": "main",
 //   "Популярное": "popular",
@@ -22,12 +23,20 @@ import AuthItem from './AuthItem';
 //   "Политика": "politic",
 //   "Наука": "science",
 // }
+const userService = ref(new UserService());
+const userName = ref("")
 
 const MenuClickHandler = (e) =>{
   const navItem = [...document.querySelectorAll('.header-nav__item')];
   navItem.forEach(item => item.classList.remove('active'))
   e.target.classList.add('active')
 }
+
+onMounted(() =>{
+  userService.value.getUser(1).then(data =>{
+    userName.value = data.nickname
+  })
+})
 
 </script>
 

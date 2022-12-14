@@ -1,9 +1,9 @@
 <template>
-  <NavMenu/>
+  <router-view />
+
 </template>
 
 <script setup>
-import NavMenu from './components/Navigation/NavMenu.vue';
 
 </script>
 
