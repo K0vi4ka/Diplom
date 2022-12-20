@@ -7,6 +7,7 @@ import { TokenModule } from 'src/token/token.module';
 import { Sequelize } from 'sequelize';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Token } from 'src/token/token.model';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   providers: [AuthService],
@@ -20,7 +21,8 @@ import { Token } from 'src/token/token.model';
         expiresIn: '24h'
       }
     }),
-    TokenModule
+    TokenModule,
+    RolesModule
    
   ],
   exports: [

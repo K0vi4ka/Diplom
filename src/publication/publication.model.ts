@@ -6,12 +6,10 @@ import { News } from "src/news/news.model";
 import { User } from "src/user/user.model";
 
 interface PublicationCreate{
-  id: number;
   newsId: number;
   userId: number;
   categoryId: number;
 }
-
 
 @Table({tableName: 'publications'})
 export class Publication extends Model<Publication,PublicationCreate>{

@@ -1,7 +1,11 @@
-import { Controller, Post, Body, Response} from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException} from '@nestjs/common';
+import { HttpStatusCode } from 'axios';
+import { request, response } from 'express';
 import { AuthDto } from 'src/roles/dto/auth.dto';
 import { CreateUserDto } from 'src/user/dto/createUser.dto';
 import { AuthService } from './auth.service'; 
+import {Response,Request,NextFunction} from 'express'
+import { ApiError } from 'src/exceptions/api-error';
 
 @Controller('auth')
 export class AuthController {
@@ -9,15 +13,36 @@ export class AuthController {
   constructor(private authService: AuthService){}
 
   @Post('/login')
-  login(@Body() userdto: AuthDto){
-    return this.authService.login(userdto)
+  async login(request,response,@Body() attr: AuthDto){
+    try{
+      const {email, password} = attr;
+      const user = await this.authService.login(attr);
+      return user
+    }
+    catch(e){
+        console.log(e)
+    }    
   }
 
   @Post('/registration')
   async registration(@Body() attr){
-    const {email, password} = attr;
-    const user = await this.authService.registration(attr);
-    (data)=>{data.cookie('refreshToken', user.refreshToken,{maxAge:30*24*60*60*1000, httpOnly:true})}
-    return user
+    try{
+      const {email, password} = attr;
+      const user = await this.authService.registration(attr);
+      return user
+    }
+    catch(e){
+      return e
+    }
+  }
+
+  @Post('/logout')
+  async logout(){
+    const cooks = (data) =>{return data.cookie};
+    const {refreshToken} = cooks('');
+    const token = await this.authService.logout(refreshToken);
+    response.clearCookie("refreshToken")
+    return response.json(token)
+
   }
 }

@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { JwtDto } from 'src/auth/dto/create-jwt.dto';
+import { ApiError } from 'src/exceptions/api-error';
 import { User } from 'src/user/user.model';
 import { Token } from './token.model';
 
@@ -31,5 +33,27 @@ export class TokenService {
 
     const token = await this.tokenRepository.create({userId,token: refreshToken})
     return token;
+  }
+
+  async deleteOne(refreshToken){
+    const tokenData = await this.tokenRepository.findOne({where:refreshToken});
+    if(!tokenData){
+      return ApiError.BadRequst("Ошибка выхода");
+    }
+
+    await this.tokenRepository.destroy(refreshToken)
+  }
+
+  async findUserByToken(accessToken){
+    try{
+      console.log(accessToken)
+      const user = await this.tokenRepository.findOne({where:{token: accessToken.token}})
+      console.log(user)
+      return user
+    }
+    catch(e){
+      console.log(e, "Что за хуйня?")
+    }
+      
   }
 }

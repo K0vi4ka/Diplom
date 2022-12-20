@@ -1,7 +1,7 @@
 <template lang="">
   <header class="header">
-    <div class="header-nav" @click = "MenuClickHandler">
-      <p class="header-nav__item">Главное</p>
+    <div class="header-nav" @click = "MenuClickHandler" ref="itemsWrapper">
+      <p class="header-nav__item" ref="main">Главное</p>
       <p class="header-nav__item">Популярное</p>
       <p class="header-nav__item">Спорт</p>
       <p class="header-nav__item">Политика</p>
@@ -15,27 +15,37 @@
 <script setup>
   import {ref, onMounted} from 'vue'
   import UserService from '@/service/UserService';
-//import {ref} from 'vue'
-// const navComp ={
-//   "Главная": "main",
-//   "Популярное": "popular",
-//   "Спорт": "sport",
-//   "Политика": "politic",
-//   "Наука": "science",
-// }
-const userService = ref(new UserService());
+const navComp ={
+  "Главная": "main",
+  "Популярное": "popular",
+  "Спорт": "sport",
+  "Политика": "politic",
+  "Наука": "science",
+}
+
+const userService = new UserService();
 const userName = ref("")
+const itemsWrapper = ref("");
+const selectCategory = ref('');
 
 const MenuClickHandler = (e) =>{
-  const navItem = [...document.querySelectorAll('.header-nav__item')];
-  navItem.forEach(item => item.classList.remove('active'))
-  e.target.classList.add('active')
+  if(e.target.getAttribute('class') === 'header-nav__item'){
+    const navItem = [...document.querySelectorAll('.header-nav__item')];
+    navItem.forEach(item => item.classList.remove('active'))
+    e.target.classList.add('active');
+    selectCategory.value = navComp[e.target.innerHTML];
+  }
 }
 
 onMounted(() =>{
-  userService.value.getUser(1).then(data =>{
-    userName.value = data.nickname
+  const token = localStorage.getItem('refreshToken');
+   userService.getUserByToken({"token": token}).then(userData =>{
+    userService.getUser(userData.userId).then(data =>{
+      userName.value = data.nickname
+    })
   })
+
+  itemsWrapper.value.children[0].classList.add('active')
 })
 
 </script>

@@ -6,9 +6,9 @@ import { CreateCategoryDto } from './dto/category-create.dto';
 export class CategoryController {
   constructor(private categoryService: CategoryService){}
 
-  @Get("/:id")
-  getCategoryById(@Param("id") id){
-    return this.categoryService.getCategoryById(id)
+  @Get("/:value")
+  getCategoryById(@Param("value") value){
+    return this.categoryService.getCategoryByValue(value)
   }
 
   @Post()

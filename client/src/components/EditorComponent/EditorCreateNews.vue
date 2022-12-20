@@ -1,41 +1,86 @@
 <template>
   <div class="news-create-block">
     <h2>Создание новости</h2>
-    <div class="news-header">
-      <h3>Введите заголовок новости</h3>
-        <InputText v-model="value" />
+    <div class="news-info">
+      <label for="newsname">Введите заголовок новости</label>
+      <InputText id="newsname" v-model="newsName"/>
+
+      <label for="category">Выберите категорию</label>
+      <select name="category" id="category" v-model="categorName">
+        <option value=""></option>
+        <option v-for="category in categoryObj" :key="category.value" :value="category.id">{{category.value}}</option>
+      </select>
     </div>
 
-
     <div class="editor">
-      <Editor></Editor>
+      <Editor v-model="editorText"></Editor>
     </div>
 
     <div class="news-create-btns">
       <button class="news-create-btns__item">Отмена</button>
-      <button class="news-create-btns__item">Сохранить новость</button>
+      <button class="news-create-btns__item" @click="createPublication">Сохранить новость</button>
     </div>
 
   </div>
 </template>
 
 <script setup>
+import CategoryService from '@/service/CategoryService';
 import InputText from 'primevue/inputtext';
 import Editor from 'primevue/editor';
+import { ref, onMounted } from 'vue';
+import { PublicationService } from '@/service/PublicationService';
+import UserService from '@/service/UserService';
 
+const editorText = ref("")
+const newsName = ref("")
+const categoryObj = ref([])
+const categorName = ref("");
+
+const categoryService = new CategoryService();
+const publicationService = new PublicationService();
+const userService = new UserService();
+
+
+
+onMounted(() =>{
+   categoryService.getAllCategory().then(data =>{
+    categoryObj.value = [...data.data]
+    console.log(categoryObj.value[1])
+   })
+})
+
+//Получить пользователя
+const createPublication = async() =>{
+  if(categorName.value && newsName.value && editorText.value){
+    const refreshToken = localStorage.getItem('refreshToken')
+    const user = await userService.getUserByToken({"token": refreshToken})
+    const responce = await publicationService.createPublication({"newsName":newsName.value,'filePath':"news-storage","data":editorText.value},categorName.value, (await user.userId))
+    if(responce){
+      console.log("AEEEEEEEE")
+    }
+  }
+}
 </script>
 
 <style>
 
-.news-header {
+.news-info {
+  display: flex;
+  flex-direction: column;
   margin: 20px 0;
+}
+
+.news-info> label  {
+  margin-top: 10px;
 }
 
 .news-create-block {
   position: relative;
-  height: 70vh;
+  min-height: 70vh;
   border: 3px solid #4169E1;
   padding: 10px;
+  margin-left: 30px;
   width: 100vh;
 }
 

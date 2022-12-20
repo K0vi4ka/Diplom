@@ -3,6 +3,7 @@ import { Publication } from "src/publication/publication.model";
 
 interface NewsCreate{
   id: number;
+  newsName: string;
   filePath: string;
 }
 
@@ -13,6 +14,8 @@ export class News extends Model<News,NewsCreate> {
   id: number;
 
   @Column({type: DataType.STRING})
-  filePath: string;
+  newsName: string;
 
+  @Column({type: DataType.STRING})
+  filePath: string;
 }

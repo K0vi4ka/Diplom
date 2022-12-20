@@ -44,7 +44,6 @@
 <style scoped>
   .main {
     display:  flex;
-    justify-content: space-between;
     margin: 20px;
     margin-left: 0;
   }

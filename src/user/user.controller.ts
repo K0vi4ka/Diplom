@@ -20,4 +20,14 @@ export class UserController {
     return this.userService.getAllUser()
   }
 
+  @Get(':id')
+  getUserById(@Param('id') id:number){
+    return this.userService.getUserById(id)
+  }
+
+  @Get('roles/:id')
+  async getUserRolesById(@Param('id') id:number){
+    const roles = await this.userService.getUserRoles(id);
+    return roles[0].description;
+  }
 }

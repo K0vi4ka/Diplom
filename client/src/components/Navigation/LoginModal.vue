@@ -1,5 +1,5 @@
 <template lang="">
-  <form v-if="show" class="modal" >
+  <form class="modal" >
     <div class="modal-email">
       <label for="login-email">Введите логин</label>
       <input type="email" id="login-email" v-model="loginInp">
@@ -43,7 +43,6 @@
         localStorage.setItem('authtoken',accessToken);
         localStorage.setItem('refreshToken',refreshToken);
       }
- 
       await userService.getUserRoles(user.id).then(roles =>{
         if(roles === 'admin'){
           router.push('/editorMain')
