@@ -66,6 +66,25 @@ export class PublicationService {
     return response;
   }
 
+  async getPublicationByNewsId(id: number){
+    const response = await this.publicationRepository.findAll({
+      include: [
+        {
+        model: User
+        }, 
+        {
+          model: News,
+          where:{Id:id}
+        },
+        {
+          model: Category
+        },
+    ], 
+    });
+
+    return response;
+  }
+
   async createPublication(publicationDto: PublicationCreateDto){
     return await this.publicationRepository.create(publicationDto);
   }

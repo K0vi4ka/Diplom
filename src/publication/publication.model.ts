@@ -29,7 +29,7 @@ export class Publication extends Model<Publication,PublicationCreate>{
   @Column({type:DataType.INTEGER})
   categoryId:number;
 
-  @Column({type: DataType.INTEGER})
+  @Column({type: DataType.INTEGER, defaultValue: 0})
   views: number;
 
   @BelongsToMany(()=>Comment,()=>PublicComment)

@@ -50,7 +50,7 @@ onMounted(() =>{
    })
 })
 
-//Получить пользователя
+
 const createPublication = async() =>{
   if(categorName.value && newsName.value && editorText.value){
     const refreshToken = localStorage.getItem('refreshToken')
@@ -65,6 +65,10 @@ const createPublication = async() =>{
 
 <style>
 
+img {
+  max-height: 400px;
+}
+
 .news-info {
   display: flex;
   flex-direction: column;
@@ -78,7 +82,6 @@ const createPublication = async() =>{
 .news-create-block {
   position: relative;
   min-height: 70vh;
-  border: 3px solid #4169E1;
   padding: 10px;
   margin-left: 30px;
   width: 100vh;

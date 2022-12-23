@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import { promisify } from 'util';
 import { existsSync, mkdirSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { writeFile,readFile } from 'node:fs/promises';
 import { ApiError } from 'src/exceptions/api-error';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
@@ -30,9 +30,12 @@ export const getFile = async (
   path: string,
   encoding: string,
 ): Promise<string | Buffer> => {
-  const readFile = promisify(fs.readFile);
-
-  return encoding ? readFile(path , 'utf-8' ) : readFile(path, {});
+  if(checkIfFileExists(path)){
+    return encoding ? readFile(path , 'utf-8' ) : readFile(path, {});
+  }
+  else {
+    throw new HttpException('File not exit', HttpStatus.BAD_REQUEST)
+  }
 };
 
 /**

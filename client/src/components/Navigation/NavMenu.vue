@@ -7,25 +7,33 @@
       <p class="header-nav__item" >Политика</p>
       <p class="header-nav__item" >Наука</p>
     </div>
-    <AuthItem/>
+
+    <div class="help-items">
+      <AuthItem @updateUser="updateUser" v-if="!userItem"/>
+
+      <SignInUserItem v-if="userItem" :userItem="userItem" :key="userItem"/>
+    </div>
+
   </header>
 </template>
 
 <script setup>
 import {ref, onMounted,watch,defineEmits} from 'vue'
 import AuthItem from './AuthItem';
+import SignInUserItem from '@/components/Navigation/SignInUserItem'
+import UserService from '@/service/UserService';
+
 const emit = defineEmits(['updateCategory'])
+const userService = new UserService();
 
-const itemsWrapper = ref("")
-// const navComp ={
-//   "Главное": "main",
-//   "Популярное": "popular",
-//   "Спорт": "sport",
-//   "Политика": "politic",
-//   "Наука": "science",
-// }
-
+const itemsWrapper = ref("");
 const selectCategory = ref();
+const userItem = ref();
+const userRoles = ref();
+
+const updateUser = (value) =>{
+  userItem.value = value
+}
 
 const MenuClickHandler = (e) =>{
   if(e.target.getAttribute('class') === 'header-nav__item'){
@@ -40,9 +48,27 @@ const MenuClickHandler = (e) =>{
     emit('updateCategory',selectCategory.value)
   });
 
-
 onMounted(() =>{
-  itemsWrapper.value.children[0].classList.add('active')
+  const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    if(token) {
+      userService.getUserByToken({"token": token}).then(user =>{
+        userItem.value = user.userId
+        userService.getUserRoles(user.userId).then(roles =>{
+          userRoles.value = roles
+      })
+     })
+    }
+  
+
+  let headerCheck = false;
+  [...itemsWrapper.value.children].forEach(item =>{
+    if(item.getAttribute('class').split(' ')[1] === 'active'){
+      headerCheck = true
+    }
+  })
+  if(!headerCheck){
+    itemsWrapper.value.children[0].classList.add('active')
+  }
 })
 
 </script>
@@ -53,15 +79,18 @@ onMounted(() =>{
     justify-content: space-between;
     align-items: center;
     height: 70px;
-    background-color:#C71585;
+    background-color:#164a47;
     color: #FFFFFF;
     padding: 0 10px;
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
+-moz-box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
+box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
   }
 
   .active {
     transform: translateY(5px); 
     font-size: 1.5rem;
-    color: #000000;
+    color:  #d53a3a;
   }
 
   .header-nav {

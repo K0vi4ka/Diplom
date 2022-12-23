@@ -27,11 +27,17 @@ export class PublicationController {
     return publication
   }
 
-  @Get(':id')
+  @Get('/user/:id')
   async getPublicationByAuthor(@Param("id") id:number){
     console.log(id)
-    const publications = this.publicationService.getPublicationByAuthor(id)
-    return publications;
+    const publications = await this.publicationService.getPublicationByAuthor(id)
+    const response = [];
+    [...publications].forEach(item =>{
+      if(item.news.newsName && item.category.value && item.user.nickname)
+      response.push([item.news.newsName,item.category.value, item.user.nickname])
+    })
+    console.log(response)
+    return response;
   }
 
   @Get('/category/:id')
@@ -45,7 +51,19 @@ export class PublicationController {
     console.log(response)
     return response;
   }
-  
 
+  @Get('/news/:id') 
+  async getPublicationByNewsId(@Param('id') newsId) {
+    const publication = await this.publicationService.getPublicationByNewsId(newsId);
+    const obj = await [...publication].map(item =>{
+      return {
+        "nickname":item.user.nickname,
+        "newsName":item.news.newsName,
+        "categoryName":item.category.value, 
+        "updateDate":item.news.updatedAt
+      }
+    })
+    return obj
+  }
 
 }

@@ -5,14 +5,21 @@
   </div>
   
   <transition>
-    <LoginModal v-if="loginFlag" v-model ="loginFlag"></LoginModal>
+    <LoginModal v-if="loginFlag" v-model ="loginFlag" @updateUser="updateUser"></LoginModal>
   </transition>
 
 </template>
 <script setup>
-  import { ref, onMounted} from 'vue'
+  import { ref, defineEmits,watch} from 'vue'
   import LoginModal from "./LoginModal"
+  const user = ref('')
 
+  const updateUser = (value) =>{
+    user.value = value
+  }
+
+
+  const emit = defineEmits(['updateUser'])
   let AuthPerson = ref(false);
   const loginFlag = ref(false);
 
@@ -21,9 +28,11 @@
     loginFlag.value = true;
   }
 
-  onMounted(() =>{
-    
-  })
+  watch(() => user.value, async () => {
+    emit('updateUser',user.value)
+  });
+
+
 </script>
 <style scoped>
 
@@ -43,15 +52,5 @@
 
   .auth-menu__btn:hover {
     transform: scale(1.2);
-  }
-
-  .v-enter-active,
-  .v-leave-active {
-    transition: opacity 2s
-  }
-
-  .v-enter-from,
-  .v-leave-to {
-    opacity: 0;
   }
 </style>

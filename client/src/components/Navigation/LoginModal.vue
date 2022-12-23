@@ -21,17 +21,15 @@
   </form>
 </template>
 <script setup>
-  import { ref, onMounted} from 'vue'
+  import { ref, onMounted,defineEmits,watch} from 'vue'
   import AuthService from "@/service/AuthService"
-  import UserService from '@/service/UserService';
-  import router from '@/router/router';
+  const emit = defineEmits(['updateUser'])
   const show = ref(true);
   const loginInp = ref("")
   const passInp = ref("")
   const memberInp = ref(false)
   const authService = new AuthService();
-  const userService = new UserService();
-
+  const userItem = ref('')
 
   const sendData = async function(e){
     e.preventDefault();
@@ -43,17 +41,24 @@
         localStorage.setItem('authtoken',accessToken);
         localStorage.setItem('refreshToken',refreshToken);
       }
-      await userService.getUserRoles(user.id).then(roles =>{
-        if(roles === 'admin'){
-          router.push('/editorMain')
-        }
-      })
+      else{
+        sessionStorage.setItem('authtoken',accessToken);
+        sessionStorage.setItem('refreshToken',refreshToken);
+        userItem.value = user.id
+        console.log("wtf")
+      }      
     }
 
     catch(e){
       console.log(e)
     }
   }
+
+
+  watch(() => userItem.value, async () => {
+    console.log('now work')
+    emit('updateUser',userItem.value)
+  });
 
   const cancelBtnHandler = (e) =>{
     e.preventDefault();

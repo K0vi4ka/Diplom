@@ -24,4 +24,14 @@ export class PublicationService{
     const responce = api.get(`http://localhost:5000/publication/category/${id}`)
     return (await responce).data;
   }
+
+  async getPublicationByNewsId(id) {
+    const responce = api.get(`http://localhost:5000/publication/news/${id}`)
+    return (await responce).data[0];
+  }
+
+  async getPublicationByUserId(id) {
+    const responce = await api.get(`http://localhost:5000/publication/user/${id}`)
+    return (await responce).data
+  }
 }

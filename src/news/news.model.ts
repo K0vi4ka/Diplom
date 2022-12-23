@@ -13,9 +13,9 @@ export class News extends Model<News,NewsCreate> {
   @Column({type: DataType.INTEGER, allowNull: false, primaryKey: true,autoIncrement: true})
   id: number;
 
-  @Column({type: DataType.STRING})
+  @Column({type: DataType.STRING, unique:true})
   newsName: string;
 
-  @Column({type: DataType.STRING})
+  @Column({type: DataType.STRING, unique:true})
   filePath: string;
 }

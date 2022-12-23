@@ -25,4 +25,23 @@ export class NewsController {
       throw new HttpException('ФАЙЛ УЖЕ ЕСТЬ, ДИБИЛ', HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Post('file-name')
+  getFilePathByName(@Body() attr) {
+    console.log(attr)
+    const fileName = attr.fileName;
+    return this.newsService.getFilePathByName(fileName);
+  }
+
+  @Post('file-content')
+  getContentByPath(@Body() path){
+    const  filePath = path.filePath;
+    return this.newsService.getFileContentByPath(filePath)
+  }
+
+  @Get('id/:path')
+  getNewsIdByPath(@Param('path') path:string) {
+    const news = this.newsService.getNewsIdByPath("news-storage/"+path)
+    return news
+  }
 }

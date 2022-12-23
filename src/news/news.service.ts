@@ -33,7 +33,28 @@ export class NewsService {
     return news;
   }
 
-   createNewsFile(path: string, data: string){
+   async createNewsFile(path: string, data: string){
     return createFile(path, data);
   }
+
+  private async getFile(path: string){
+    const fileText = await getFile(path,'utf-8')
+    return fileText
+  }
+
+  async getFilePathByName(fileName: string) {
+    const file = await this.newstRepository.findOne({where:{newsName: fileName}})
+    return file.filePath
+  }
+
+  async getFileContentByPath(filePath: string){
+    const content = await this.getFile(filePath+'.html');
+    return content
+  }
+
+  async getNewsIdByPath(filePath: string) {
+    console.log(filePath)
+    return await this.newstRepository.findOne({where:{filePath}})
+  }
+
 }

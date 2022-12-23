@@ -4,6 +4,13 @@
 </template>
 
 <script setup>
+  import { onMounted } from 'vue';
+  import router from './router/router';
+
+  onMounted(() => {
+    router.push('newsTime');
+  })
+
 
 </script>
 

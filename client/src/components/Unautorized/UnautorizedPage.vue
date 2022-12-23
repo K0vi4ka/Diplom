@@ -1,5 +1,5 @@
 <template lang="">
-  <NavMenuVue :category = "selectCategory" @updateCategory="updateCategory"/>
+  <NavMenuVue @updateCategory="updateCategory"/>
   <ContentPageVue :content="selectCategory"/>
 </template>
 <script setup>
@@ -15,9 +15,7 @@ import {ref, onMounted} from 'vue';
 
   const updateCategory = (value) =>{
     selectCategory.value = value
-    console.log(selectCategory.value)
   }
-
 
   onMounted(()=>{
     const token = localStorage.getItem('refreshToken');
@@ -31,7 +29,6 @@ import {ref, onMounted} from 'vue';
      })
     }
 })
-
 
 </script>
 <style scoped>
