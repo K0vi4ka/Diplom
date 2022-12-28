@@ -22,6 +22,7 @@ export class PublicationService{
 
   async getPublicationByCategoryId(id) {
     const responce = api.get(`http://localhost:5000/publication/category/${id}`)
+    console.log(responce)
     return (await responce).data;
   }
 
@@ -33,5 +34,14 @@ export class PublicationService{
   async getPublicationByUserId(id) {
     const responce = await api.get(`http://localhost:5000/publication/user/${id}`)
     return (await responce).data
+  }
+
+  parsePublicationData(value) {
+    const mounthArray = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"]
+    let date = value.split("T")[0].split('-').reverse()
+    let newDate = date.reduce((preValue,item,index) =>{
+      return index === 1? preValue+ mounthArray[index]+" ": preValue+item+" "
+    },"")
+    return newDate;
   }
 }

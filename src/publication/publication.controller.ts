@@ -14,11 +14,11 @@ export class PublicationController {
     const publication = await this.publicationService.getAllPublicaton();
     const response = [];
     [...publication].forEach(item =>{
-      if(item.news.newsName && item.category.value && item.user.nickname)
-      response.push([item.news.newsName,item.category.value, item.user.nickname])
+      if(item.news.newsName && item.category.value && item.user.nickname){
+        response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
+      }
     })
-    console.log(response)
-    return response;
+    return response.reverse();
   }
 
   @Post()
@@ -34,10 +34,9 @@ export class PublicationController {
     const response = [];
     [...publications].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname)
-      response.push([item.news.newsName,item.category.value, item.user.nickname])
+      response.push([item.news.newsName,item.category.value, item.user.nickname, item.updatedAt])
     })
-    console.log(response)
-    return response;
+    return response.reverse();
   }
 
   @Get('/category/:id')
@@ -46,10 +45,9 @@ export class PublicationController {
     const response = [];
     [...publications].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname)
-      response.push([item.news.newsName,item.category.value, item.user.nickname])
+      response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
     })
-    console.log(response)
-    return response;
+    return response.reverse();
   }
 
   @Get('/news/:id') 
@@ -57,13 +55,12 @@ export class PublicationController {
     const publication = await this.publicationService.getPublicationByNewsId(newsId);
     const obj = await [...publication].map(item =>{
       return {
-        "nickname":item.user.nickname,
-        "newsName":item.news.newsName,
-        "categoryName":item.category.value, 
-        "updateDate":item.news.updatedAt
+        "nickname": item.user.nickname,
+        "newsName": item.news.newsName,
+        "categoryName": item.category.value, 
+        "updateDate": item.news.updatedAt
       }
     })
     return obj
   }
-
 }

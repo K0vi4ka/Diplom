@@ -3,11 +3,8 @@
     <div class="header-nav" @click ="MenuClickHandler" ref="itemsWrapper">
       <p class="header-nav__item" >Главное</p>
       <p class="header-nav__item" >Популярное</p>
-      <p class="header-nav__item" >Спорт</p>
-      <p class="header-nav__item" >Политика</p>
-      <p class="header-nav__item" >Наука</p>
-    </div>
-
+      <p class="header-nav__item" v-for="category in allCategory" :key="category">{{category}}</p>
+      </div>
     <div class="help-items">
       <AuthItem @updateUser="updateUser" v-if="!userItem"/>
 
@@ -22,11 +19,14 @@ import {ref, onMounted,watch,defineEmits} from 'vue'
 import AuthItem from './AuthItem';
 import SignInUserItem from '@/components/Navigation/SignInUserItem'
 import UserService from '@/service/UserService';
+import CategoryService from '@/service/CategoryService';
 
 const emit = defineEmits(['updateCategory'])
 const userService = new UserService();
+const categoryService = new CategoryService();
 
 const itemsWrapper = ref("");
+const allCategory = ref("")
 const selectCategory = ref();
 const userItem = ref();
 const userRoles = ref();
@@ -58,7 +58,10 @@ onMounted(() =>{
       })
      })
     }
-  
+
+    categoryService.getAllCategory().then(category =>{
+      allCategory.value = category
+    })
 
   let headerCheck = false;
   [...itemsWrapper.value.children].forEach(item =>{
@@ -69,6 +72,7 @@ onMounted(() =>{
   if(!headerCheck){
     itemsWrapper.value.children[0].classList.add('active')
   }
+
 })
 
 </script>

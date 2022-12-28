@@ -1,6 +1,9 @@
 <template>
   <div class="news-create-block">
     <h2>Создание новости</h2>
+
+    <p class="public-is-created"></p>
+
     <div class="news-info">
       <label for="newsname">Введите заголовок новости</label>
       <InputText id="newsname" v-model="newsName"/>
@@ -8,7 +11,7 @@
       <label for="category">Выберите категорию</label>
       <select name="category" id="category" v-model="categorName">
         <option value=""></option>
-        <option v-for="category in categoryObj" :key="category.value" :value="category.id">{{category.value}}</option>
+        <option v-for="category in categoryObj" :key="category.value" :value="category.id">{{category}}</option>
       </select>
     </div>
 
@@ -29,7 +32,7 @@ import CategoryService from '@/service/CategoryService';
 import InputText from 'primevue/inputtext';
 import Editor from 'primevue/editor';
 import { ref, onMounted } from 'vue';
-import { PublicationService } from '@/service/PublicationService';
+import {PublicationService} from '@/service/PublicationService';
 import UserService from '@/service/UserService';
 
 const editorText = ref("")
@@ -45,19 +48,18 @@ const userService = new UserService();
 
 onMounted(() =>{
    categoryService.getAllCategory().then(data =>{
-    categoryObj.value = [...data.data]
-    console.log(categoryObj.value[1])
+    categoryObj.value = data
    })
 })
 
 
 const createPublication = async() =>{
   if(categorName.value && newsName.value && editorText.value){
-    const refreshToken = localStorage.getItem('refreshToken')
+    const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     const user = await userService.getUserByToken({"token": refreshToken})
     const responce = await publicationService.createPublication({"newsName":newsName.value,'filePath':"news-storage","data":editorText.value},categorName.value, (await user.userId))
     if(responce){
-      console.log("AEEEEEEEE")
+      document.querySelector('.public-is-created').innerHTML = "Запись успешна создана"
     }
   }
 }
@@ -103,6 +105,10 @@ img {
     color: #FFFFFF;
     border-radius: 10px;
     border: 1px solid #708090;
+}
+
+.public-is-created {
+  color: #5cff59;
 }
 
 </style>

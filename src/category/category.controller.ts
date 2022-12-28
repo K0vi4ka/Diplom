@@ -17,8 +17,12 @@ export class CategoryController {
   }
 
   @Get()
-  getAllCategory(){
-    return this.categoryService.getAllCaterory();
+  async getAllCategory(){
+    const categoryes = await this.categoryService.getAllCaterory();
+    const response = [];
+    [...categoryes].forEach(item =>{response.push(item.value)})
+
+    return response
   }
 
   
