@@ -1,58 +1,53 @@
 <template lang="">
   <header class="header">
-    <div class="header-nav" @click ="MenuClickHandler" ref="itemsWrapper">
+    <div class="header-nav" @click ="MenuClickHandler">
       <p class="header-nav__item" >Главное</p>
       <p class="header-nav__item" >Популярное</p>
-      <p class="header-nav__item" v-for="category in allCategory" :key="category">{{category}}</p>
-      </div>
-    <div class="help-items">
-      <AuthItem @updateUser="updateUser" v-if="!userItem"/>
+      <p class="header-nav__item" v-for="category in allCategory" :key="category" >{{category}}</p>
+    </div>
 
-      <SignInUserItem v-if="userItem" :userItem="userItem" :key="userItem"/>
+    <div class="help-items">
+      <AuthItem v-if="!authStore.userId"/>
+
+      <SignInUserItem v-if="authStore.userId" :userItem="authStore.userId" :key="authStore.userId"/>
     </div>
 
   </header>
 </template>
 
 <script setup>
-import {ref, onMounted,watch,defineEmits} from 'vue'
+import {ref, onMounted} from 'vue'
 import AuthItem from './AuthItem';
 import SignInUserItem from '@/components/Navigation/SignInUserItem'
 import UserService from '@/service/UserService';
 import CategoryService from '@/service/CategoryService';
+import { AuthStore } from '@/service/pinia-store';
+import router from '@/router/router';
 
-const emit = defineEmits(['updateCategory'])
 const userService = new UserService();
 const categoryService = new CategoryService();
+const authStore = AuthStore();
 
-const itemsWrapper = ref("");
 const allCategory = ref("")
-const selectCategory = ref();
-const userItem = ref();
 const userRoles = ref();
-
-const updateUser = (value) =>{
-  userItem.value = value
-}
 
 const MenuClickHandler = (e) =>{
   if(e.target.getAttribute('class') === 'header-nav__item'){
     const navItem = [...document.querySelectorAll('.header-nav__item')];
     navItem.forEach(item => item.classList.remove('active'))
     e.target.classList.add('active')
-    selectCategory.value = e.target.innerHTML
+    authStore.categoryName = e.target.innerHTML
     } 
+    const path = window.location.href;
+    if(path.split('/').reverse()[0] !== 'newsTime'){
+      router.push('/newsTime')
+    }
   }
-
-  watch(() => selectCategory.value, async () => {
-    emit('updateCategory',selectCategory.value)
-  });
 
 onMounted(() =>{
   const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     if(token) {
       userService.getUserByToken({"token": token}).then(user =>{
-        userItem.value = user.userId
         userService.getUserRoles(user.userId).then(roles =>{
           userRoles.value = roles
       })
@@ -61,17 +56,21 @@ onMounted(() =>{
 
     categoryService.getAllCategory().then(category =>{
       allCategory.value = category
-    })
+    });
 
-  let headerCheck = false;
-  [...itemsWrapper.value.children].forEach(item =>{
-    if(item.getAttribute('class').split(' ')[1] === 'active'){
-      headerCheck = true
+    if(authStore.categoryName === 'Главное') {
+      document.querySelector('.header-nav__item').classList.add('active')
     }
-  })
-  if(!headerCheck){
-    itemsWrapper.value.children[0].classList.add('active')
-  }
+    else {
+      setTimeout(()=>{
+        [...document.querySelectorAll('.header-nav__item')].forEach(item=>{
+          if(item.innerHTML === authStore.categoryName){
+            item.classList.add('active')
+          }
+        })
+      },100)
+    }
+
 
 })
 

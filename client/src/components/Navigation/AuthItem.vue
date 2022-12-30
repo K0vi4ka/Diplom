@@ -1,37 +1,27 @@
-<template lang="">
+<template>
   <div class="auth-menu" v-if="!AuthPerson">
-    <button class="auth-menu__btn" @click="test">Войти</button>
+    <button class="auth-menu__btn" @click="showModal">Войти</button>
     <button class="auth-menu__btn">Регистрация</button>
   </div>
   
-  <transition>
-    <LoginModal v-if="loginFlag" v-model ="loginFlag" @updateUser="updateUser"></LoginModal>
+  <transition name="nested">
+      <LoginModal v-if="authStore.popup" v-model ="loginFlag"></LoginModal>
   </transition>
 
 </template>
 <script setup>
-  import { ref, defineEmits,watch} from 'vue'
+  import { ref} from 'vue'
   import LoginModal from "./LoginModal"
-  const user = ref('')
+  import { AuthStore } from '@/service/pinia-store';
 
-  const updateUser = (value) =>{
-    user.value = value
-  }
-
-
-  const emit = defineEmits(['updateUser'])
   let AuthPerson = ref(false);
   const loginFlag = ref(false);
+  const authStore = AuthStore();
 
-  const test = function test() {
-    if(loginFlag.value == true) return
-    loginFlag.value = true;
+  const showModal = () => {
+    console.log(authStore.popup)
+    authStore.updatePopup();
   }
-
-  watch(() => user.value, async () => {
-    emit('updateUser',user.value)
-  });
-
 
 </script>
 <style scoped>
@@ -53,4 +43,34 @@
   .auth-menu__btn:hover {
     transform: scale(1.2);
   }
+
+  .nested-enter-active, .nested-leave-active {
+	transition: all 0.3s ease-in-out;
+}
+/* delay leave of parent element */
+.nested-leave-active {
+  transition-delay: 0.25s;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+/* we can also transition nested elements using nested selectors */
+.nested-enter-active .inner,
+.nested-leave-active .inner { 
+  transition: all 0.3s ease-in-out;
+}
+/* delay enter of nested element */
+.nested-enter-active .inner {
+	transition-delay: 0.25s;
+}
+
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+  transform: translateX(30px);
+  opacity: 0.001;
+}
 </style>

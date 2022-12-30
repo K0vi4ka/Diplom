@@ -63,4 +63,10 @@ export class PublicationController {
     })
     return obj
   }
+
+  @Get(':newsid')
+  async getPublicationIdByNews(@Param('newsid') newsId:number) {
+    const publication = await this.publicationService.getPublicationByNewsId(newsId);
+    return  publication[0].id; 
+  }
 }

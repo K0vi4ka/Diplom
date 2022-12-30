@@ -4,7 +4,6 @@ const api = axios.create()
 
 api.interceptors.request.use(
   (config) => {
-    console.log('THET WORK')
     let token = localStorage.getItem('authtoken');
 
     if (token) {

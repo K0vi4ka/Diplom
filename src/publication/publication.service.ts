@@ -24,7 +24,6 @@ export class PublicationService {
         }
     ]
     });
-
     return response
   }
 
@@ -81,9 +80,9 @@ export class PublicationService {
         },
     ], 
     });
-
     return response;
   }
+
 
   async createPublication(publicationDto: PublicationCreateDto){
     return await this.publicationRepository.create(publicationDto);

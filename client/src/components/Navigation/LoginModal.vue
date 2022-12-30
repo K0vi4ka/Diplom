@@ -15,21 +15,21 @@
     </div>
     <div class="btn-container">
       <button class="btn-container__btn" @click="sendData">OK</button>
-      <button class="btn-container__btn" @click="cancelBtnHandler;$emit('update:modelValue', show.value)">Отмена</button>
+      <button class="btn-container__btn" @click="cancelBtnHandler">Отмена</button>
     </div>
 
   </form>
 </template>
 <script setup>
-  import { ref, onMounted,defineEmits,watch} from 'vue'
+  import { ref} from 'vue'
   import AuthService from "@/service/AuthService"
-  const emit = defineEmits(['updateUser'])
-  const show = ref(true);
+  import { AuthStore } from '@/service/pinia-store';
+
   const loginInp = ref("")
   const passInp = ref("")
   const memberInp = ref(false)
   const authService = new AuthService();
-  const userItem = ref('')
+  const authStore = AuthStore();
 
   const sendData = async function(e){
     e.preventDefault();
@@ -44,9 +44,10 @@
       else{
         sessionStorage.setItem('authtoken',accessToken);
         sessionStorage.setItem('refreshToken',refreshToken);
-        userItem.value = user.id
-        console.log("wtf")
-      }      
+        authStore.updateUserId(user.id) 
+        
+      }  
+      authStore.updatePopup()    
     }
 
     catch(e){
@@ -54,19 +55,11 @@
     }
   }
 
-
-  watch(() => userItem.value, async () => {
-    console.log('now work')
-    emit('updateUser',userItem.value)
-  });
-
   const cancelBtnHandler = (e) =>{
     e.preventDefault();
+    authStore.updatePopup();
   }
 
-  onMounted(() =>{
-
-  })
 
 </script>
 <style scoped>

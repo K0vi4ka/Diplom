@@ -15,25 +15,25 @@
 </div>
 </template>
 <script setup>
-  import {ref,defineProps,onMounted} from 'vue'
+  import {ref,onMounted} from 'vue'
   import UserMenu from './UserMenu.vue';
   import UserService from '@/service/UserService';
   import AdminMenu from './AdminMenu.vue';
+  import { AuthStore } from '@/service/pinia-store';
 
-
-  const props = defineProps(['userItem'])
-  const userName = ref('');
   const userService = new UserService();
+  const store = new AuthStore();
+
   const userRoles = ref('')
+  const userName = ref('');
 
   onMounted(()=>{
-    userService.getUser(props.userItem).then(user =>{
+    userService.getUser(store.userId).then(user =>{
       userName.value = user.nickname
       
     })
-    userService.getUserRoles(props.userItem).then(roles=>{
+    userService.getUserRoles(store.userId).then(roles=>{
       userRoles.value = roles
-      console.log(userRoles.value)
     })
   })
 </script>

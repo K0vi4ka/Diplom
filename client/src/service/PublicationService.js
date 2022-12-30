@@ -44,4 +44,9 @@ export class PublicationService{
     },"")
     return newDate;
   }
+
+  async getPublicationIdByNewsId(id) {
+    const responce = await api.get(`http://localhost:5000/publication/${id}`);
+    return await responce
+  }
 }

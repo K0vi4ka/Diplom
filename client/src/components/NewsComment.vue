@@ -1,27 +1,25 @@
 <template>
   <div class="comments-container">
-    <h1>COmments</h1>
 
     <div class="comments-conteiner" v-for="comment in comments" :key="comment">
-      <p>{{comment.user}}</p>
-      <p>{{comment.value}}</p>
-      <p>{{comment.date}}</p>
-
+      <CommentItem :comment="comment"/>
     </div>
   </div>
 </template>
 
 <script setup>
 import {onMounted,ref} from "vue"
+import CommentItem from '@/components/CommentItem.vue'
 import CommentsService from "@/service/CommentsService";
+import { AuthStore } from "@/service/pinia-store";
 
-  //const props = defineProps({news:Number})
+
   const comments = ref([])
   const commentsService = new CommentsService();
+  const store = AuthStore();
 
   onMounted(() => {
-    commentsService.getCommentsByPublicationId(32).then(data =>{
-      console.log(data)
+    commentsService.getCommentsByPublicationId(Number(store.currentPublication)).then(data =>{
       comments.value = data
     })
   })

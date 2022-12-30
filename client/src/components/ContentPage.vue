@@ -11,16 +11,17 @@
 </template>
 <script setup>
   import NewsItem from '@/components/NewsItem.vue'
-  import { ref, defineProps, onMounted, watch } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
   import { PublicationService } from '@/service/PublicationService';
   import CategoryService from '@/service/CategoryService';
   import router from '@/router/router';
   import NewsService from '@/service/NewsService';
+  import { AuthStore } from '@/service/pinia-store';
 
-  const contentProps = defineProps(['content']);
   const publicationService = new PublicationService();
   const categoryService = new CategoryService();
   const newsService = new NewsService();
+  const store = AuthStore();
   const pageContent = ref([]);
 
   const findTargetName = (e) =>{
@@ -49,21 +50,32 @@
   }
   
   onMounted(()=>{
-    if(contentProps.content === 'Главное'){
+    if(store.categoryName === 'Главное'){
       loadMainPage();
     }
-  })
-
-  watch(() => contentProps.content, async () => {
-    pageContent.value = []
-    if(contentProps.content === 'Главное'){
-      loadMainPage();
-    }
-    else if(contentProps.content === 'Популярное') {
+    else if(store.categoryName === 'Популярное') {
       console.log('Возможно потом')
     }
     else {
-      categoryService.getCaegoryValue(contentProps.content).then(categoryId =>{
+      categoryService.getCaegoryValue(store.categoryName).then(categoryId =>{
+        publicationService.getPublicationByCategoryId(categoryId).then((publications)=>{
+          pageContent.value = publications
+       })
+       
+      })
+    }
+  })
+
+  watch(() => store.categoryName, async () => {
+    pageContent.value = []
+    if(store.categoryName === 'Главное'){
+      loadMainPage();
+    }
+    else if(store.categoryName === 'Популярное') {
+      console.log('Возможно потом')
+    }
+    else {
+      categoryService.getCaegoryValue(store.categoryName).then(categoryId =>{
         publicationService.getPublicationByCategoryId(categoryId).then((publications)=>{
           pageContent.value = publications
        })

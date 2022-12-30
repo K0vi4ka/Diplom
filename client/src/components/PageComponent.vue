@@ -18,7 +18,7 @@
       <div class="comment-input">
         <Textarea class="castom-textarea" v-model="value" :autoResize="true" rows="3" cols="30" />
         <br>
-        <button id="comment-btn" class="comment-btn submit">Отправить</button>
+        <button id="comment-btn" @click="sendComment" class="comment-btn submit">Отправить</button>
         <button id="comment-btn" class="comment-btn cancel">Отмена</button>
       </div>
       <div class="news-comments">
@@ -35,13 +35,28 @@
   import { PublicationService } from '@/service/PublicationService';
   import Textarea from 'primevue/textarea';
   import NewsCommentVue from './NewsComment.vue';
+  import { AuthStore } from '@/service/pinia-store';
+  import CommentsService from '@/service/CommentsService';
 
 
   const newsService = new NewsService();
   const pageContent = ref('');
   const pageAdditionalContent = ref({})
   const publicationService = new PublicationService();
-  const newsIndex = ref("")
+  const commentsService = new CommentsService();
+  const store = AuthStore();
+  const commentValue = ref('value')
+
+  const sendComment = () =>{
+    console.log(commentValue)
+    const commentBody = {
+      "value" : commentValue.value,
+      "author" : store.userId
+    }
+
+    console.log(commentBody,store.publicationId)
+    commentsService.createComment(commentBody,store.publicationId)
+  }
 
   onMounted(() => {
     let path = window.location.hash.split('/')[3]
@@ -51,7 +66,9 @@
     })
 
     newsService.getNewsIdByPath(path).then(newsId =>{
-      newsIndex.value = newsId.id
+      publicationService.getPublicationIdByNewsId(newsId.id).then(publicationId =>{
+        store.publicationId = publicationId.data
+      })
       publicationService.getPublicationByNewsId(newsId.id).then(publicatoin =>{
         let date = publicatoin.updateDate
         let newDate = publicationService.parsePublicationData(date)
