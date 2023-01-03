@@ -16,7 +16,7 @@
        <p>Коментарии</p> 
       </div>
       <div class="comment-input">
-        <Textarea class="castom-textarea" v-model="value" :autoResize="true" rows="3" cols="30" />
+        <Textarea class="castom-textarea" v-model="commentValue" :autoResize="true" rows="3" cols="30" />
         <br>
         <button id="comment-btn" @click="sendComment" class="comment-btn submit">Отправить</button>
         <button id="comment-btn" class="comment-btn cancel">Отмена</button>
@@ -44,19 +44,8 @@
   const pageAdditionalContent = ref({})
   const publicationService = new PublicationService();
   const commentsService = new CommentsService();
-  const store = AuthStore();
-  const commentValue = ref('value')
-
-  const sendComment = () =>{
-    console.log(commentValue)
-    const commentBody = {
-      "value" : commentValue.value,
-      "author" : store.userId
-    }
-
-    console.log(commentBody,store.publicationId)
-    commentsService.createComment(commentBody,store.publicationId)
-  }
+  const store = new AuthStore();
+  const commentValue = ref('')
 
   onMounted(() => {
     let path = window.location.hash.split('/')[3]
@@ -67,7 +56,7 @@
 
     newsService.getNewsIdByPath(path).then(newsId =>{
       publicationService.getPublicationIdByNewsId(newsId.id).then(publicationId =>{
-        store.publicationId = publicationId.data
+        store.updateCurrentPublication(publicationId.data)
       })
       publicationService.getPublicationByNewsId(newsId.id).then(publicatoin =>{
         let date = publicatoin.updateDate
@@ -81,6 +70,17 @@
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value
   });
+
+  const sendComment = () =>{
+    console.log(commentValue)
+    const commentBody = {
+      "value" : commentValue.value,
+      "author" : store.userId
+    }
+
+    console.log(commentBody,store.currentPublication)
+    commentsService.createComment(commentBody,store.currentPublication)
+  }
 
 </script>
 <style >

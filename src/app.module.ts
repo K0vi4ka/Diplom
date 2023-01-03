@@ -4,7 +4,6 @@ import { UserModule } from './user/user.module';
 import {ConfigModule} from  "@nestjs/config"
 import {User} from './user/user.model'
 import { RolesModule } from './roles/roles.module';
-import SQLite from 'sqlite3'
 import { Roles } from "./roles/roles.model";
 import { UserRoles } from "./roles/user-roles.model";
 import { NewsModule } from './news/news.module';

@@ -22,7 +22,7 @@ export class NewsController {
       return this.newsService.createNews(filePath,newsName,data)
     }
     catch(e){
-      throw new HttpException('ФАЙЛ УЖЕ ЕСТЬ, ДИБИЛ', HttpStatus.BAD_REQUEST);
+      throw new HttpException('ФАЙЛ УЖЕ ЕСТЬ', HttpStatus.BAD_REQUEST);
     }
   }
 

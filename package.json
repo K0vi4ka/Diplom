@@ -32,6 +32,7 @@
     "axios": "^1.2.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
+    "docker": "^1.0.0",
     "fs-": "^1.0.0",
     "mysql2": "^2.3.3",
     "nestjs-rate-limiter": "^3.1.0",
@@ -41,7 +42,7 @@
     "sequelize": "^6.26.0",
     "sequelize-typescript": "^2.1.5",
     "sqlite3": "^5.1.2",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.11"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

@@ -15,8 +15,8 @@ export const AuthStore = defineStore('authstore',{
       this.categoryName = category
     },
 
-    updateCurrentPublication(value) {
-      this.currentPublication = value
+    updateCurrentPublication(publicatoinId) {
+      this.currentPublication = publicatoinId
     }
   }
 })

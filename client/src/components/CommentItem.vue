@@ -30,6 +30,7 @@
 <style >
   .comment-info {
     display: flex;
+    justify-content: space-between;
     background-color: #f4f4f4;    
   }
 
