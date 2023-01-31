@@ -32,6 +32,7 @@ const allCategory = ref("")
 const userRoles = ref();
 
 const MenuClickHandler = (e) =>{
+  console.log(e.target)
   if(e.target.getAttribute('class') === 'header-nav__item'){
     const navItem = [...document.querySelectorAll('.header-nav__item')];
     navItem.forEach(item => item.classList.remove('active'))
@@ -68,7 +69,7 @@ onMounted(() =>{
             item.classList.add('active')
           }
         })
-      },100)
+      },200)
     }
 
 

@@ -16,6 +16,13 @@ export class CategoryController {
     return this.categoryService.createCategory(dto)
   }
 
+  @Get('categoryname/full')
+  async getAllCategoryFullData() {
+    console.log('work')
+    const categoryes = await this.categoryService.getAllCaterory();
+    return await categoryes
+  }
+
   @Get()
   async getAllCategory(){
     const categoryes = await this.categoryService.getAllCaterory();

@@ -9,14 +9,16 @@ export class PublicationService{
         "usersId": user,
         "categoryId": category
       }
-
+      console.log('send')
       const responce = api.post('http://localhost:5000/publication', obj);
       return responce.data
      })
   }
 
   async getAllPublication(){
-    const responce = api.get('http://localhost:5000/publication')
+    console.log('start')
+    const responce = api.get('http://localhost:5000/publication');
+    console.log( await responce.data)
     return (await responce).data;
   }
 

@@ -11,4 +11,9 @@ export default class CategoryService{
     return responce.data.id
   }
 
+  async getFullCategoryData() {
+    const responce = await api.get('http://localhost:5000/category/categoryname/full')
+    return await responce.data
+  }
+
 }

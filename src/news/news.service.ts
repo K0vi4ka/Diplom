@@ -37,14 +37,14 @@ export class NewsService {
     return createFile(path, data);
   }
 
-  private async getFile(path: string){
+  async getFile(path: string){
     const fileText = await getFile(path,'utf-8')
     return fileText
   }
 
   async getFilePathByName(fileName: string) {
     const file = await this.newstRepository.findOne({where:{newsName: fileName}})
-    return file.filePath
+    return file
   }
 
   async getFileContentByPath(filePath: string){

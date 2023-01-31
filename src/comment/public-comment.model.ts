@@ -8,7 +8,7 @@ interface CreatePublicationComment{
   publicId: number;
 }
 
-@Table({tableName: "comments"})
+@Table({tableName: "commentpublic"})
 export class PublicComment extends Model<PublicComment,CreatePublicationComment>{
   @Column({type: DataType.INTEGER, allowNull: false, autoIncrement:true, primaryKey: true})
   id: number
@@ -20,7 +20,4 @@ export class PublicComment extends Model<PublicComment,CreatePublicationComment>
   @ForeignKey(()=>Publication)
   @Column({type: DataType.INTEGER})
   publicId:number;
-
-  @BelongsTo(() => Publication)
-  publication: Publication
 }

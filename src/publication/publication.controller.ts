@@ -14,10 +14,14 @@ export class PublicationController {
     const publication = await this.publicationService.getAllPublicaton();
     const response = [];
     [...publication].forEach(item =>{
+      console.log(item.news.newsName)
+      console.log(item.category.value);
+      console.log(item.user.nickname)
       if(item.news.newsName && item.category.value && item.user.nickname){
         response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
       }
     })
+    
     return response.reverse();
   }
 

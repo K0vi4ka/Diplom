@@ -17,8 +17,8 @@ export class Comment extends Model<Comment,CreateComment>{
   value: string;
 
   @ForeignKey(()=>User)
-  @Column({type: DataType.STRING})
-  author:string;
+  @Column({type: DataType.INTEGER})
+  author:number;
 
   @BelongsToMany(() => Publication, ()=> PublicComment)
   users: Publication[];

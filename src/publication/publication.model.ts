@@ -32,9 +32,6 @@ export class Publication extends Model<Publication,PublicationCreate>{
   @Column({type: DataType.INTEGER, defaultValue: 0})
   views: number;
 
-  @BelongsToMany(()=>Comment,()=>PublicComment)
-  comments: Comment[];
-
   @BelongsTo(()=> User)
   user:User;
 

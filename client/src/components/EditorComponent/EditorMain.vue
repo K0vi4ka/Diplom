@@ -37,12 +37,14 @@
   import UserService from "@/service/UserService";
   import router from "@/router/router";
   import NewsService from "@/service/NewsService";
+  import { AuthStore } from "@/service/pinia-store";
 
   const contentValue = ref("news");
   const authorContent = ref('')
   const publicationService = new PublicationService();
   const userService = new UserService();
   const newsService = new NewsService();
+  const store = new AuthStore();
 
   const headerObj = {
     "news": "Ваши статьи",
@@ -84,10 +86,10 @@
   }
 
   const selectNewsHandler = async (e) => {
-    let selectPage = findTargetName(e)
+      let selectPage = findTargetName(e)
     await newsService.getNewsPathByName(selectPage).then(path =>{
       console.log(path)
-      router.push(`/newsTime/news/${path.split('/')[1]}`)
+      router.push(`/newsTime/news/${path.filePath.split('/')[1]}`)
     })
   }
 
@@ -106,6 +108,11 @@
   watch(() => contentValue.value,() => {
     headerValue.value = headerObj[contentValue.value]
   });
+
+  watch(() => store.categoryName,() => {
+    router.push('/newsTime')
+  });
+  
 
 </script>
 <style scoped>

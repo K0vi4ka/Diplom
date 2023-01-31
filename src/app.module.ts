@@ -10,14 +10,15 @@ import { NewsModule } from './news/news.module';
 import { PublicationModule } from './publication/publication.module';
 import { CategoryController } from './category/category.controller';
 import { CategoryModule } from './category/category.module';
-import { CommentModule } from './comment/comment.module';
 import { Publication } from "./publication/publication.model";
 import { Category } from "./category/category-model";
 import { News } from "./news/news.model";
-import { Comment } from "./comment/comment.model";
-import { PublicComment } from "./comment/public-comment.model";
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { CommentModule } from './comment/comment.module';
+import { PublicComment } from "./comment/public-comment.model";
+import { Comment } from "./comment/comment.model";
+
 
 
 @Module({
@@ -42,7 +43,6 @@ import { TokenModule } from './token/token.module';
     NewsModule,
     PublicationModule,
     CategoryModule,
-    CommentModule,
     AuthModule,
     TokenModule,
   ],

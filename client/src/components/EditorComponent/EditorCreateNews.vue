@@ -47,21 +47,21 @@ const userService = new UserService();
 
 
 onMounted(() =>{
-   categoryService.getAllCategory().then(data =>{
-    categoryObj.value = data
+   categoryService.getFullCategoryData().then(data =>{
+    categoryObj.value = data.map(item =>{ 
+      return item.value
+    })
    })
 })
 
 
 const createPublication = async() =>{
-  if(categorName.value && newsName.value && editorText.value){
     const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     const user = await userService.getUserByToken({"token": refreshToken})
     const responce = await publicationService.createPublication({"newsName":newsName.value,'filePath':"news-storage","data":editorText.value},categorName.value, (await user.userId))
     if(responce){
       document.querySelector('.public-is-created').innerHTML = "Запись успешна создана"
     }
-  }
 }
 </script>
 
