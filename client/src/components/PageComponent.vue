@@ -72,13 +72,10 @@
   });
 
   const sendComment = () =>{
-    console.log(commentValue)
     const commentBody = {
       "value" : commentValue.value,
       "author" : store.userId
     }
-
-    console.log(commentBody,store.currentPublication)
     commentsService.createComment(commentBody,store.currentPublication)
   }
 

@@ -14,10 +14,10 @@ export class UserController {
     return this.userService.createUser(userDto)
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   getAll() {
-    return this.userService.getAllUser()
+    return this.userService.getAllUser();
   }
 
   @Get(':id')
@@ -25,9 +25,34 @@ export class UserController {
     return this.userService.getUserById(id)
   }
 
+  @Post('update:id') 
+  updateUsers(@Param('id') id:number,@Body() userDto: CreateUserDto) {
+    this.userService.updateUser(id,userDto);
+  }
+
   @Get('roles/:id')
   async getUserRolesById(@Param('id') id:number){
     const roles = await this.userService.getUserRoles(id);
     return roles[0].description;
+  }
+
+  @Get('exist/nickname/:nickname')
+  async userExist(@Param('nickname') nickname: string) {
+    const user = await this.userService.getExistByUsername(nickname)
+    if(user) {
+      //User exist -> can't create user
+      return false
+    }
+    return true;
+  }
+
+  @Get('exist/email/:email')
+  async emailExist(@Param('email') nickname: string) {
+    const user = await this.userService.getExistByEmail(nickname)
+    if(user) {
+      //User exist -> can't create user
+      return false
+    }
+    return true;
   }
 }

@@ -24,7 +24,7 @@ export class PublicationService {
         }
     ]
     });
-    return response
+    return await response
   }
 
   async getPublicationByAuthor(id: number){

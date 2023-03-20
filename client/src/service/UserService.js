@@ -15,4 +15,10 @@ export default class UserService {
     let responce = await api.post('http://localhost:5000/token', token)
     return responce.data
   }
+
+  async getAllUsers() {
+    let responce =  await api.get('http://localhost:5000/users');
+    console.log(responce.data)
+    return responce.data;
+  }
 }

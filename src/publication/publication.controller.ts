@@ -14,9 +14,6 @@ export class PublicationController {
     const publication = await this.publicationService.getAllPublicaton();
     const response = [];
     [...publication].forEach(item =>{
-      console.log(item.news.newsName)
-      console.log(item.category.value);
-      console.log(item.user.nickname)
       if(item.news.newsName && item.category.value && item.user.nickname){
         response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
       }
@@ -33,7 +30,6 @@ export class PublicationController {
 
   @Get('/user/:id')
   async getPublicationByAuthor(@Param("id") id:number){
-    console.log(id)
     const publications = await this.publicationService.getPublicationByAuthor(id)
     const response = [];
     [...publications].forEach(item =>{

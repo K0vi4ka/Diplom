@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import {CreateUserDto} from './dto/createUser.dto'
 import { RolesService } from 'src/roles/roles.service';
+import { where } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -38,4 +39,18 @@ export class UserService {
     return user.$get('roles');
   }
 
+  async getExistByUsername(nickname) {
+    const user = await this.userRepository.findOne({where: {nickname}});
+    return await user
+  }
+
+  async getExistByEmail(email) {
+    const user = await this.userRepository.findOne({where : {email}})
+    return await user;
+  }
+
+  async updateUser(id,user) {
+    const updatedUser = await this.userRepository.update(id,user); 
+    return await updatedUser
+  }
 }

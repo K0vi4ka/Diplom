@@ -8,6 +8,7 @@
     <div class="side-menu" @click="changeSideMenuContentHandler">
       <p class="side-menu__item">Ваши статьи</p>
       <p class="side-menu__item">Создать новую статью</p>
+      <p class="side-menu__item">Список пользователей</p>
     </div>
 
     
@@ -22,6 +23,8 @@
       </div>
 
       <EditorCreateNewsVue v-if="contentValue  === 'create'"></EditorCreateNewsVue>
+      <EditorUserList v-if="contentValue == 'usersList'" />
+      
     </div>
     </div>
     
@@ -38,6 +41,7 @@
   import router from "@/router/router";
   import NewsService from "@/service/NewsService";
   import { AuthStore } from "@/service/pinia-store";
+  import EditorUserList from "./EditorUserList.vue";
 
   const contentValue = ref("news");
   const authorContent = ref('')
@@ -58,9 +62,10 @@
       case 'Ваши статьи': contentValue.value = 'news' 
       break;
       case 'Создать новую статью': contentValue.value = "create"
-      break
-      default: contentValue.value 
       break;
+      case 'Список пользователей' : contentValue.value = 'usersList'
+      break;
+      default: contentValue.value;
     }
     updateSideMenuStyle(e);
   }
@@ -86,11 +91,14 @@
   }
 
   const selectNewsHandler = async (e) => {
+    if(contentValue.value === "news") {
       let selectPage = findTargetName(e)
-    await newsService.getNewsPathByName(selectPage).then(path =>{
-      console.log(path)
-      router.push(`/newsTime/news/${path.filePath.split('/')[1]}`)
-    })
+      await newsService.getNewsPathByName(selectPage).then(path =>{
+        console.log(path)
+        router.push(`/newsTime/news/${path.filePath.split('/')[1]}`)
+      })
+    }
+    
   }
 
   onMounted(() => {

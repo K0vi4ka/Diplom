@@ -4,14 +4,14 @@
 
     <p class="public-is-created"></p>
 
-    <div class="news-info">
+    <div class="news-info" @click="categoryHandler">
       <label for="newsname">Введите заголовок новости</label>
       <InputText id="newsname" v-model="newsName"/>
 
       <label for="category">Выберите категорию</label>
-      <select name="category" id="category" v-model="categorName">
+      <select name="category" id="category" v-model="categorName" >
         <option value=""></option>
-        <option v-for="category in categoryObj" :key="category.value" :value="category.id">{{category}}</option>
+        <option v-for="category in categoryObj" :key="category.value" :value="category.id">{{category.value}}</option>
       </select>
     </div>
 
@@ -49,7 +49,7 @@ const userService = new UserService();
 onMounted(() =>{
    categoryService.getFullCategoryData().then(data =>{
     categoryObj.value = data.map(item =>{ 
-      return item.value
+      return item
     })
    })
 })
@@ -59,9 +59,14 @@ const createPublication = async() =>{
     const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     const user = await userService.getUserByToken({"token": refreshToken})
     const responce = await publicationService.createPublication({"newsName":newsName.value,'filePath':"news-storage","data":editorText.value},categorName.value, (await user.userId))
+
     if(responce){
       document.querySelector('.public-is-created').innerHTML = "Запись успешна создана"
     }
+}
+
+const categoryHandler = (e) => {
+  console.log(e.target)
 }
 </script>
 

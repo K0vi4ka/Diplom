@@ -1,27 +1,42 @@
 <template>
   <div class="auth-menu" v-if="!AuthPerson">
     <button class="auth-menu__btn" @click="showModal">Войти</button>
-    <button class="auth-menu__btn">Регистрация</button>
+    <button class="auth-menu__btn" @click="showRegModal">Регистрация</button>
   </div>
   
   <transition name="nested">
-      <LoginModal v-if="authStore.popup" v-model ="loginFlag"></LoginModal>
+      <LoginModal v-if="authStore.popup && loginFlag" v-model="loginFlag"></LoginModal>
+  </transition>
+
+  <transition name="nested">
+      <RegistrationModal v-if="authStore.popup && regFlag" v-model="regFlag"></RegistrationModal>
   </transition>
 
 </template>
 <script setup>
   import { ref} from 'vue'
   import LoginModal from "./LoginModal"
+  import RegistrationModal from './RegistrationModal.vue';
   import { AuthStore } from '@/service/pinia-store';
 
   let AuthPerson = ref(false);
   const loginFlag = ref(false);
   const authStore = AuthStore();
+  const regFlag = ref(false);
 
   const showModal = () => {
-    console.log(authStore.popup)
+    regFlag.value = false
+    loginFlag.value = true
     authStore.updatePopup();
   }
+
+  const showRegModal = () => {
+    loginFlag.value = false
+    regFlag.value = true;
+    authStore.updatePopup();
+  }
+
+
 
 </script>
 <style scoped>

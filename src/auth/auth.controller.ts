@@ -38,11 +38,17 @@ export class AuthController {
 
   @Post('/logout')
   async logout(){
-    const cooks = (data) =>{return data.cookie};
-    const {refreshToken} = cooks('');
-    const token = await this.authService.logout(refreshToken);
-    response.clearCookie("refreshToken")
-    return response.json(token)
+    try {
+      const cooks = (data) =>{return data.cookie};
+      const {refreshToken} = cooks('');
+      const token = await this.authService.logout(refreshToken);
+      response.clearCookie("refreshToken")
+      return response.json(token)
+    }
+    catch (e){
+      return e
+    }
+    
 
   }
 }

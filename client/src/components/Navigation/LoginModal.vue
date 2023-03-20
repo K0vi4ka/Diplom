@@ -107,6 +107,4 @@
     background-color: #4169E1;
     color: #FFFFFF;
   }
-
-
 </style>

@@ -18,12 +18,19 @@ import { TokenModule } from './token/token.module';
 import { CommentModule } from './comment/comment.module';
 import { PublicComment } from "./comment/public-comment.model";
 import { Comment } from "./comment/comment.model";
+import { LikesService } from './likes/likes.service';
+import { LikesModule } from './likes/likes.module';
+import { LikeValueService } from './like-value/like-value.service';
+import { LikeValueModule } from './like-value/like-value.module';
+import { Likes } from "./likes/likes.model";
+import { LikeValue } from "./like-value/like-value.model";
 
 
 
 @Module({
-  controllers: [CategoryController],
+  controllers: [],
   providers: [],
+
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env'
@@ -35,7 +42,7 @@ import { Comment } from "./comment/comment.model";
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment],
+      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment,Likes,LikeValue],
       autoLoadModels: true,
     }),
     UserModule,
@@ -45,6 +52,8 @@ import { Comment } from "./comment/comment.model";
     CategoryModule,
     AuthModule,
     TokenModule,
+    LikesModule,
+    LikeValueModule,
   ],
 })
 export class AppModule{}

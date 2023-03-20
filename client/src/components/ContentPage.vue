@@ -50,6 +50,9 @@
   }
   
   onMounted(()=>{
+    if(!store.categoryName) {
+      store.updateCategoryName("Главное");
+    }
     if(store.categoryName === 'Главное'){
       loadMainPage();
     }

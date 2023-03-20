@@ -12,19 +12,19 @@ export class PublicationService{
       console.log('send')
       const responce = api.post('http://localhost:5000/publication', obj);
       return responce.data
+     }).catch(error=>{
+      console.log(error)
      })
   }
 
   async getAllPublication(){
     console.log('start')
     const responce = api.get('http://localhost:5000/publication');
-    console.log( await responce.data)
     return (await responce).data;
   }
 
   async getPublicationByCategoryId(id) {
     const responce = api.get(`http://localhost:5000/publication/category/${id}`)
-    console.log(responce)
     return (await responce).data;
   }
 
