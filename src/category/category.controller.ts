@@ -6,9 +6,9 @@ import { CreateCategoryDto } from './dto/category-create.dto';
 export class CategoryController {
   constructor(private categoryService: CategoryService){}
 
-  @Get("/:id")
-  getCategoryById(@Param("id") id){
-    return this.categoryService.getCategoryById(id)
+  @Get("/:value")
+  getCategoryById(@Param("value") value){
+    return this.categoryService.getCategoryByValue(value)
   }
 
   @Post()
@@ -16,9 +16,20 @@ export class CategoryController {
     return this.categoryService.createCategory(dto)
   }
 
+  @Get('categoryname/full')
+  async getAllCategoryFullData() {
+    console.log('work')
+    const categoryes = await this.categoryService.getAllCaterory();
+    return await categoryes
+  }
+
   @Get()
-  getAllCategory(){
-    return this.categoryService.getAllCaterory();
+  async getAllCategory(){
+    const categoryes = await this.categoryService.getAllCaterory();
+    const response = [];
+    [...categoryes].forEach(item =>{response.push(item.value)})
+
+    return response
   }
 
   

@@ -1,6 +1,8 @@
 version: "3.9"
 services:
 
+
+
   # adminer:
   #   image: adminer
   #   restart: always
@@ -12,8 +14,11 @@ services:
     restart: always
     ports:
       - '${DB_PORT:-3306}:3306'
+    volumes:
+      - ./tmp/db:/tmp
     environment:
       MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD:-secret}'
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD:-secret}'
       MYSQL_DATABASE: '${DB_DATABASE}'
+    

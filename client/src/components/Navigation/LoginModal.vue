@@ -1,5 +1,5 @@
 <template lang="">
-  <form v-if="show" class="modal" >
+  <form class="modal" >
     <div class="modal-email">
       <label for="login-email">Введите логин</label>
       <input type="email" id="login-email" v-model="loginInp">
@@ -9,9 +9,13 @@
       <label for="login-password">Введите пароль</label>
       <input type="password" id="login-password" v-model="passInp">
     </div>
+    <div class="modal-checkbox">
+      <input type="checkbox" id="authCheckbox">
+      <label for="authCheckbox" @click="memberInp = !memberInp">Запомнить данные</label>
+    </div>
     <div class="btn-container">
       <button class="btn-container__btn" @click="sendData">OK</button>
-      <button class="btn-container__btn" @click="$emit('update:modelValue', show.value)">Отмена</button>
+      <button class="btn-container__btn" @click="cancelBtnHandler">Отмена</button>
     </div>
 
   </form>
@@ -19,41 +23,41 @@
 <script setup>
   import { ref} from 'vue'
   import AuthService from "@/service/AuthService"
-  const show = ref(true);
+  import { AuthStore } from '@/service/pinia-store';
+
   const loginInp = ref("")
   const passInp = ref("")
-  const authService = new AuthService()
+  const memberInp = ref(false)
+  const authService = new AuthService();
+  const authStore = AuthStore();
 
-
-  const sendData = function(e){
+  const sendData = async function(e){
     e.preventDefault();
-    const res = validData()
-    console.log(res)
-    if(res === 1){
-      const token = authService.login({
-        "email": loginInp.value,
-        "password": passInp.value
-      }).then(responce =>{
-        console.log(responce.data)
-      })
-      console.log(token)
+    try
+    {
+      const {accessToken,refreshToken,user} = await authService.login({email: loginInp.value,password: passInp.value})
+   
+      if(memberInp.value){
+        localStorage.setItem('authtoken',accessToken);
+        localStorage.setItem('refreshToken',refreshToken);
+      }
+      else{
+        sessionStorage.setItem('authtoken',accessToken);
+        sessionStorage.setItem('refreshToken',refreshToken);
+        authStore.updateUserId(user.id) 
+        
+      }  
+      authStore.updatePopup()    
     }
 
+    catch(e){
+      console.log(e)
+    }
   }
 
-  const validData = () =>{
-    const login = validateEmail(loginInp.value);
-    const pass = validatePassword(passInp.value)
-    console.log(pass)
-    if(login & pass){ return 1}
-  }
-
-  const validateEmail = (email) => {
-  return new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(email.toLowerCase())
-  };
-
-  const validatePassword = (password) => {
-    return !/[~`!#$%\\^&*+=\-\\[\]\\';,/{}|\\":<>\\?]/g.test(password)
+  const cancelBtnHandler = (e) =>{
+    e.preventDefault();
+    authStore.updatePopup();
   }
 
 
@@ -103,6 +107,4 @@
     background-color: #4169E1;
     color: #FFFFFF;
   }
-
-
 </style>

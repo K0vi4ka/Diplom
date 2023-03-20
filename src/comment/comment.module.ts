@@ -5,13 +5,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Comment } from './comment.model';
 import { Publication } from 'src/publication/publication.model';
 import { PublicComment } from './public-comment.model';
+import { User } from 'src/user/user.model';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   providers: [CommentService],
   controllers: [CommentController],
 
   imports: [
-    SequelizeModule.forFeature([Comment,Publication,PublicComment])
+    SequelizeModule.forFeature([User,Comment,Publication,PublicComment]),
   ],
 
   exports:[

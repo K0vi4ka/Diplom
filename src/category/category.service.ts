@@ -10,13 +10,11 @@ export class CategoryService {
   async createCategory(dto: CreateCategoryDto){
     const category =  await this.categoryRepository.create(dto)
     return category
-
   }
 
-  async getCategoryById(id){
-    const category = await this.categoryRepository.findOne({where:{id}})
+  async getCategoryByValue(value){
+    const category = await this.categoryRepository.findOne({where:{value}})
     return category
-
   }
 
   async getAllCaterory(){

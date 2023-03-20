@@ -1,9 +1,17 @@
 <template>
-  <NavMenu/>
+  <router-view />
 </template>
 
 <script setup>
-import NavMenu from './components/Navigation/NavMenu.vue';
+
+  import { onMounted } from 'vue';
+  import router from './router/router';
+  
+
+  onMounted(() => {
+    router.push('newsTime');
+  })
+
 
 </script>
 
