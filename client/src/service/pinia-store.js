@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export const AuthStore = defineStore('authstore',{
-  state: () => {{return { popup: false, userId: null, categoryName: "Главное" , currentPublication: 0}}},
+  state: () => {{return { popup: false, userId: null, categoryName: "Главное" , currentPublication: 0, selectedUser: null}}},
   actions: {
     updatePopup() {
       this.popup = !this.popup
@@ -17,6 +17,14 @@ export const AuthStore = defineStore('authstore',{
 
     updateCurrentPublication(publicatoinId) {
       this.currentPublication = publicatoinId
+    },
+
+    updateSelctedUser(user) {
+      this.selectedUser = user;
+    },
+
+    getUser(){
+      return this.selectedUser;
     }
   }
 })

@@ -39,7 +39,7 @@
   const selectNewsHandler = async (e) => {
     let selectPage = findTargetName(e)
     await newsService.getNewsPathByName(selectPage).then(path =>{
-      router.push(`/newsTime/news/${path.filePath.split('/')[1]}`)
+      router.push(`/newsTime/news/${path.filePath.split('/')[1]}`);
     })
   }
 

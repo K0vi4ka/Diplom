@@ -45,7 +45,6 @@
         sessionStorage.setItem('authtoken',accessToken);
         sessionStorage.setItem('refreshToken',refreshToken);
         authStore.updateUserId(user.id) 
-        
       }  
       authStore.updatePopup()    
     }

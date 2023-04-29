@@ -9,6 +9,7 @@
       <p class="side-menu__item">Ваши статьи</p>
       <p class="side-menu__item">Создать новую статью</p>
       <p class="side-menu__item">Список пользователей</p>
+      <p class="side-menu__item">Импортировать статьи</p>
     </div>
 
     
@@ -24,6 +25,7 @@
 
       <EditorCreateNewsVue v-if="contentValue  === 'create'"></EditorCreateNewsVue>
       <EditorUserList v-if="contentValue == 'usersList'" />
+      <EditorImportNews v-if="contentValue == 'imoprtsNews'"/>
       
     </div>
     </div>
@@ -42,6 +44,7 @@
   import NewsService from "@/service/NewsService";
   import { AuthStore } from "@/service/pinia-store";
   import EditorUserList from "./EditorUserList.vue";
+  import EditorImportNews from "./EditorImportNews.vue";
 
   const contentValue = ref("news");
   const authorContent = ref('')
@@ -64,6 +67,8 @@
       case 'Создать новую статью': contentValue.value = "create"
       break;
       case 'Список пользователей' : contentValue.value = 'usersList'
+      break;
+      case 'Импортировать статьи' : contentValue.value = 'imoprtsNews'
       break;
       default: contentValue.value;
     }

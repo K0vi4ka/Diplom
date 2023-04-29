@@ -51,4 +51,10 @@ export default class VaidateUserData {
     var filter = /^\s*\+?375((33\d{7})|(29\d{7})|(44\d{7}|)|(25\d{7}))\s*$/;
     return String(phone).search (filter) != -1;
   }
+
+  validateUserData(item) {
+    item.FIO = item.FIO == null? " - ": item.FIO;
+    item.email = item.email == null? " - ": item.email;
+    item.phone = item.phone == null? " - ": item.phone;
+  }
 }
