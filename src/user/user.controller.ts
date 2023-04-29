@@ -26,8 +26,27 @@ export class UserController {
   }
 
   @Post('update:id') 
-  updateUsers(@Param('id') id:number,@Body() userDto: CreateUserDto) {
-    this.userService.updateUser(id,userDto);
+  async updateUsersData(@Param('id') id:number,@Body() userDto: CreateUserDto) {
+     try{
+      await this.userService.updateUser(id,userDto);
+      return true;
+     }
+     catch {
+      return false;
+     }
+  }
+
+  @Post('update/password')
+  async updateUserPassword(@Body() passwords) {
+    const {userId,oldPassword,newPassword} = passwords;
+    console.log(userId,oldPassword,newPassword)
+    try{
+      await this.userService.chagePassword(userId,newPassword,oldPassword);
+      return true
+    }
+    catch{
+      return false
+    }
   }
 
   @Get('roles/:id')

@@ -21,4 +21,11 @@ export class CategoryService {
     const categorys = await this.categoryRepository.findAll();
     return categorys
   }
+
+  async getCategoryName(id:number) {
+    const categoryName = await this.categoryRepository.findOne({where: {
+      id:id
+    }})
+    return categoryName
+  }
 }

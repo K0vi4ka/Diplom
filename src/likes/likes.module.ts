@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { LikeValue } from 'src/like-value/like-value.model';
 import { Publication } from 'src/publication/publication.model';
 import { LikesController } from './likes.controller';
 import { Likes } from './likes.model';
 import { LikesService } from './likes.service';
+import { User } from 'src/user/user.model';
 
 @Module({
   controllers: [LikesController],
@@ -12,7 +12,7 @@ import { LikesService } from './likes.service';
 
 
   imports: [
-    SequelizeModule.forFeature([Likes,LikeValue,Publication]),
+    SequelizeModule.forFeature([Likes,Publication,User]),
   ],
 })
 export class LikesModule {}
