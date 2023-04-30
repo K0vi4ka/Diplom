@@ -53,6 +53,7 @@ import { LinkeSource } from "./linkesource/linkesource-model";
     LikesModule,
     LinkednewsModule,
     LinkesourceModule,
+    CommentModule
   ],
 })
 export class AppModule{}

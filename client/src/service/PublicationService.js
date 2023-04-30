@@ -49,6 +49,6 @@ export class PublicationService{
 
   async getPublicationIdByNewsId(id) {
     const responce = await api.get(`http://localhost:5000/publication/${id}`);
-    return await responce
+    return await responce.data
   }
 }

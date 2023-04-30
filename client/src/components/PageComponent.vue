@@ -21,8 +21,9 @@
         <button id="comment-btn" @click="sendComment" class="comment-btn submit">Отправить</button>
         <button id="comment-btn" class="comment-btn cancel">Отмена</button>
       </div>
-      <div class="news-comments">
-        <NewsCommentVue />
+
+      <div class="news-comments" >
+        <NewsCommentVue :comments="comments" v-if="comments.length !== 0"/>
       </div>
     </div>
   </div>
@@ -46,8 +47,9 @@
   const commentsService = new CommentsService();
   const store = new AuthStore();
   const commentValue = ref('')
+  const comments = ref([]);
 
-  onMounted(() => {
+  onMounted(async () => {
     let path = window.location.hash.split('/')[3]
 
     newsService.getNewsContentByPath(path).then(fileContent =>{
@@ -56,7 +58,12 @@
 
     newsService.getNewsIdByPath(path).then(newsId =>{
       publicationService.getPublicationIdByNewsId(newsId.id).then(publicationId =>{
-        store.updateCurrentPublication(publicationId.data)
+        store.updateCurrentPublication(publicationId)
+        commentsService.getCommentsByPublicationId(publicationId).then(comm => {
+          comments.value = comm
+          console.log(comments.value)
+        })
+
       })
       publicationService.getPublicationByNewsId(newsId.id).then(publicatoin =>{
         let date = publicatoin.updateDate
@@ -64,14 +71,14 @@
         publicatoin.updateDate = newDate;
         pageAdditionalContent.value = publicatoin
       })
-    }) 
+    })
   })
 
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value
   });
 
-  const sendComment = () =>{
+  const sendComment = async () =>{
     const commentBody = {
       "value" : commentValue.value,
       "author" : store.userId

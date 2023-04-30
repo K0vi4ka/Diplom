@@ -25,6 +25,10 @@ export const AuthStore = defineStore('authstore',{
 
     getUser(){
       return this.selectedUser;
+    },
+
+    getCurrentPublicationId() {
+      return this.currentPublication
     }
   }
 })
