@@ -1,7 +1,6 @@
 import { Controller,Get } from '@nestjs/common';
 import { Post } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
-import { NewsService } from 'src/news/news.service';
 import { PublicationCreateDto } from './dto/publication-create.dto';
 import { PublicationService } from './publication.service';
 

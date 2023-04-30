@@ -6,7 +6,13 @@
       </div>
     </div>
     
-    <div v-if="pageContent.length === 0">Ошибка загрузки</div>
+    <div class="publication-wrapper">
+      <a class="news imports" v-for="item in importContent" :key="item" v-bind:href = "item.link" target="_blank">
+          <ImportsItem :item="item"/>
+      </a>
+    </div>
+
+    <div v-if="pageContent.length === 0 && importContent.length == 0">Ошибка загрузки</div>
   </main>
 </template>
 <script setup>
@@ -17,11 +23,16 @@
   import router from '@/router/router';
   import NewsService from '@/service/NewsService';
   import { AuthStore } from '@/service/pinia-store';
+  import LinkedNewsService from '@/service/LinkedNewsService';
+  import ImportsItem from './ImportsItem.vue';
 
   const publicationService = new PublicationService();
   const categoryService = new CategoryService();
   const newsService = new NewsService();
+  const linkedNewsService = new LinkedNewsService();
   const store = AuthStore();
+
+  const importContent = ref([]);
   const pageContent = ref([]);
 
   const findTargetName = (e) =>{
@@ -43,10 +54,12 @@
     })
   }
 
-  const loadMainPage = () =>{
+  const loadMainPage = async () =>{
     publicationService.getAllPublication().then(content =>{
          pageContent.value = content
       })
+    importContent.value = await linkedNewsService.getAllLinkdeNews();
+    console.log(importContent.value)
   }
   
   onMounted(()=>{
@@ -60,11 +73,11 @@
       console.log('Возможно потом')
     }
     else {
-      categoryService.getCaegoryValue(store.categoryName).then(categoryId =>{
+      categoryService.getCaegoryValue(store.categoryName).then(async categoryId =>{
         publicationService.getPublicationByCategoryId(categoryId).then((publications)=>{
           pageContent.value = publications
        })
-       
+       importContent.value = await linkedNewsService.getAllLinkdNewsById(categoryId);
       })
     }
   })
@@ -78,10 +91,11 @@
       console.log('Возможно потом')
     }
     else {
-      categoryService.getCaegoryValue(store.categoryName).then(categoryId =>{
+      categoryService.getCaegoryValue(store.categoryName).then(async categoryId =>{
         publicationService.getPublicationByCategoryId(categoryId).then((publications)=>{
           pageContent.value = publications
        })
+       importContent.value = await linkedNewsService.getAllLinkdNewsById(categoryId);
        
       })
     }
@@ -98,12 +112,17 @@
     width: 90%; 
     background-color: #e8e8e8;
     margin: 20px auto;
+    margin-bottom: 0px;
     border-radius: 10px;
+  }
+
+  .publication-wrapper:nth-child(2) {
+    margin-top: 0;
   }
 
   .news {
     padding: 20px;
-    height: 100px;
+    height: 150px;
     border-bottom: 2px solid #000000;
   }
 

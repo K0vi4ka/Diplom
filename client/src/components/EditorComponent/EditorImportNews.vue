@@ -28,11 +28,21 @@
 <script setup>
   import { ref} from 'vue';
   import ImportsService from '@/service/ImportsService';
+  import LinkedNewsService from '@/service/LinkedNewsService';
+  import LinkeSourceService from '@/service/LinkeSource';
 
   const importService = new ImportsService();
+  const linkedNewsService =new LinkedNewsService();
+  const linkeSourceService = new LinkeSourceService();
 
   const importsType = ref("");
   const content = ref([]);
+
+  const categoryIdObj = {
+    "sports" : 1,
+    "business" : 2,
+    "scince" : 3
+  }
 
   const LoadContent = async () => {
     const type = importsType.value;
@@ -45,6 +55,34 @@
       break;
       default: break;
     }
+  }
+
+  const changeDataHandler = () => {
+    const checkboxes = document.querySelectorAll('input');
+    const activeCheckbox = [...checkboxes].map((item,index) => {
+      if(item.checked) {
+        console.log(index)
+        return index;
+      }
+    })
+
+    console.log(activeCheckbox)
+
+    activeCheckbox.forEach(async item=> {
+      if(item === undefined) return;
+      const elem = content.value.articles[item]
+      const sourceId = await linkeSourceService.createLinkeSource(elem.author);
+      const obj = {
+        "title": elem.title,
+        "source": await sourceId,
+        "link": elem.url,
+        "categoryId": categoryIdObj[importsType.value],
+        "date": elem.publishedAt
+      }
+
+      console.log(obj)
+      linkedNewsService.createLinkedNews(obj);
+    })
   }
 
 </script>

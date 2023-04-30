@@ -1,11 +1,14 @@
 <template lang="">
-  <h2>{{newsData[0]}}</h2>
-  <p>{{newsData[1]}}</p>
-  <div class = "news-info-item">
-    <p>{{newsData[3]}}</p>
-    <p class="news-author">Автор: {{newsData[2]}}</p>
+  <div class="news-wrapper">
+    <div>
+      <h2>{{newsData[0]}}</h2>
+      <p>{{newsData[1]}}</p>
+    </div>
+    <div class = "news-info-item">
+      <p>{{newsData[3]}}</p>
+      <p class="news-author">Автор: {{newsData[2]}}</p>
+    </div>
   </div>
-
 </template>
 
 <script setup>
@@ -31,6 +34,14 @@
 
   .news-info-item {
     display: flex;
+    justify-content: space-between;
+  }
+
+  .news-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
   }
 </style>
