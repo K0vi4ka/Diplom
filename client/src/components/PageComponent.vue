@@ -27,10 +27,10 @@
       </div>
     </div>
   </div>
-  
+  <DynamicDialog />
 </template>
 <script setup>
-  import { onMounted,ref, watch } from 'vue';
+  import { onMounted,ref, watch,defineAsyncComponent,provide } from 'vue';
   import NavMenuVue from './Navigation/NavMenu.vue';
   import NewsService from '@/service/NewsService';
   import { PublicationService } from '@/service/PublicationService';
@@ -38,6 +38,11 @@
   import NewsCommentVue from './NewsComment.vue';
   import { AuthStore } from '@/service/pinia-store';
   import CommentsService from '@/service/CommentsService';
+  import { useDialog } from 'primevue/usedialog';
+  import DynamicDialog from 'primevue/dynamicdialog';
+
+  const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));
+  const dynamicDialog = useDialog();
 
 
   const newsService = new NewsService();
@@ -79,11 +84,38 @@
   });
 
   const sendComment = async () =>{
-    const commentBody = {
+    if(store.userId == null) {
+      provide("dynamicDialog",dynamicDialog)
+        dynamicDialog.open(LoginModal, {
+        props: {
+            header: 'Ваши данные',
+            style: {
+                width: '50vw',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: {
+
+            },
+
+            modal: true,
+            
+            onClose: () => {
+              return
+              
+            }
+        },
+    })
+    }
+    else {
+      const commentBody = {
       "value" : commentValue.value,
       "author" : store.userId
     }
     commentsService.createComment(commentBody,store.currentPublication)
+    }
   }
 
 </script>

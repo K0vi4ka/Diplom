@@ -68,4 +68,40 @@ export class PublicationController {
     const publication = await this.publicationService.getPublicationByNewsId(newsId);
     return  publication[0].id; 
   }
+
+  @Get('/date/date')
+  async getPublicationDate() {
+    const publication = await this.publicationService.getAllPublicationDate();
+    const set = new Set();
+    await publication.forEach(item => {
+      item = item + ""
+      const dateArr = item.split(" ");
+      set.add(dateArr[1]+"-"+dateArr[3]);
+    })
+    console.log()
+    return [...set];
+  }
+
+  @Get("/date/:date")
+  async getPublicationByDate(@Param("date") date:string) {
+    const publication = await this.publicationService.getAllPublicaton();
+    const publicData = await publication.filter(item => {
+      const publicDate = item.updatedAt + ""
+      const dateArr = publicDate.split(" ");
+      console.log(publicDate+" "+date +" "+item)
+      if(dateArr[1]+"-"+dateArr[3] === date && item.views > 30 ) {
+        return item
+      }
+    })
+
+    const response = [];
+    [...publicData].forEach(item =>{
+      if(item.news.newsName && item.category.value && item.user.nickname){
+        response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
+      }
+    })
+    
+    return response.reverse();
+  }
+
 }

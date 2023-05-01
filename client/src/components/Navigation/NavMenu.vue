@@ -1,6 +1,7 @@
-<template lang="">
+<template>
   <header class="header">
     <div class="header-nav" @click ="MenuClickHandler">
+      <p class="logo">Ntime</p>
       <p class="header-nav__item" >Главное</p>
       <p class="header-nav__item" >Популярное</p>
       <p class="header-nav__item" v-for="category in allCategory" :key="category" >{{category}}</p>
@@ -26,7 +27,9 @@ import router from '@/router/router';
 
 const userService = new UserService();
 const categoryService = new CategoryService();
+
 const authStore = AuthStore();
+
 
 const allCategory = ref("")
 const userRoles = ref();
@@ -89,6 +92,12 @@ onMounted(() =>{
     -webkit-box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
 -moz-box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
 box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
+  }
+
+  .logo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-decoration:underline;
+    font-size: 1.5rem;
   }
 
   .active {

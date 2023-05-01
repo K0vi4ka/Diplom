@@ -21,7 +21,7 @@
   </form>
 </template>
 <script setup>
-  import { ref} from 'vue'
+  import { ref,inject} from 'vue'
   import AuthService from "@/service/AuthService"
   import { AuthStore } from '@/service/pinia-store';
 
@@ -30,6 +30,7 @@
   const memberInp = ref(false)
   const authService = new AuthService();
   const authStore = AuthStore();
+  const dialogRef = inject("dialogRef");
 
   const sendData = async function(e){
     e.preventDefault();
@@ -40,13 +41,14 @@
       if(memberInp.value){
         localStorage.setItem('authtoken',accessToken);
         localStorage.setItem('refreshToken',refreshToken);
+        dialogRef.value.close();
       }
       else{
         sessionStorage.setItem('authtoken',accessToken);
         sessionStorage.setItem('refreshToken',refreshToken);
         authStore.updateUserId(user.id) 
-      }  
-      authStore.updatePopup()    
+        dialogRef.value.close();
+      }    
     }
 
     catch(e){
@@ -54,31 +56,14 @@
     }
   }
 
-  const cancelBtnHandler = (e) =>{
-    e.preventDefault();
-    authStore.updatePopup();
+  const cancelBtnHandler = () =>{
+    dialogRef.value.close();
   }
 
 
 </script>
 <style scoped>
-  .modal {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 200px;
-    color:#000000;
-    background: #fff;
-    border: 5px solid #4169E1;;
-    border-radius: 8px;
-    padding: 15px;
-    min-width: 420px;
-    max-width: 480px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+
 
   label{
     display: inline-block;

@@ -87,4 +87,10 @@ export class PublicationService {
   async createPublication(publicationDto: PublicationCreateDto){
     return await this.publicationRepository.create(publicationDto);
   }
+
+  async getAllPublicationDate() {
+    const publication =  await this.publicationRepository.findAll()
+    return await publication.map(item => item.updatedAt);
+    
+  }
 }
