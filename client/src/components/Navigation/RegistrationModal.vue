@@ -59,7 +59,7 @@
   </form>
 </template>
 <script setup>
-  import {ref} from "vue";
+  import {ref,inject} from "vue";
   import { AuthStore } from "@/service/pinia-store";
   import ValidateUserData from "@/service/ValidateUserData"
   import InputMask from 'primevue/inputmask';
@@ -79,6 +79,7 @@
   const passInpRef = ref();
   const accesspassInpRef= ref();
   const phoneInpRef = ref();
+  const dialogRef = inject("dialogRef");
 
   
 
@@ -117,7 +118,7 @@
         sessionStorage.setItem('refreshToken',refreshToken);
         authStore.updateUserId(user.id);
       }  
-      authStore.updatePopup()    
+      dialogRef.value.close();  
     }
 
   const inputValidHandler = async (input) => {
@@ -154,27 +155,13 @@
   }
 
 
-  const cancelBtnHandler = (e) => {
-    e.preventDefault();
-    authStore.updatePopup();
+  const cancelBtnHandler = () => {
+    dialogRef.value.close();
   }
 </script>
 <style scoped>
   .modal {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    color:#000000;
-    background: #fff;
-    border: 5px solid #4169E1;;
-    border-radius: 8px;
-    padding: 15px;
-    min-width: 450px;
-    max-width: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
   }
 
   .modal div {

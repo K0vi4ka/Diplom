@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LikeValueService } from './like-value.service';
+import { LinkesourceService } from './linkesource.service';
 
-describe('LikeValueService', () => {
-  let service: LikeValueService;
+describe('LinkesourceService', () => {
+  let service: LinkesourceService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LikeValueService],
+      providers: [LinkesourceService],
     }).compile();
 
-    service = module.get<LikeValueService>(LikeValueService);
+    service = module.get<LinkesourceService>(LinkesourceService);
   });
 
   it('should be defined', () => {

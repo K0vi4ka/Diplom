@@ -9,7 +9,9 @@ export class CommentController {
   @Post(":publication")
   async createComment(@Body() dto: CreateCommentDto,@Param("publication") publication:number){
     try{
+      console.log(publication)
       const comment = await this.commentsService.createComment(dto);
+      console.log(await comment);
       const commentPublication = await this.commentsService.createPublicationComment((await comment).id,publication)
       return commentPublication
     }
@@ -32,8 +34,10 @@ export class CommentController {
   }
 
   @Get('publications/:publication')
-    async getCommentsByUserId(@Param('publication') publicationId:number) {
+    async getCommentsByPublicatoinId(@Param('publication') publicationId:number) {
+    console.log(publicationId)
     const comments = await this.commentsService.getPublicationByPublication(publicationId);
+    console.log(await comments)
     return await this.parseUserData(await comments) 
   }
 

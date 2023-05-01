@@ -3,37 +3,77 @@
     <button class="auth-menu__btn" @click="showModal">Войти</button>
     <button class="auth-menu__btn" @click="showRegModal">Регистрация</button>
   </div>
-  
-  <transition name="nested">
-      <LoginModal v-if="authStore.popup && loginFlag" v-model="loginFlag"></LoginModal>
-  </transition>
 
   <transition name="nested">
       <RegistrationModal v-if="authStore.popup && regFlag" v-model="regFlag"></RegistrationModal>
   </transition>
 
+    <DynamicDialog />
 </template>
 <script setup>
-  import { ref} from 'vue'
-  import LoginModal from "./LoginModal"
-  import RegistrationModal from './RegistrationModal.vue';
+  import { ref,defineAsyncComponent,provide} from 'vue'
   import { AuthStore } from '@/service/pinia-store';
+  import { useDialog } from 'primevue/usedialog';
+  import DynamicDialog from 'primevue/dynamicdialog';
+
+  const LoginModal = defineAsyncComponent(() => import('./LoginModal.vue'));
+  const RegistrationModal = defineAsyncComponent(() => import('./RegistrationModal.vue'))
 
   let AuthPerson = ref(false);
-  const loginFlag = ref(false);
   const authStore = AuthStore();
   const regFlag = ref(false);
+  const dynamicDialog = useDialog();
+
 
   const showModal = () => {
-    regFlag.value = false
-    loginFlag.value = true
-    authStore.updatePopup();
+    provide("dynamicDialog",dynamicDialog)
+        dynamicDialog.open(LoginModal, {
+        props: {
+            header: 'Ваши данные',
+            style: {
+                width: '50vw',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: {
+
+            },
+
+            modal: true,
+            
+            onClose: () => {
+            
+            }
+        },
+    });
   }
 
   const showRegModal = () => {
-    loginFlag.value = false
-    regFlag.value = true;
-    authStore.updatePopup();
+    provide("dynamicDialog",dynamicDialog)
+    console.log('click')
+        dynamicDialog.open(RegistrationModal, {
+        props: {
+            header: 'Ваши данные',
+            style: {
+                width: '50vw',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: {
+
+            },
+
+            modal: true,
+            
+            onClose: () => {
+            
+            }
+        },
+    });
   }
 
 

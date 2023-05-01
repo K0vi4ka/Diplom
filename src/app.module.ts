@@ -18,14 +18,12 @@ import { TokenModule } from './token/token.module';
 import { CommentModule } from './comment/comment.module';
 import { PublicComment } from "./comment/public-comment.model";
 import { Comment } from "./comment/comment.model";
-import { LikesService } from './likes/likes.service';
 import { LikesModule } from './likes/likes.module';
-import { LikeValueService } from './like-value/like-value.service';
-import { LikeValueModule } from './like-value/like-value.module';
 import { Likes } from "./likes/likes.model";
-import { LikeValue } from "./like-value/like-value.model";
-
-
+import { LinkdedNews } from "./linkednews/linkednews.model";
+import { LinkednewsModule } from "./linkednews/linkednews.module";
+import { LinkesourceModule } from './linkesource/linkesource.module';
+import { LinkeSource } from "./linkesource/linkesource-model";
 
 @Module({
   controllers: [],
@@ -42,7 +40,7 @@ import { LikeValue } from "./like-value/like-value.model";
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment,Likes,LikeValue],
+      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment,Likes,LinkdedNews,LinkeSource],
       autoLoadModels: true,
     }),
     UserModule,
@@ -53,7 +51,9 @@ import { LikeValue } from "./like-value/like-value.model";
     AuthModule,
     TokenModule,
     LikesModule,
-    LikeValueModule,
+    LinkednewsModule,
+    LinkesourceModule,
+    CommentModule
   ],
 })
 export class AppModule{}

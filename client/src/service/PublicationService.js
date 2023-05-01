@@ -9,11 +9,10 @@ export class PublicationService{
         "usersId": user,
         "categoryId": category
       }
-      console.log('send')
       const responce = api.post('http://localhost:5000/publication', obj);
       return responce.data
      }).catch(error=>{
-      console.log(error)
+      throw new Error(error)
      })
   }
 
@@ -49,6 +48,40 @@ export class PublicationService{
 
   async getPublicationIdByNewsId(id) {
     const responce = await api.get(`http://localhost:5000/publication/${id}`);
-    return await responce
+    return await responce.data
+  }
+
+  async getPublicationDate() {
+    const responce = await api.get("http://localhost:5000/publication/date/date");
+    return await responce.data
+  }
+
+  parsePopularPublicationDate(arr) {
+    const obj = {
+      "Jan": "Январь",
+      "Feb": "Февраль",
+      "Mar" : "Март",
+      "Apr" : "Апрель",
+      "May": "Май",
+      "Jun": "Июнь",
+      "Jul": "Июль",
+      "Aug": "Август",
+      "Sep" : "Сетябрь",
+      "Oct": "Октябрь",
+      "Nov": "Ноябрь",
+      "Dec" : "Декабрь"
+    }
+
+    const newArr = arr.map(item => {
+      const itemArr = item.split('-');
+      return {name: obj[itemArr[0]] + "-" + itemArr[1], code: item} 
+    });
+
+    return newArr
+  }
+
+  async getPopularPublicByDate(date) {
+    const responce = await api.get(`http://localhost:5000/publication/date/${date}`)
+    return await responce.data
   }
 }

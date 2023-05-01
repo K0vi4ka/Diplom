@@ -32,5 +32,13 @@ export class CategoryController {
     return response
   }
 
+  @Get("categoryId/:category")
+  async getCategoryName(@Param("category") categoryId:number) {
+    console.log(categoryId)
+    const categoryName = await this.categoryService.getCategoryName(categoryId);
+    console.log(categoryName)
+    return await categoryName.value
+  }
+
   
 }

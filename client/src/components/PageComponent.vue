@@ -21,15 +21,16 @@
         <button id="comment-btn" @click="sendComment" class="comment-btn submit">Отправить</button>
         <button id="comment-btn" class="comment-btn cancel">Отмена</button>
       </div>
-      <div class="news-comments">
-        <NewsCommentVue />
+
+      <div class="news-comments" >
+        <NewsCommentVue :comments="comments" v-if="comments.length !== 0"/>
       </div>
     </div>
   </div>
-  
+  <DynamicDialog />
 </template>
 <script setup>
-  import { onMounted,ref, watch } from 'vue';
+  import { onMounted,ref, watch,defineAsyncComponent,provide } from 'vue';
   import NavMenuVue from './Navigation/NavMenu.vue';
   import NewsService from '@/service/NewsService';
   import { PublicationService } from '@/service/PublicationService';
@@ -37,6 +38,11 @@
   import NewsCommentVue from './NewsComment.vue';
   import { AuthStore } from '@/service/pinia-store';
   import CommentsService from '@/service/CommentsService';
+  import { useDialog } from 'primevue/usedialog';
+  import DynamicDialog from 'primevue/dynamicdialog';
+
+  const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));
+  const dynamicDialog = useDialog();
 
 
   const newsService = new NewsService();
@@ -46,8 +52,9 @@
   const commentsService = new CommentsService();
   const store = new AuthStore();
   const commentValue = ref('')
+  const comments = ref([]);
 
-  onMounted(() => {
+  onMounted(async () => {
     let path = window.location.hash.split('/')[3]
 
     newsService.getNewsContentByPath(path).then(fileContent =>{
@@ -56,7 +63,12 @@
 
     newsService.getNewsIdByPath(path).then(newsId =>{
       publicationService.getPublicationIdByNewsId(newsId.id).then(publicationId =>{
-        store.updateCurrentPublication(publicationId.data)
+        store.updateCurrentPublication(publicationId)
+        commentsService.getCommentsByPublicationId(publicationId).then(comm => {
+          comments.value = comm
+          console.log(comments.value)
+        })
+
       })
       publicationService.getPublicationByNewsId(newsId.id).then(publicatoin =>{
         let date = publicatoin.updateDate
@@ -64,19 +76,46 @@
         publicatoin.updateDate = newDate;
         pageAdditionalContent.value = publicatoin
       })
-    }) 
+    })
   })
 
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value
   });
 
-  const sendComment = () =>{
-    const commentBody = {
+  const sendComment = async () =>{
+    if(store.userId == null) {
+      provide("dynamicDialog",dynamicDialog)
+        dynamicDialog.open(LoginModal, {
+        props: {
+            header: 'Ваши данные',
+            style: {
+                width: '50vw',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: {
+
+            },
+
+            modal: true,
+            
+            onClose: () => {
+              return
+              
+            }
+        },
+    })
+    }
+    else {
+      const commentBody = {
       "value" : commentValue.value,
       "author" : store.userId
     }
     commentsService.createComment(commentBody,store.currentPublication)
+    }
   }
 
 </script>

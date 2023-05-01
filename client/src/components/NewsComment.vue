@@ -1,29 +1,24 @@
 <template>
-  <div class="comments-container">
+  <div class="comments-container"  v-if="commentsValue.length !== 0">
 
-    <div class="comments-conteiner" v-for="comment in comments" :key="comment">
-      <CommentItem :comment="comment" />
+    <div class="comments-conteiner" v-for="comment in commentsValue" :key="comment">
+      <CommentItem  :comment="comment" />
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref,watch} from "vue"
+import {ref,defineProps,onMounted} from "vue"
 import CommentItem from '@/components/CommentItem.vue'
-import CommentsService from "@/service/CommentsService";
-import { AuthStore } from "@/service/pinia-store";
 
 
-  const comments = ref([])
-  const commentsService = new CommentsService();
-  const store = new AuthStore();
+  const props = defineProps(["comments"])
+  const commentsValue = ref([])
 
-  watch(() => store.currentPublication , async () => {
-    commentsService.getCommentsByPublicationId(store.currentPublication).then(data =>{
-        comments.value = data;
-    })
-  });
-
+  onMounted(async () => {
+    commentsValue.value = await props.comments;
+    console.log(commentsValue.value)
+  })
 </script>
 
 <style scoped>

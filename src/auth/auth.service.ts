@@ -1,9 +1,6 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/sequelize';
-import { HttpStatusCode } from 'axios';
 import { CreateUserDto } from 'src/user/dto/createUser.dto';
-import { User } from 'src/user/user.model';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from "bcryptjs"
 import { AuthDto } from 'src/roles/dto/auth.dto';
@@ -11,8 +8,6 @@ import { TokenService } from 'src/token/token.service';
 import { JwtDto } from './dto/create-jwt.dto';
 import { ApiError } from 'src/exceptions/api-error';
 import { RolesService } from 'src/roles/roles.service';
-import { response } from 'express';
-import { request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -64,7 +59,7 @@ export class AuthService {
     return tokenData
   }
 
-  private async validateUser(userdto: AuthDto){
+  async validateUser(userdto: AuthDto){
     const user = await this.userService.getUserByEmail(userdto.email)
     const passwordEquals = await bcrypt.compare(userdto.password, user.password)
     if(user && passwordEquals){

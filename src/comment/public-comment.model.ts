@@ -20,4 +20,10 @@ export class PublicComment extends Model<PublicComment,CreatePublicationComment>
   @ForeignKey(()=>Publication)
   @Column({type: DataType.INTEGER})
   publicId:number;
+
+  @BelongsTo(() => Comment)
+  comment: Comment
+
+  @BelongsTo(() => Publication)
+  publication: Publication
 }

@@ -6,7 +6,6 @@ import { Comment } from './comment.model';
 import { Publication } from 'src/publication/publication.model';
 import { PublicComment } from './public-comment.model';
 import { User } from 'src/user/user.model';
-import { UserModule } from 'src/user/user.module';
 
 @Module({
   providers: [CommentService],

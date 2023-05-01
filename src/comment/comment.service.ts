@@ -15,8 +15,8 @@ export class CommentService {
 
   async createComment(dto: CreateCommentDto){ 
     const comment = await this.commentRepository.create(dto);
-    //if(!comment) {throw new('ФАЙЛ УЖЕ ЕСТЬ, ДИБИЛ',HttpStatus.BAD_REQUEST)} 
-    return comment
+    console.log(comment)
+    return await comment
   }
 
   async createPublicationComment(commentId:number,publicationId:number) {
@@ -52,6 +52,6 @@ export class CommentService {
         where:{id:publicationId}
       },
     ]})
-    return comments
+    return await comments
   }
 }

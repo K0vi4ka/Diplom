@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import {CreateUserDto} from './dto/createUser.dto'
 import { RolesService } from 'src/roles/roles.service';
-import { where } from 'sequelize';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from "bcryptjs"
 
 @Injectable()
 export class UserService {
 
   constructor(@InjectModel(User) private userRepository: typeof User,
-  private roleService: RolesService) {}
+  private roleService: RolesService, 
+  private jwtService: JwtService) {}
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
@@ -50,7 +52,32 @@ export class UserService {
   }
 
   async updateUser(id,user) {
-    const updatedUser = await this.userRepository.update(id,user); 
+    const updatedUser = await this.userRepository.update(
+      {FIO: user.FIO ,nickname: user.nickname,email: user.email,phone: user.phone},
+      {where: {id:id}}
+      ); 
     return await updatedUser
   }
+
+  async chagePassword(id: number,password: string,oldPassword:string) {
+    const user = await this.getUserById(id);
+    const val = await this.validateUser(id,oldPassword);
+      const hashPassword = await bcrypt.hash(password,5);
+      const updatedUser = await this.userRepository.update(
+        {password: hashPassword},
+        {where: {id: id}}
+        )
+      return await updatedUser
+    }
+
+    private async validateUser(id:number,oldPassword){
+      const user = await this.getUserById(id);
+      const passwordEquals = await bcrypt.compare(oldPassword, user.password)
+      if(user && passwordEquals){
+        return user
+      }
+      throw new UnauthorizedException({message: "Данные введены не верно"})
+    }
+  
+    
 }

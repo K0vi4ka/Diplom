@@ -8,9 +8,9 @@
 
     <transition name="bounce">
       <div class="user-option-menu" v-if="showMenu">
-        <a href="" class="user-option-menu__link">Ваш профиль</a>
+        <UserInfoButton/>
         <a href="#newsTime/editorMain" class="user-option-menu__link">Редактор</a>
-        <a href="" class="user-option-menu__link">Выйти со страницы</a>
+        <ExitButton class="user-option-menu__link"/>
       </div>
     </transition>
     
@@ -19,6 +19,8 @@
 </template>
 
 <script setup>
+  import UserInfoButton from './UserInfoButton.vue';
+  import ExitButton from './ExitButton.vue';
   import {ref} from 'vue'
 
   const showMenu = ref(false)
@@ -62,6 +64,7 @@
     color: #FFFFFF;
     text-decoration: none;
     padding: 5px;
+    text-align: center;
   }
 
   .user-option-menu__link:hover {

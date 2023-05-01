@@ -13,7 +13,7 @@ export class AuthController {
   constructor(private authService: AuthService){}
 
   @Post('/login')
-  async login(request,response,@Body() attr: AuthDto){
+  async login(@Body() attr: AuthDto){
     try{
       const {email, password} = attr;
       const user = await this.authService.login(attr);
