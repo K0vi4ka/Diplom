@@ -11,8 +11,22 @@ export class LikesService {
   constructor(@InjectModel(Likes)private likesRepository: typeof Likes){}
 
   async createLikes(dto: CreateLikesDto){
+    console.log(dto)
     const likes = await this.likesRepository.create(dto);
     return likes;
+  }
+
+  async deleteLike(dto:CreateLikesDto) {
+    try {
+      const like = await this.likesRepository.destroy({where: 
+        {userId:dto.userId,publicId:dto.publicId},
+      })
+      return true;
+    }
+    catch{
+      return false;
+    }
+    
   }
 
   async getPublicationLikes(publicationId:number) {
@@ -32,9 +46,11 @@ export class LikesService {
   }
 
   async isUserLikePublication(publicationId:number,userId:number){
+    console.log(publicationId,userId)
     const likes = await this.likesRepository.findOne({where: {
       publicId: publicationId,
       userId: userId
     }})
+    return await likes
   }
 }

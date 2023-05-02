@@ -1,7 +1,7 @@
 <template lang="">
   <main class="main">
 
-    <div v-if="store.categoryName === 'Популярное'" class="popular-news">
+    <div v-if="store.categoryName === 'Популярное' && publicDateArr.length !== 0" class="popular-news">
       <div class="select-block">
         <h2 class="popular_header">Популярное за {{publicDate.name}}</h2>
         <div class="select">
