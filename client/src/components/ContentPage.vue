@@ -19,17 +19,19 @@
     </div>
   
     <div class="publication-wrapper">
-      <a class="news imports" v-for="item in importContent" :key="item" v-bind:href = "item.link" target="_blank">
+      <div class="news imports" v-for="item in importContent" :key="item" v-bind:href = "item.link" target="_blank" @click="OpenFrame">
           <ImportsItem :item="item"/>
-      </a>
+      </div>
     </div>
 
     <div v-if="pageContent.length === 0 && importContent.length == 0">Ошибка загрузки</div>
   </main>
 </template>
 <script setup>
+
+
   import NewsItem from '@/components/NewsItem.vue'
-  import { ref, onMounted, watch } from 'vue';
+  import { ref, onMounted, watch} from 'vue';
   import { PublicationService } from '@/service/PublicationService';
   import CategoryService from '@/service/CategoryService';
   import router from '@/router/router';
@@ -39,6 +41,7 @@
   import Dropdown from 'primevue/dropdown';
   import ImportsItem from './ImportsItem.vue';
 
+
   const publicationService = new PublicationService();
   const categoryService = new CategoryService();
   const newsService = new NewsService();
@@ -46,6 +49,7 @@
   const store = AuthStore();
   const publicDateArr = ref([]);
   const publicDate = ref("");
+
 
   const importContent = ref([]);
   const pageContent = ref([]);
@@ -90,6 +94,7 @@
       loadMainPage();
     }
     else if(store.categoryName === 'Популярное') {
+      console.log(publicDate.value.code)
       pageContent.value = await publicationService.getPopularPublicByDate(publicDate.value.code);
       importContent.value = [];
     }
@@ -109,6 +114,7 @@
       loadMainPage();
     }
     else if(store.categoryName === 'Популярное') {
+      console.log(publicDate.value.code)
       pageContent.value = await publicationService.getPopularPublicByDate(publicDate.value.code);
       importContent.value = [];
     }
