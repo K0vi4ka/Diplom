@@ -9,7 +9,10 @@
       <p class="news-created-date">Созданно {{pageAdditionalContent.updateDate}}</p>
     </div>
 
+    
     <div class="content"></div>
+
+    <svg @click="changeHeart" style="color: red" xmlns="http://www.w3.org/2000/svg" width="18" height="16"  class="bi bi-suit-heart-fill heart" viewBox="0 0 16 16" fill="white"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" stroke="red" class="" ></path> </svg>
 
     <div class="comments-block">
       <div class="comments-block-header">
@@ -40,12 +43,14 @@
   import CommentsService from '@/service/CommentsService';
   import { useDialog } from 'primevue/usedialog';
   import DynamicDialog from 'primevue/dynamicdialog';
+  import LikesService from '@/service/LikesService';
 
   const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));
   const dynamicDialog = useDialog();
 
 
   const newsService = new NewsService();
+  const likesService = new LikesService();
   const pageContent = ref('');
   const pageAdditionalContent = ref({})
   const publicationService = new PublicationService();
@@ -55,6 +60,8 @@
   const comments = ref([]);
 
   onMounted(async () => {
+
+
     let path = window.location.hash.split('/')[3]
 
     newsService.getNewsContentByPath(path).then(fileContent =>{
@@ -62,7 +69,18 @@
     })
 
     newsService.getNewsIdByPath(path).then(newsId =>{
-      publicationService.getPublicationIdByNewsId(newsId.id).then(publicationId =>{
+      publicationService.getPublicationIdByNewsId(newsId.id).then(async publicationId =>{
+        
+    const heart = await likesService.isUserHaveLike(publicationId,store.userId);
+    console.log(heart)
+    if(heart) {
+      document.querySelector('.heart').setAttribute("fill","red")
+      likeRef.value = true
+    }
+    else {
+      document.querySelector('.heart').setAttribute("fill","white")
+      likeRef.value = false;
+    }
         store.updateCurrentPublication(publicationId)
         commentsService.getCommentsByPublicationId(publicationId).then(comm => {
           comments.value = comm
@@ -77,6 +95,7 @@
         pageAdditionalContent.value = publicatoin
       })
     })
+
   })
 
   watch(() => pageContent.value, async () => {
@@ -104,7 +123,6 @@
             
             onClose: () => {
               return
-              
             }
         },
     })
@@ -118,8 +136,95 @@
     }
   }
 
+  const likeRef = ref(false)
+  const changeHeart = () => {
+    if(store.userId === null) {
+      provide("dynamicDialog",dynamicDialog)
+        dynamicDialog.open(LoginModal, {
+        props: {
+            header: 'Ваши данные',
+            style: {
+                width: '50vw',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: {
+
+            },
+
+            modal: true,
+            
+            onClose: () => {
+              return
+            }
+        },
+    })
+    }
+      const heart = document.querySelector(".heart")
+      console.log(heart)
+      if(!likeRef.value){
+          likesService.createLike(store.getCurrentPublicationId(),store.userId)
+          heart.classList.remove("heart-unscale")
+          heart.setAttribute("fill","red");
+          heart.classList.add("heart-scale")
+      }
+      else {
+        likesService.deleteLike(store.getCurrentPublicationId(),store.userId)
+        heart.classList.remove("heart-scale")
+        heart.setAttribute("fill","white");
+        heart.classList.add("heart-unscale")
+      }
+      likeRef.value = !likeRef.value
+  }
+
 </script>
 <style >
+
+  .heart {
+    position: relative;
+    bottom: 20px;
+    left: 90%;
+    transform: scale(4);
+  }
+
+  .heart-scale {
+    animation-name: scale;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+  }
+
+  .heart-unscale {
+    animation-name: unscale;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+  }
+  
+  @keyframes unscale {
+    0% {
+      transform: scale(4);
+    }
+    50% {
+      transform: scale(3);
+    }
+    100% {
+      transform: scale(4);
+    }
+  }
+
+  @keyframes scale {
+    0% {
+      transform: scale(4);
+    }
+    50% {
+      transform: scale(6);
+    }
+    100% {
+      transform: scale(4);
+    }
+    
+  }
   img {
     max-height: 400px;
   }
@@ -149,6 +254,7 @@
 
   .content {
     margin: 20px;
+    margin-bottom: 50px;
   }
 
   .comments-block {
