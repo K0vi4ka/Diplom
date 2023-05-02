@@ -30,7 +30,6 @@
       </div>
     </div>
   </div>
-  <DynamicDialog />
 </template>
 <script setup>
   import { onMounted,ref, watch,defineAsyncComponent,provide } from 'vue';
@@ -42,7 +41,6 @@
   import { AuthStore } from '@/service/pinia-store';
   import CommentsService from '@/service/CommentsService';
   import { useDialog } from 'primevue/usedialog';
-  import DynamicDialog from 'primevue/dynamicdialog';
   import LikesService from '@/service/LikesService';
 
   const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));

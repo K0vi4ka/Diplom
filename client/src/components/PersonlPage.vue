@@ -25,7 +25,6 @@
 
       <button class="btn" @click="updateUserData">Изменить ваши личные данные</button>
 
-      <DynamicDialog/>
       <div class="change-password">
         <h2>Изменение пароля</h2>
         <div class="change-password__block">
@@ -63,7 +62,6 @@
   import LikesService from '@/service/LikesService';
   import CategoryService from '@/service/CategoryService';
   import { useDialog } from 'primevue/usedialog';
-  import DynamicDialog from 'primevue/dynamicdialog';
   import InputText from 'primevue/inputtext';
   import UserService from '@/service/UserService';
 

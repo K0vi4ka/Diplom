@@ -1,4 +1,6 @@
 <template >
+  
+
   <div class="news-wrapper" @click="clickData">
     <div>
       <h2>{{ data.title }}</h2>
@@ -11,13 +13,11 @@
     </div>
   </div>
 
-  <DynamicDialog />
-
 </template>
 <script setup>
   import {ref, defineProps,onMounted,defineAsyncComponent,provide} from 'vue';
    import { PublicationService } from '@/service/PublicationService';
-   import DynamicDialog from 'primevue/dynamicdialog';
+
    import { useDialog } from 'primevue/usedialog';
    import { AuthStore } from '@/service/pinia-store';
 
@@ -39,7 +39,7 @@
   })
 
   const clickData = () => {
-    store.updateLinkNews(data.value.link)
+    store.updateLinkNews(data.value)
     provide("dynamicDialog",dynamicDialog)
         dynamicDialog.open(frameComponent, {
         props: {

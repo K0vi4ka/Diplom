@@ -1,4 +1,5 @@
 <template lang="">
+  <DynamicDialog />
   <main class="main">
 
     <div v-if="store.categoryName === 'Популярное' && publicDateArr.length !== 0" class="popular-news">
@@ -29,7 +30,7 @@
 </template>
 <script setup>
 
-
+  import DynamicDialog from 'primevue/dynamicdialog';
   import NewsItem from '@/components/NewsItem.vue'
   import { ref, onMounted, watch} from 'vue';
   import { PublicationService } from '@/service/PublicationService';
