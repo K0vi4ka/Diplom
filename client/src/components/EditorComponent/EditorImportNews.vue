@@ -46,8 +46,9 @@
 
   const LoadContent = async () => {
     const type = importsType.value;
+    console.log(importsType.value)
     switch(type) {
-      case "sports" : content.value = await importService.getSportsNews();
+      case "sport" : content.value = await importService.getSportsNews();
       break;
       case "scince" : content.value = await  importService.getScienceNews();
       break;

@@ -55,7 +55,6 @@
             }
         },
     });
-
   }
 
   onMounted(async () => {

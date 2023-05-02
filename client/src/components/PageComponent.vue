@@ -26,7 +26,7 @@
       </div>
 
       <div class="news-comments" >
-        <NewsCommentVue :comments="comments" v-if="comments.length !== 0"/>
+        <NewsCommentVue :comments="comments" v-model="comments" v-if="comments.length !== 0"/>
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@
     }
         store.updateCurrentPublication(publicationId)
         commentsService.getCommentsByPublicationId(publicationId).then(comm => {
-          comments.value = comm
+          comments.value = comm.reverse();
           console.log(comments.value)
         })
 
@@ -98,9 +98,20 @@
 
   })
 
+  setInterval(() => {
+    commentsService.getCommentsByPublicationId(store.currentPublication).then(comm => {
+          comments.value = comm.reverse();
+          console.log(comments.value)
+    })
+  },5000)
+
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value
   });
+
+  watch(comments.value,() => {
+
+  })
 
   const sendComment = async () =>{
     if(store.userId == null) {
@@ -134,6 +145,10 @@
     }
     commentsService.createComment(commentBody,store.currentPublication)
     }
+    commentsService.getCommentsByPublicationId(store.currentPublication).then(comm => {
+          comments.value = comm.reverse();
+    })
+    commentValue.value = "";    
   }
 
   const likeRef = ref(false)
