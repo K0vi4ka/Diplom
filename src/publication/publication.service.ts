@@ -5,6 +5,7 @@ import { News } from 'src/news/news.model';
 import { User } from 'src/user/user.model';
 import { PublicationCreateDto } from './dto/publication-create.dto';
 import { Publication } from './publication.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class PublicationService {
@@ -90,7 +91,28 @@ export class PublicationService {
 
   async getAllPublicationDate() {
     const publication =  await this.publicationRepository.findAll()
-    return await publication.map(item => item.updatedAt);
-    
+    return await publication.map(item => item.updatedAt); 
   }
+
+  async getUsersAmoungViewsForDate(startDate,stopDate) {
+    const publication = await this.publicationRepository.sum('views',{where: {
+      createdAt: {
+        [Op.between] : [startDate,stopDate]
+      }
+    }})
+    return await publication
+  }
+
+  async getPopularPublicationByViews(startDate,stopDate) {
+    const publication = await this.publicationRepository.findAll({
+      where: {
+        createdAt: {
+          [Op.between] : [startDate,stopDate]
+        }
+      }
+    })
+
+    return await publication;
+  }
+
 }

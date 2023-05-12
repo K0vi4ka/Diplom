@@ -9,9 +9,7 @@ export class TokenController {
 
   @Post()
   async getUserByToken(@Body() token){
-    console.log(token)
     const user = await this.tokenService.findUserByToken(token);
-    console.log(user)
     return user
   }
 }

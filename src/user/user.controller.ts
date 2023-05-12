@@ -39,7 +39,6 @@ export class UserController {
   @Post('update/password')
   async updateUserPassword(@Body() passwords) {
     const {userId,oldPassword,newPassword} = passwords;
-    console.log(userId,oldPassword,newPassword)
     try{
       await this.userService.chagePassword(userId,newPassword,oldPassword);
       return true

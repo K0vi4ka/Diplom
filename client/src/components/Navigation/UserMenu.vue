@@ -63,7 +63,7 @@
     color: #FFFFFF;
     text-decoration: none;
     padding: 5px;
-    
+    transition: all 200ms;
   }
 
   .user-option-menu__link:hover {

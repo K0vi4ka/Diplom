@@ -3,7 +3,8 @@ import api from "@/auth-axios.js"
 export default class UserService {
 
   async getUser(id) {
-    let responce = await api.get(`http://localhost:5000/users/${id}`)
+    let responce = await api.get(`http://localhost:5000/users/${id}`);
+    console.log(responce)
     return responce.data;
   }
 
@@ -25,7 +26,8 @@ export default class UserService {
 
   async getUserByID(id) {
     let responce = await api.get(`http://localhost:5000/users/${id}`);
-    return responce.data;
+    console.log(responce)
+    return await responce.data;
   }
 
   async updateUserData(id,nickname,email,fio,phone){

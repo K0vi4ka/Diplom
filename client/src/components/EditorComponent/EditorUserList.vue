@@ -1,5 +1,4 @@
 <template>
-  <h1>Список пользователей</h1>
   <div class="list">
     <DataTable :value="allUsers" @row-click="itemClickHandler($event.data)">
       <Column field="id" style="width: 50px; text-align: center;"/>
@@ -11,7 +10,6 @@
     <DynamicDialog />
   </div>
  
-
 </template>
 <script setup>
   import {ref,onMounted, defineAsyncComponent,provide } from 'vue';
@@ -65,16 +63,6 @@
     }) 
   })
 
-  // const getUserData = (data) => {
-  //   console.log(data)
-  //     // const childrenList = e.target.parentNode.children
-  //     // const item = [...childrenList][0].innerHTML;
-  //     // const userIdx = item[item.length -1]
-  //     // const user = [...allUsers.value].find(item => item.id = userIdx)
-  //     // console.log(userIdx);
-  //     // console.log(user)
-  //     // return user;
-  // }
 
 </script>
 <style scoped>

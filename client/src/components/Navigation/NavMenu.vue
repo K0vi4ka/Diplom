@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header-nav" @click ="MenuClickHandler">
-      <p class="logo">Ntime</p>
+      <p class="logo" @click="LogoClickHandler">Ntime</p>
       <p class="header-nav__item" >Главное</p>
       <p class="header-nav__item" >Популярное</p>
       <p class="header-nav__item" v-for="category in allCategory" :key="category" >{{category}}</p>
@@ -34,8 +34,16 @@ const authStore = AuthStore();
 const allCategory = ref("")
 const userRoles = ref();
 
+const LogoClickHandler = () => {
+  router.push('/newsTime');
+  
+  const navItem = [...document.querySelectorAll('.header-nav__item')];
+  navItem.forEach(item => item.classList.remove('active'));
+  document.querySelector('.header-nav__item').classList.add('active');
+  authStore.updateCategoryName("Главное")
+}
+
 const MenuClickHandler = (e) =>{
-  console.log(e.target)
   if(e.target.getAttribute('class') === 'header-nav__item'){
     const navItem = [...document.querySelectorAll('.header-nav__item')];
     navItem.forEach(item => item.classList.remove('active'))
@@ -74,8 +82,6 @@ onMounted(() =>{
         })
       },200)
     }
-
-
 })
 
 </script>
@@ -118,6 +124,8 @@ box-shadow: 0px 8px 8px 0px rgba(34, 60, 80, 0.32);
     display: flex;
     align-items: center;
     height: 100%;
+    transition: all 100ms;
+    font-size: 1.2rem;
   }
 
   .header-nav__item:hover {

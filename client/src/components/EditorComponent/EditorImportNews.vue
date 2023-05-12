@@ -1,6 +1,4 @@
 <template>
-  <h1>Импорт Статей</h1>
-
   <h2>Выберите категорию получаемых статей</h2>
 
   <select name="" id="" @click="LoadContent" v-model="importsType">

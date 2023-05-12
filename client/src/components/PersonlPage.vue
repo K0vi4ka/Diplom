@@ -1,5 +1,6 @@
 <template>
   <NavMenu/>
+  <DynamicDialog />
   <h1 class="profile_header">Ваш Профиль</h1>
 
   <div class="content-wrapper">
@@ -45,7 +46,7 @@
       
       <div class="progress-items" v-for="category in allCategory" :key="category">
         <p class="progress-items__category-name">{{ category }}</p>
-        <progress class="progress-items__progressbar" v-bind:max="progressCount" v-bind:value="statisticsObj[category]" v-bind:mykey="category" @progress="getBestCategory"></progress>
+        <progress class="progress-items__progressbar" v-bind:max="progressCount" v-bind:value="statisticsObj[category]" v-bind:mykey="category"></progress>
         <p class="progress-items__likes">{{ statisticsObj[category] }}</p>
       </div>
 
@@ -64,6 +65,7 @@
   import { useDialog } from 'primevue/usedialog';
   import InputText from 'primevue/inputtext';
   import UserService from '@/service/UserService';
+  import DynamicDialog from 'primevue/dynamicdialog';
 
   const SelectUserModal = defineAsyncComponent(() => import('@/components/EditorComponent/SelectUserModal.vue'));
   const dynamicDialog = useDialog();

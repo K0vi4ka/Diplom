@@ -9,7 +9,6 @@
           <p>Выберит нужную вам дату</p>
           <Dropdown v-model="publicDate" editable :options="publicDateArr" optionLabel="name" placeholder="Select a City" @change="selectDate" class="dropdown-menu"/>
         </div>
-        
       </div>
       
     </div>
@@ -158,6 +157,7 @@
     padding: 20px;
     height: 150px;
     border-bottom: 2px solid #000000;
+    transition: all 200ms;
   }
 
   .news:hover {

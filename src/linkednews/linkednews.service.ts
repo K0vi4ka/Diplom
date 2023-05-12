@@ -13,7 +13,6 @@ export class LinkednewsService {
   private readonly httpService: HttpService){}
 
   async createLinkdeNews(linkedNewsDto: CreateLinkedNewsDto) {
-    console.log(linkedNewsDto.title.length)
     const linkedNews = await this.linkednewsService.create(linkedNewsDto);
     return linkedNews;
   }

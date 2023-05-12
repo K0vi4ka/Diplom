@@ -10,6 +10,7 @@
       <p class="side-menu__item">Создать новую статью</p>
       <p class="side-menu__item">Список пользователей</p>
       <p class="side-menu__item">Импортировать статьи</p>
+      <p class="side-menu__item">Статистика</p>
     </div>
 
     
@@ -26,6 +27,8 @@
       <EditorCreateNewsVue v-if="contentValue  === 'create'"></EditorCreateNewsVue>
       <EditorUserList v-if="contentValue == 'usersList'" />
       <EditorImportNews v-if="contentValue == 'imoprtsNews'"/>
+      <EditorStatistics v-if="contentValue == 'statistics'"/>
+      
       
     </div>
     </div>
@@ -45,6 +48,7 @@
   import { AuthStore } from "@/service/pinia-store";
   import EditorUserList from "./EditorUserList.vue";
   import EditorImportNews from "./EditorImportNews.vue";
+  import EditorStatistics from "./EditorStatistics.vue"
 
   const contentValue = ref("news");
   const authorContent = ref('')
@@ -55,7 +59,10 @@
 
   const headerObj = {
     "news": "Ваши статьи",
-    "create": "Создание новой статьи"
+    "create": "Создание новой статьи",
+    "usersList" :"Список пользователей",
+    "imoprtsNews" : "Импорт статей",
+    "statistics": "Статистика"
   }
 
   const headerValue = ref(headerObj[contentValue.value])
@@ -69,6 +76,8 @@
       case 'Список пользователей' : contentValue.value = 'usersList'
       break;
       case 'Импортировать статьи' : contentValue.value = 'imoprtsNews'
+      break;
+      case 'Статистика' : contentValue.value = "statistics";
       break;
       default: contentValue.value;
     }
@@ -142,6 +151,7 @@
     box-shadow: 1px 0px 14px 10px rgba(34, 60, 80, 0.08) inset;
     border-radius: 10px;
     width: 110vh;
+    padding: 10px;
   }
 
   .content-header {
@@ -166,6 +176,7 @@
 
   .side-menu__item {
     color:#FFFFFF;
+    transition: all 200ms;
   }
 
   .news {

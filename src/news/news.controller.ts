@@ -15,6 +15,12 @@ export class NewsController {
     return this.newsService.getNewsById(id)
   }
 
+  @Get("name/:id")
+  async getNewsNameById(@Param("id") id:number) {
+    const news = await this.newsService.getNewsNameById(id);
+    return await news
+  }
+
   @Post('create-news')
   createNews(@Body() dto){
     try{
@@ -28,7 +34,6 @@ export class NewsController {
 
   @Post('file-name')
   getFilePathByName(@Body() attr) {
-    console.log(attr)
     const fileName = attr.fileName;
     return this.newsService.getFilePathByName(fileName);
   }

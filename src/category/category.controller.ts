@@ -18,7 +18,6 @@ export class CategoryController {
 
   @Get('categoryname/full')
   async getAllCategoryFullData() {
-    console.log('work')
     const categoryes = await this.categoryService.getAllCaterory();
     return await categoryes
   }
@@ -34,9 +33,7 @@ export class CategoryController {
 
   @Get("categoryId/:category")
   async getCategoryName(@Param("category") categoryId:number) {
-    console.log(categoryId)
     const categoryName = await this.categoryService.getCategoryName(categoryId);
-    console.log(categoryName)
     return await categoryName.value
   }
 

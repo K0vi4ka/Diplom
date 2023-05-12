@@ -1,6 +1,5 @@
 <template>
   <div class="news-create-block">
-    <h2>Создание новости</h2>
 
     <p class="public-is-created"></p>
 

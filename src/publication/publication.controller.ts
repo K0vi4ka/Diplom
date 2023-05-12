@@ -78,7 +78,6 @@ export class PublicationController {
       const dateArr = item.split(" ");
       set.add(dateArr[1]+"-"+dateArr[3]);
     })
-    console.log()
     return [...set];
   }
 
@@ -88,7 +87,6 @@ export class PublicationController {
     const publicData = await publication.filter(item => {
       const publicDate = item.updatedAt + ""
       const dateArr = publicDate.split(" ");
-      console.log(publicDate+" "+date +" "+item)
       if(dateArr[1]+"-"+dateArr[3] === date && item.views > 30 ) {
         return item
       }
@@ -102,6 +100,38 @@ export class PublicationController {
     })
     
     return response.reverse();
+  }
+
+
+  @Post("views/count/date")
+  async getUsersAmoungViewsForDate(@Body() obj:any) {
+    const date = obj.date;
+    let dateNow = new Date(date);
+    let getYear = dateNow.getFullYear();
+    let getMonth = dateNow.getMonth();
+    let startDate = new Date(getYear, getMonth); 
+    let stopDate = new Date(getYear,getMonth+1);
+    const response = await this.publicationService.getUsersAmoungViewsForDate(startDate,stopDate);
+    return await response;
+  }
+
+  @Post("views/publicatoin/date")
+  async getPopularPublicationByViews(@Body() obj:any) {
+    const date = obj.date;
+    let dateNow = new Date(date);
+    let getYear = dateNow.getFullYear();
+    let getMonth = dateNow.getMonth();
+    let startDate = new Date(getYear, getMonth); 
+    let stopDate = new Date(getYear,getMonth+1);
+    const publication = await this.publicationService.getPopularPublicationByViews(startDate,stopDate);
+    const response = [];
+    await [...publication].forEach((item,index) => {
+      if(index < 3) {
+        response.push(item)
+      }
+    })
+
+    return await response.reverse();
   }
 
 }

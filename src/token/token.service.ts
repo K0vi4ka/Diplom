@@ -46,13 +46,12 @@ export class TokenService {
 
   async findUserByToken(accessToken){
     try{
-      console.log(accessToken)
       const user = await this.tokenRepository.findOne({where:{token: accessToken.token}})
-      console.log(user)
+
       return user
     }
     catch(e){
-      console.log(e, "Что за хуйня?")
+
     }
       
   }

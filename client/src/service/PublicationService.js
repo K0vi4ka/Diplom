@@ -71,7 +71,7 @@ export class PublicationService{
       "Nov": "Ноябрь",
       "Dec" : "Декабрь"
     }
-
+    
     const newArr = arr.map(item => {
       const itemArr = item.split('-');
       return {name: obj[itemArr[0]] + "-" + itemArr[1], code: item} 
@@ -82,6 +82,21 @@ export class PublicationService{
 
   async getPopularPublicByDate(date) {
     const responce = await api.get(`http://localhost:5000/publication/date/${date}`)
+    return await responce.data
+  }
+
+  async getUsersViewsAmoung(date) {
+    const responce = await api.post("http://localhost:5000/publication/views/count/date",{
+      "date" :date
+    })
+    return await responce
+  }
+
+  async getTopPublicationViews(date) {
+    const responce = await api.post("http://localhost:5000/publication/views/publicatoin/date",{
+      "date" : date
+    })
+
     return await responce.data
   }
 }
