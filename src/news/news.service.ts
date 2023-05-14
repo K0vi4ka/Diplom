@@ -64,4 +64,22 @@ export class NewsService {
     return await news.newsName;
   }
 
+  async getNewsIdByName(newsName:string) {
+    const news= await this.newstRepository.findOne( {
+      where: {
+        newsName: newsName
+      }
+    })
+    return news;
+  }
+
+  async deleteNews(newsId: number) {
+    const news = await this.newstRepository.destroy({
+      where: {
+        id: newsId
+      }
+    })
+    return await news;
+  }
+
 }

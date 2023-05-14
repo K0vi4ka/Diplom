@@ -54,4 +54,18 @@ export class CommentService {
     ]})
     return await comments
   }
+
+  async deleteComment(commentId: number) {
+    await this.commenttopublicationRepository.destroy({
+      where: {
+        commentId: commentId
+      }
+    })
+
+    await this.commentRepository.destroy({
+      where: {
+        id: commentId
+      }
+    })
+  }
 }

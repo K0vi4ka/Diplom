@@ -99,7 +99,6 @@ export class LikesService {
           },
         }
       })
-      console.log(count)
       const obj = {"user": await userId, "count": await count}
       return obj
   }    

@@ -27,12 +27,11 @@
   const userRoles = ref('')
   const userName = ref('');
 
-  onMounted(()=>{
-    userService.getUser(store.userId).then(user =>{
+  onMounted(async ()=>{
+    await userService.getUser(store.userId).then(user =>{
       userName.value = user.nickname
-      
     })
-    userService.getUserRoles(store.userId).then(roles=>{
+    await userService.getUserRoles(store.userId).then(roles=>{
       userRoles.value = roles
     })
   })

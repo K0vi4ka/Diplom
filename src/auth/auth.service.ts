@@ -22,7 +22,7 @@ export class AuthService {
       throw new UnauthorizedException({message: "Данные введены не верно"})
     }
     
-    const userDto = new JwtDto(user.id, user.email)
+    const userDto = new JwtDto(user.id, user.email);
       const tokens = await this.tokenService.generateToken(user)
       await this.tokenService.saveToken(user.id, (await tokens).refreshToken)
   

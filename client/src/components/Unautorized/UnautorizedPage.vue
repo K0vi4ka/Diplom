@@ -1,7 +1,4 @@
 <template lang="">
-  <transition name="slide-fade">
-    <div v-if="authStore.popup" class="popup-block" @click="popupClose"></div>
-  </transition>
 
   <NavMenuVue />
   <ContentPageVue/>
@@ -17,18 +14,14 @@ import {onMounted} from 'vue';
   const authStore = AuthStore();
   const userService = new UserService();
 
-  const popupClose = () =>{
-    authStore.updatePopup();
-  }
-
-  onMounted(()=>{
+  onMounted(async ()=>{
     const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     if(token) {
-      userService.getUserByToken({"token": token}).then(user =>{
-        authStore.userId = user.userId
-     })
+      const user = await userService.getUserByToken(token);
+      authStore.userId = await user.userId;
+     }
     }
-  })
+  )
 
 </script>
 <style scoped>

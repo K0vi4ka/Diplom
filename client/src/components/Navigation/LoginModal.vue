@@ -1,14 +1,14 @@
 <template lang="">
   <form class="modal" >
-    <div class="modal-email">
+    <div class="modal-email inp-block">
       <label for="login-email">Введите логин</label>
       <input type="email" id="login-email" v-model="loginInp">
-      <p class="email-warnings"></p>
     </div>
-    <div class="modal-password">
+    <div class="modal-password inp-block">
       <label for="login-password">Введите пароль</label>
       <input type="password" id="login-password" v-model="passInp">
     </div>
+    <div class="warning">{{warningMesssage}}</div>
     <div class="modal-checkbox">
       <input type="checkbox" id="authCheckbox">
       <label for="authCheckbox" @click="memberInp = !memberInp">Запомнить данные</label>
@@ -31,28 +31,32 @@
   const authService = new AuthService();
   const authStore = AuthStore();
   const dialogRef = inject("dialogRef");
+  const warningMesssage = ref("");
 
   const sendData = async function(e){
     e.preventDefault();
     try
     {
       const {accessToken,refreshToken,user} = await authService.login({email: loginInp.value,password: passInp.value})
-   
+
       if(memberInp.value){
-        localStorage.setItem('authtoken',accessToken);
-        localStorage.setItem('refreshToken',refreshToken);
+        console.log(refreshToken)
+        localStorage.setItem('authtoken',await accessToken);
+        localStorage.setItem('refreshToken',await refreshToken);
+        authStore.updateUserId(await user.id) 
         dialogRef.value.close();
       }
       else{
-        sessionStorage.setItem('authtoken',accessToken);
-        sessionStorage.setItem('refreshToken',refreshToken);
-        authStore.updateUserId(user.id) 
+        sessionStorage.setItem('authtoken',await accessToken);
+        sessionStorage.setItem('refreshToken',await refreshToken);
+        authStore.updateUserId(await user.id) 
         dialogRef.value.close();
       }    
     }
 
     catch(e){
-      console.log(e)
+      console.log(e);
+      warningMesssage.value = "Ошибка данные введены не верно"
     }
   }
 
@@ -64,14 +68,21 @@
 </script>
 <style scoped>
 
-
   label{
     display: inline-block;
-    width: 150px;
+    width: 250px;
+    margin-bottom: 20px;
   }
 
   input{
     font-size: 20px;
+  }
+
+  .warning {
+    display: flex;
+    justify-content: flex-end;
+    color: #ff0000;
+    transform: translateX(-10%);
   }
 
   input .warning {
@@ -81,6 +92,7 @@
   .btn-container {
     display: flex;
     justify-content: space-around;
+    width: 100%;
   }
 
   .btn-container__btn {

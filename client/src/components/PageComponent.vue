@@ -101,7 +101,7 @@
           comments.value = comm.reverse();
           console.log(comments.value)
     })
-  },5000)
+  },20000)
 
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value

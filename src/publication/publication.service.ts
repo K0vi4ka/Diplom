@@ -6,10 +6,17 @@ import { User } from 'src/user/user.model';
 import { PublicationCreateDto } from './dto/publication-create.dto';
 import { Publication } from './publication.model';
 import { Op } from 'sequelize';
+import { Likes } from 'src/likes/likes.model';
+import { Comment } from 'src/comment/comment.model';
+import { PublicComment } from 'src/comment/public-comment.model';
 
 @Injectable()
 export class PublicationService {
-  constructor(@InjectModel(Publication) private publicationRepository: typeof Publication){}
+  constructor(@InjectModel(Publication) private publicationRepository: typeof Publication,
+  @InjectModel(News) private newsRepository: typeof News,
+  @InjectModel(Likes) private likeRepository: typeof Likes,
+  @InjectModel(Comment) private commentRepository: typeof Comment,
+  @InjectModel(PublicComment) private publicCommentRepository: typeof PublicComment){}
 
   async getAllPublicaton(){
     const response = await this.publicationRepository.findAll({
@@ -113,6 +120,37 @@ export class PublicationService {
     })
 
     return await publication;
+  }
+
+  async deletePublication(newsId: number) {
+    const publicId = await this.publicationRepository.findOne({
+      where: {
+        newsId:newsId
+      }
+    })
+
+    const comment = await this.publicCommentRepository.destroy({ 
+      where: {
+        publicId: publicId.id
+      }
+    })
+
+    await this.likeRepository.destroy({
+      where: {
+        publicId: publicId.id
+      }
+    })
+    await this.publicationRepository.destroy({
+      where: {
+        newsId: newsId
+      }
+    })
+    await this.newsRepository.destroy({
+      where: {
+        id:newsId
+      }
+    })
+
   }
 
 }

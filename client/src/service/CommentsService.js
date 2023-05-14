@@ -11,4 +11,9 @@ export default class CommentsService{
     const responce = await api.post(`http://localhost:5000/comment/${publicationID}`,commentBody)
     return await responce.data
   }
+
+  async deleteComment(commentId) {
+    const responce = await api.delete(`http://localhost:5000/comment/delete/${commentId}`);
+    return responce.data
+  }
 }

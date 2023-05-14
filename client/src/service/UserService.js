@@ -4,7 +4,6 @@ export default class UserService {
 
   async getUser(id) {
     let responce = await api.get(`http://localhost:5000/users/${id}`);
-    console.log(responce)
     return responce.data;
   }
 
@@ -14,19 +13,18 @@ export default class UserService {
   }
   
   async getUserByToken(token){
-    let responce = await api.post('http://localhost:5000/token', token)
+    let responce = await api.post('http://localhost:5000/token',
+    {"myToken" : token})
     return responce.data
   }
 
   async getAllUsers() {
     let responce =  await api.get('http://localhost:5000/users');
-    console.log(responce.data)
     return responce.data;
   }
 
   async getUserByID(id) {
     let responce = await api.get(`http://localhost:5000/users/${id}`);
-    console.log(responce)
     return await responce.data;
   }
 

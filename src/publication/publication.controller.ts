@@ -1,4 +1,4 @@
-import { Controller,Get } from '@nestjs/common';
+import { Controller,Get,Delete } from '@nestjs/common';
 import { Post } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
 import { PublicationCreateDto } from './dto/publication-create.dto';
@@ -132,6 +132,12 @@ export class PublicationController {
     })
 
     return await response.reverse();
+  }
+
+  @Delete("delete/:newsId")
+  async deletePublication(@Param("newsId") newsId: number) {
+    const publication = await this.publicationService.deletePublication(newsId);
+    return publication;
   }
 
 }

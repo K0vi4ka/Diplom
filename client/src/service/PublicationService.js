@@ -34,7 +34,7 @@ export class PublicationService{
 
   async getPublicationByUserId(id) {
     const responce = await api.get(`http://localhost:5000/publication/user/${id}`)
-    return (await responce).data
+    return await responce.data
   }
 
   parsePublicationData(value) {
@@ -98,5 +98,10 @@ export class PublicationService{
     })
 
     return await responce.data
+  }
+
+  async deletePublication(newsId) {
+    const responce = await api.delete(`http://localhost:5000/publication/delete/${newsId}`);
+    return responce.data
   }
 }

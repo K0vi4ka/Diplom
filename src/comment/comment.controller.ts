@@ -1,4 +1,4 @@
-import { Controller,Post,Get,Param,Body } from '@nestjs/common';
+import { Controller,Post,Get,Param,Body,Delete } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
@@ -47,6 +47,7 @@ export class CommentController {
     for(let item of comments) {
       const comment = await this.commentsService.getCommentById(item.commentId);
       const commentObj = {
+        "id": comment.id,
         "user": comment.user.nickname,
         "value" : comment.value,
         "date":  comment.updatedAt,
@@ -55,6 +56,10 @@ export class CommentController {
     }
     
     return response
-    
+  }
+
+  @Delete("delete/:commentId") 
+  async deleteComment(@Param("commentId") commentId:number) {
+    return await this.commentsService.deleteComment(commentId);
   }
 }
