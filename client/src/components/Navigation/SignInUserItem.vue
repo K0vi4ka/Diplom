@@ -32,6 +32,7 @@
       userName.value = user.nickname
     })
     await userService.getUserRoles(store.userId).then(roles=>{
+      console.log(store.userId)
       userRoles.value = roles
     })
   })

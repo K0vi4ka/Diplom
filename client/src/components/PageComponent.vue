@@ -42,6 +42,7 @@
   import CommentsService from '@/service/CommentsService';
   import { useDialog } from 'primevue/usedialog';
   import LikesService from '@/service/LikesService';
+  import router from '@/router/router';
 
   const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));
   const dynamicDialog = useDialog();
@@ -59,8 +60,10 @@
 
   onMounted(async () => {
 
-
-    let path = window.location.hash.split('/')[3]
+    let pathArr = router.currentRoute.value.path.split('/');
+    console.log(pathArr)
+    let path = pathArr[pathArr.length - 1];
+    console.log(path)
 
     newsService.getNewsContentByPath(path).then(fileContent =>{
       pageContent.value = fileContent

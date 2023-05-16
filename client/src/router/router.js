@@ -1,4 +1,5 @@
-import { createRouter,createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+
 import UnautorizedPage from '@/components/Unautorized/UnautorizedPage.vue'
 import EditorMain from '@/components/EditorComponent/EditorMain';
 import PersonalPage from "@/components/PersonlPage"
@@ -29,11 +30,11 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+  history: createWebHistory(),
+  routes,
 })
 
-export default router
+export default router;
 
 
 

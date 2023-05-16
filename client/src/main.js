@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/router'
+import router from './router/router.js'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';

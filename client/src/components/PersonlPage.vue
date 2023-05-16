@@ -84,9 +84,9 @@
   const oldPassword = ref("");
 
 
+
   onMounted(async () => {
-    const userData = piniaStore.getUser();
-    user.value = userData;
+    user.value  = await userService.getUserByID(piniaStore.userId);
     validate.validateUserData(user.value)
     console.log(user.value)
     formatDate();
