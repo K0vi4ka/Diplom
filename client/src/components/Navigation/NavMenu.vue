@@ -59,7 +59,8 @@ const MenuClickHandler = (e) =>{
 onMounted(async () =>{
   const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     if(token) {
-        userRoles.value = await userService.getUserRoles(authStore.userId)
+      const user = await userService.getToken(token);
+      userRoles.value = await userService.getUserRoles((await user).userId)
     }
 
     categoryService.getAllCategory().then(category =>{

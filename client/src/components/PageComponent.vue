@@ -14,6 +14,50 @@
 
     <svg @click="changeHeart" style="color: red" xmlns="http://www.w3.org/2000/svg" width="18" height="16"  class="bi bi-suit-heart-fill heart" viewBox="0 0 16 16" fill="white"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" stroke="red" class="" ></path> </svg>
 
+    
+    <div class="share-block">
+      <p class="share-par">Поделитесь данной публикацией</p>
+
+      <div class="share-buttons">
+      <ShareNetwork
+    network="facebook"
+    :url=router.currentRoute.value.path
+    :title=pageAdditionalContent.newsName
+    hashtags="vuejs,vite">
+    <i class="pi pi-facebook icons" style="font-size: 2rem; color: #3b5998"></i>
+    </ShareNetwork>
+
+    <ShareNetwork
+    network="vk"
+    :url=router.currentRoute.value.path
+    :title=pageAdditionalContent.newsName
+    hashtags="vuejs,vite">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="39" height="39" viewBox="0 0 48 48">
+<path fill="#1976d2" d="M24,4C13,4,4,13,4,24s9,20,20,20s20-9,20-20S35,4,24,4z"></path><path fill="#fff" d="M25.2,33.2c-9,0-14.1-6.1-14.3-16.4h4.5c0.1,7.5,3.5,10.7,6.1,11.3V16.8h4.2v6.5c2.6-0.3,5.3-3.2,6.2-6.5h4.2	c-0.7,4-3.7,7-5.8,8.2c2.1,1,5.5,3.6,6.7,8.2h-4.7c-1-3.1-3.5-5.5-6.8-5.9v5.9H25.2z"></path>
+</svg>
+    </ShareNetwork>
+
+    <ShareNetwork
+    network="telegram"
+    :url=router.currentRoute.value.path
+    :title=pageAdditionalContent.newsName
+    hashtags="vuejs,vite">
+    <i class="pi pi-telegram icons" style="font-size: 2rem; color: #0088cc"></i>
+    </ShareNetwork>
+
+    <ShareNetwork
+    network="whatsapp"
+    :url=router.currentRoute.value.path
+    :title=pageAdditionalContent.newsName
+    hashtags="vuejs,vite">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 58 58">
+    <path style="fill:#2CB742;" d="M0,58l4.988-14.963C2.457,38.78,1,33.812,1,28.5C1,12.76,13.76,0,29.5,0S58,12.76,58,28.5 S45.24,57,29.5,57c-4.789,0-9.299-1.187-13.26-3.273L0,58z"/><path style="fill:#FFFFFF;" d="M47.683,37.985c-1.316-2.487-6.169-5.331-6.169-5.331c-1.098-0.626-2.423-0.696-3.049,0.42 c0,0-1.577,1.891-1.978,2.163c-1.832,1.241-3.529,1.193-5.242-0.52l-3.981-3.981l-3.981-3.981c-1.713-1.713-1.761-3.41-0.52-5.242 c0.272-0.401,2.163-1.978,2.163-1.978c1.116-0.627,1.046-1.951,0.42-3.049c0,0-2.844-4.853-5.331-6.169 c-1.058-0.56-2.357-0.364-3.203,0.482l-1.758,1.758c-5.577,5.577-2.831,11.873,2.746,17.45l5.097,5.097l5.097,5.097 c5.577,5.577,11.873,8.323,17.45,2.746l1.758-1.758C48.048,40.341,48.243,39.042,47.683,37.985z"/></svg>
+    </ShareNetwork>
+    </div>
+    </div>
+    
+
+
     <div class="comments-block">
       <div class="comments-block-header">
        <p>Коментарии</p> 
@@ -304,5 +348,33 @@
     border: 0px;
     margin-left: 10px;
     padding: 5px;
+  }
+
+  .icons {
+    margin: 0;
+    padding: 0;
+  }
+
+  .share-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 40%;
+  }
+
+  .share-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+  }
+
+  .share-par {
+    font-size: 1.5rem;
+    font-style: italic;
+  }
+
+  .share-par::first-letter {
+    margin-left: 40px;
   }
 </style>

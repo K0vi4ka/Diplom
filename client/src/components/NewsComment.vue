@@ -37,8 +37,8 @@
   onMounted(async () => {
     commentsValue.value = await props.comments;
     userNickName.value = (await userService.getUserByID(store.userId)).nickname;
+    if(!store.userId) return
     userRoles.value = await  userService.getUserRoles(store.userId);
-    console.log(userRoles.value)
   })
 
   watch(props,async () => {

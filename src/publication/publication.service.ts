@@ -93,7 +93,14 @@ export class PublicationService {
 
 
   async createPublication(publicationDto: PublicationCreateDto){
-    return await this.publicationRepository.create(publicationDto);
+    try{
+      console.log(publicationDto)
+      const responce = await this.publicationRepository.create(publicationDto);
+      return await responce
+    }
+    catch(e){
+      throw new Error(e)
+    }
   }
 
   async getAllPublicationDate() {

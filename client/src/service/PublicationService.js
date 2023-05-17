@@ -2,18 +2,23 @@ import api from "@/auth-axios";
 
 export class PublicationService{
   async createPublication(newsBody,category,user){
-     await api.post('http://localhost:5000/news/create-news',newsBody,{maxBodyLength: 10000000,
-     maxContentLength: 10000000}).then(news =>{
+    try {
+      const news = await api.post('http://localhost:5000/news/create-news',newsBody,{maxBodyLength: 10000000,
+      maxContentLength: 10000000})
       const obj = {
-        "newsId": news.data.id,
+        "newsId" : (await news.data).id,
         "usersId": user,
         "categoryId": category
       }
-      const responce = api.post('http://localhost:5000/publication', obj);
-      return responce.data
-     }).catch(error=>{
+      console.log(obj)
+      
+       const responce = api.post('http://localhost:5000/publication', obj);
+       return responce.data
+    }
+
+     catch(error){
       throw new Error(error)
-     })
+     }
   }
 
   async getAllPublication(){

@@ -6,6 +6,7 @@ import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
+import VueSocialSharing from 'vue-social-sharing';
 
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";     
@@ -22,6 +23,7 @@ app.use(router)
 app.use(pinia)
 app.use(PrimeVue)
 app.use(DialogService);
+app.use(VueSocialSharing)
 app.use(ConfirmationService);
 app.use(ToastService);
 app.mount('#app')

@@ -15,10 +15,10 @@
 
 
   onMounted(async () => {
-    const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
-    if(token) {
-      const user = await userService.getUserByToken(token);
-      store.userId = await user.userId;
+    const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    if(refreshToken) {
+      const token = await userService.getToken(refreshToken);
+      store.userId = await token.userId;
      }
     }
   )

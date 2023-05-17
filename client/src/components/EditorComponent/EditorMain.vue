@@ -88,7 +88,7 @@
         accept: async () => {
           const newsId = await newsService.getNewsId(e.target.parentNode.children[0].children[0].querySelector("h2").innerHTML);
           await publicationService.deletePublication(await newsId);    let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken')
-          userService.getUserByToken(token).then(user =>{
+          userService.getToken(token).then(user =>{
           publicationService.getPublicationByUserId(user.userId).then(data =>{
             console.log(data)
           authorContent.value = data;
@@ -151,7 +151,7 @@
 
   onMounted(() => {
     let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken')
-    userService.getUserByToken(token).then(user =>{
+    userService.getToken(token).then(user =>{
       publicationService.getPublicationByUserId(user.userId).then(data =>{
         authorContent.value = data;
       })

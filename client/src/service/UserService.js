@@ -12,7 +12,7 @@ export default class UserService {
     return responce.data;
   }
   
-  async getUserByToken(token){
+  async getToken(token){
     let responce = await api.post('http://localhost:5000/token',
     {"myToken" : token})
     return responce.data

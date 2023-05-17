@@ -38,7 +38,10 @@ export class UserService {
 
   async getUserRoles(id){
     const user = await this.userRepository.findOne({where:{id}});
-    return user.$get('roles');
+    if (user) {
+      return user.$get('roles');
+    }
+    return [];
   }
 
   async getExistByUsername(nickname) {

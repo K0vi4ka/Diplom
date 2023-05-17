@@ -31,10 +31,12 @@
     await userService.getUser(store.userId).then(user =>{
       userName.value = user.nickname
     })
-    await userService.getUserRoles(store.userId).then(roles=>{
-      console.log(store.userId)
-      userRoles.value = roles
-    })
+    const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    
+    if(token) {
+      const user = await userService.getToken(token);
+      userRoles.value = await userService.getUserRoles((await user).userId)
+    }
   })
 </script>
 <style>

@@ -17,8 +17,7 @@ import {onMounted} from 'vue';
   onMounted(async ()=>{
     const token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
     if(token) {
-      console.log("wtf")
-      const user = await userService.getUserByToken(token);
+      const user = await userService.getToken(token);
       authStore.userId = await user.userId;
      }
     }
