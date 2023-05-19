@@ -29,7 +29,8 @@ export default class UserService {
   }
 
   async updateUserData(id,nickname,email,fio,phone){
-    let responce = await api.post(`http://localhost:5000/users/update:${id}`,{
+    console.log(id,nickname,email,fio,phone)
+    let responce = await api.post(`http://localhost:5000/users/update/${id.id}`,{
       "nickname": nickname,
       "email": email,
       "FIO" : fio,
@@ -39,7 +40,8 @@ export default class UserService {
   }
 
   async chagePassword(obj) {
-      let responce = await api.post("http://localhost:5000/users/update/password",obj)
+      console.log(obj)
+      let responce = await api.post("http://localhost:5000/users/update/data/password",obj)
       return responce.data
   }
 }

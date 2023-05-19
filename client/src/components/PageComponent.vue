@@ -105,9 +105,7 @@
   onMounted(async () => {
 
     let pathArr = router.currentRoute.value.path.split('/');
-    console.log(pathArr)
     let path = pathArr[pathArr.length - 1];
-    console.log(path)
 
     newsService.getNewsContentByPath(path).then(fileContent =>{
       pageContent.value = fileContent
@@ -115,7 +113,7 @@
 
     newsService.getNewsIdByPath(path).then(newsId =>{
       publicationService.getPublicationIdByNewsId(newsId.id).then(async publicationId =>{
-        
+      
     const heart = await likesService.isUserHaveLike(publicationId,store.userId);
     console.log(heart)
     if(heart) {
@@ -134,12 +132,15 @@
 
       })
       publicationService.getPublicationByNewsId(newsId.id).then(publicatoin =>{
+        publicationService.updatePublicationViews(publicatoin.id)
         let date = publicatoin.updateDate
         let newDate = publicationService.parsePublicationData(date)
         publicatoin.updateDate = newDate;
         pageAdditionalContent.value = publicatoin
       })
     })
+
+    
 
   })
 

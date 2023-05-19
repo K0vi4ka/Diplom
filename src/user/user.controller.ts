@@ -25,7 +25,7 @@ export class UserController {
     return this.userService.getUserById(id)
   }
 
-  @Post('update:id') 
+  @Post('update/:id') 
   async updateUsersData(@Param('id') id:number,@Body() userDto: CreateUserDto) {
      try{
       await this.userService.updateUser(id,userDto);
@@ -36,9 +36,11 @@ export class UserController {
      }
   }
 
-  @Post('update/password')
+  @Post('update/data/password')
   async updateUserPassword(@Body() passwords) {
-    const {userId,oldPassword,newPassword} = passwords;
+    const userId = passwords.userId;
+    const newPassword = passwords.newPassword;
+    const oldPassword = passwords.oldPassword;
     try{
       await this.userService.chagePassword(userId,newPassword,oldPassword);
       return true

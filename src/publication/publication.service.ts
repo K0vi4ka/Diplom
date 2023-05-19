@@ -160,4 +160,20 @@ export class PublicationService {
 
   }
 
+  async updatePublicationViews(publicationId:number) {
+    const publication = await this.publicationRepository.findOne({
+      where: {
+        id: publicationId
+      }
+    })
+    const publicationViews = await publication.views + 1
+    await this.publicationRepository.update({
+      views: publicationViews 
+    },{
+      where: {
+        id: publicationId
+      }
+    })
+  }
+
 }

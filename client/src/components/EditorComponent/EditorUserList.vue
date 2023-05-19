@@ -8,6 +8,7 @@
       <Column field="phone" header="Телефон пользователя" style="padding: 20px; border-bottom: 1px solid #000000; text-align: center;"> </Column>
     </DataTable>
     <DynamicDialog />
+    <Toast/>
   </div>
  
 </template>
@@ -30,12 +31,13 @@
   const validateUserData = new VaidateUserData();
 
 
-  const itemClickHandler = (data) => {
+  const itemClickHandler = async data => {
+    console.log(data)
     authStore.updateSelctedUser(data);
         provide("dynamicDialog",dynamicDialog)
         dynamicDialog.open(SelectUserModal, {
         props: {
-            header: 'Ваши данные',
+            header: 'Пользователь ' + data.nickname + ", роль " + await userService.getUserRoles(data.id),
             style: {
                 width: '50vw',
             },
@@ -57,6 +59,7 @@
 
   onMounted(async () => {
     allUsers.value = await userService.getAllUsers();
+    
     
     allUsers.value.forEach(item => {
       validateUserData.validateUserData(item);

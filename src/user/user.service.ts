@@ -63,6 +63,7 @@ export class UserService {
   }
 
   async chagePassword(id: number,password: string,oldPassword:string) {
+    console.log(id)
     const user = await this.getUserById(id);
     const val = await this.validateUser(id,oldPassword);
       const hashPassword = await bcrypt.hash(password,5);

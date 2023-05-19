@@ -33,10 +33,19 @@ export class CommentController {
 
   }
 
+  @Post('publication/isupdate')
+  async checkNewComment(@Body() commentsInfo){
+    const {publicationId,publicationLength} = commentsInfo;
+    const nowCommentsLength = (await this.commentsService.getPublicationByPublicationId(publicationId)).length;
+    if(await nowCommentsLength === publicationLength) return [];
+    const newComments = await this.commentsService.getLastPublication((await nowCommentsLength - publicationLength),publicationId);
+    return newComments;
+  }
+
   @Get('publications/:publication')
     async getCommentsByPublicatoinId(@Param('publication') publicationId:number) {
     console.log(publicationId)
-    const comments = await this.commentsService.getPublicationByPublication(publicationId);
+    const comments = await this.commentsService.getPublicationByPublicationId(publicationId);
     console.log(await comments)
     return await this.parseUserData(await comments) 
   }

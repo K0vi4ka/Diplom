@@ -1,4 +1,4 @@
-import { Controller,Get,Delete } from '@nestjs/common';
+import { Controller,Get,Delete,Put } from '@nestjs/common';
 import { Post } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
 import { PublicationCreateDto } from './dto/publication-create.dto';
@@ -54,6 +54,7 @@ export class PublicationController {
     const publication = await this.publicationService.getPublicationByNewsId(newsId);
     const obj = await [...publication].map(item =>{
       return {
+        "id" : item.id,
         "nickname": item.user.nickname,
         "newsName": item.news.newsName,
         "categoryName": item.category.value, 
@@ -139,5 +140,17 @@ export class PublicationController {
     const publication = await this.publicationService.deletePublication(newsId);
     return publication;
   }
+
+  @Put("update/views/:publicationId")
+  async updatePublicationViews(@Param("publicationId") publicationId:number) {
+    try {
+      return await this.publicationService.updatePublicationViews(publicationId)
+    }
+    catch{
+      throw Error("Ошибка, данные не изменены");
+    }
+  }
+
+
 
 }

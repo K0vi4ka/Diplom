@@ -30,10 +30,10 @@
         <h2>Изменение пароля</h2>
         <div class="change-password__block">
           <p class="change-password__par" >Введите старый пароль</p>
-          <InputText v-model="oldPassword"></InputText>
+          <InputText v-model="oldPassword" id="login"></InputText>
 
           <p class="change-password__par">Введите новый пароль</p>
-          <InputText  v-model="newPassword"></InputText>
+          <InputText  v-model="newPassword" id = "password"></InputText>
           <br>
           <button class="btn change-btn" @click="changePassword" >Изменить пароль</button>
         </div>
@@ -104,14 +104,21 @@
   });
 
   const changePassword = async () => {
-    const obj =       {
+    try {
+      const obj =       {
         "userId": user.value.id,
         "oldPassword" : oldPassword.value,
-        "newPassword" : newPassword.value
+        "newPassword" : newPassword.value,
       }
-    const pass = await userService.chagePassword(obj);
+      await userService.chagePassword(obj);
+      oldPassword.value = "";
+      newPassword.value = "";
+    }
+    catch{
+      console.log()
+    }
 
-    console.log(await pass);
+
   }
 
   const getLikesStatistic =  (likes) => {

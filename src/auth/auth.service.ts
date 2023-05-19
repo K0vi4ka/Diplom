@@ -44,7 +44,7 @@ export class AuthService {
     const userDto = new JwtDto(user.id, user.email)
     const tokens = await this.tokenService.generateToken(user)
     await this.tokenService.saveToken(user.id, (await tokens).refreshToken)
-    const role = await this.roleService.getRollByValue(2);
+    const role = await this.roleService.getRollByValue(1);
     await user.$set('roles',[role.id])
     user.roles = [role]
 

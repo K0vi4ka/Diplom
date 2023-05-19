@@ -109,4 +109,10 @@ export class PublicationService{
     const responce = await api.delete(`http://localhost:5000/publication/delete/${newsId}`);
     return responce.data
   }
+
+  async updatePublicationViews(publicationId){
+    console.log(publicationId)
+    const responce = await api.put(`http://localhost:5000/publication/update/views/${publicationId}`)
+    return responce.data
+  }
 }
