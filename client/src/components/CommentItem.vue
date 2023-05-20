@@ -24,7 +24,7 @@
 
   onMounted(async () => {
     comment.value = props.comment;
-    let newDate = publicationService.parsePublicationData(props.comment.date);
+    let newDate = publicationService.parsePublicationData(comment.value.date);
     comment.value.date = newDate;
   })
 

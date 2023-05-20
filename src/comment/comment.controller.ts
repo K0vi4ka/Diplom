@@ -9,7 +9,6 @@ export class CommentController {
   @Post(":publication")
   async createComment(@Body() dto: CreateCommentDto,@Param("publication") publication:number){
     try{
-      console.log(publication)
       const comment = await this.commentsService.createComment(dto);
       console.log(await comment);
       const commentPublication = await this.commentsService.createPublicationComment((await comment).id,publication)
@@ -33,20 +32,20 @@ export class CommentController {
 
   }
 
-  @Post('publication/isupdate')
+  @Post('publication/getsome/isupdate')
   async checkNewComment(@Body() commentsInfo){
-    const {publicationId,publicationLength} = commentsInfo;
-    const nowCommentsLength = (await this.commentsService.getPublicationByPublicationId(publicationId)).length;
-    if(await nowCommentsLength === publicationLength) return [];
-    const newComments = await this.commentsService.getLastPublication((await nowCommentsLength - publicationLength),publicationId);
-    return newComments;
+    const {publicationId,commentsLength} = commentsInfo;
+    const nowComments = await this.commentsService.getPublicationByPublicationId(publicationId);
+    const newCommentsLength = await nowComments.length;
+    console.log(newCommentsLength, commentsLength)
+    if(await newCommentsLength === commentsLength) throw new Error("Ошибка, данные отсутсвуют");
+    const newComments = await this.commentsService.getLastPublication((await newCommentsLength) - commentsLength,publicationId);
+    return await this.parseUserData(await newComments) 
   }
 
   @Get('publications/:publication')
     async getCommentsByPublicatoinId(@Param('publication') publicationId:number) {
-    console.log(publicationId)
     const comments = await this.commentsService.getPublicationByPublicationId(publicationId);
-    console.log(await comments)
     return await this.parseUserData(await comments) 
   }
 

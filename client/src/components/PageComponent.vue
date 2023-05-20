@@ -87,6 +87,7 @@
   import { useDialog } from 'primevue/usedialog';
   import LikesService from '@/service/LikesService';
   import router from '@/router/router';
+  import { useToast } from 'primevue/usetoast';
 
   const LoginModal = defineAsyncComponent(() => import('./Navigation/LoginModal.vue'));
   const dynamicDialog = useDialog();
@@ -101,6 +102,7 @@
   const store = new AuthStore();
   const commentValue = ref('')
   const comments = ref([]);
+  const toast = useToast();
 
   onMounted(async () => {
 
@@ -144,12 +146,20 @@
 
   })
 
-  setInterval(() => {
-    commentsService.getCommentsByPublicationId(store.currentPublication).then(comm => {
-          comments.value = comm.reverse();
-          console.log(comments.value)
-    })
-  },20000)
+  setInterval(async () => {
+    const commentsLength = comments.value.length;
+      try {
+        const newCommet =  await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
+        comments.value.reverse()
+        await newCommet.forEach(item => {
+        comments.value.push(item);
+      });
+      comments.value.reverse()
+      }
+      catch(e){
+        console.log(e)
+      }
+  },5000)
 
   watch(() => pageContent.value, async () => {
     document.querySelector('.content').innerHTML = pageContent.value
@@ -185,16 +195,34 @@
     })
     }
     else {
-      const commentBody = {
-      "value" : commentValue.value,
-      "author" : store.userId
+      try {
+        const commentBody = {
+        "value" : commentValue.value,
+        "author" : store.userId
+      }
+      const commentsLength = comments.value.length;
+      await commentsService.createComment(commentBody,store.currentPublication)
+    
+      try {
+        const newCommet =  await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
+        comments.value.reverse()
+        await newCommet.forEach(item => {
+        comments.value.push(item);
+      });
+      comments.value.reverse()
+      }
+      catch(e){
+        console.log(e)
+      }
+
+      commentValue.value = ""; 
+      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Ваш коментарий успешно создан', life: 3000 });
     }
-    commentsService.createComment(commentBody,store.currentPublication)
+    catch{
+      toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Ошибка, ваш коментарий не создан', life: 3000 });
     }
-    commentsService.getCommentsByPublicationId(store.currentPublication).then(comm => {
-          comments.value = comm.reverse();
-    })
-    commentValue.value = "";    
+         
+    }
   }
 
   const likeRef = ref(false)

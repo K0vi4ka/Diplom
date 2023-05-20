@@ -56,16 +56,16 @@ export class CommentService {
   }
 
   async getLastPublication(difference:number, publicationId:number) {
-    const comments = await this.commentRepository.findAll({
-      include: [{
+    const comments = await this.commenttopublicationRepository.findAll({
+      include: [
+      {
         model: Publication,
-        where: {id:publicationId}
-      }
-        
-      ],
-      order: ['createdAt','DESC'],
+      }],
+      where: {publicId: publicationId},
+      order: [['createdAt','DESC']],
       limit: difference
     })
+    console.log(comments,difference,publicationId)
     return comments;
 
   }
