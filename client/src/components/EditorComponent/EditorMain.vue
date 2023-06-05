@@ -10,6 +10,7 @@
       <p class="side-menu__item">Создать новую статью</p>
       <p class="side-menu__item">Список пользователей</p>
       <p class="side-menu__item">Импортировать статьи</p>
+      <p class="side-menu__item">Статистика</p>
     </div>
 
     
@@ -20,12 +21,16 @@
       <div v-if="contentValue === 'news'">
         <div class="news" v-for="content in authorContent" :key="content">
           <NewsItem :content="content"/>
+          <i class="pi pi-trash icons" style="font-size: 1.5rem" @click="someHandler"></i>
         </div>
       </div>
 
       <EditorCreateNewsVue v-if="contentValue  === 'create'"></EditorCreateNewsVue>
       <EditorUserList v-if="contentValue == 'usersList'" />
       <EditorImportNews v-if="contentValue == 'imoprtsNews'"/>
+      <EditorStatistics v-if="contentValue == 'statistics'"/>
+      <ConfirmDialog></ConfirmDialog>
+      <Toast />
       
     </div>
     </div>
@@ -45,6 +50,11 @@
   import { AuthStore } from "@/service/pinia-store";
   import EditorUserList from "./EditorUserList.vue";
   import EditorImportNews from "./EditorImportNews.vue";
+  import EditorStatistics from "./EditorStatistics.vue"
+  import ConfirmDialog from 'primevue/confirmdialog';
+  import { useConfirm } from "primevue/useconfirm";
+  import { useToast } from "primevue/usetoast";
+  import Toast from 'primevue/toast'
 
   const contentValue = ref("news");
   const authorContent = ref('')
@@ -52,14 +62,46 @@
   const userService = new UserService();
   const newsService = new NewsService();
   const store = new AuthStore();
+  const confirm = useConfirm();
+  const toast = useToast();
 
   const headerObj = {
     "news": "Ваши статьи",
-    "create": "Создание новой статьи"
+    "create": "Создание новой статьи",
+    "usersList" :"Список пользователей",
+    "imoprtsNews" : "Импорт статей",
+    "statistics": "Статистика"
   }
 
   const headerValue = ref(headerObj[contentValue.value])
 
+
+  const someHandler = (e) => {
+    confirm.require({
+        message: 'Вы уверены что хотите удалить данную запись',
+        header: 'Подтверждение',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: "Да",
+        rejectLabel: "Нет",
+        acceptIcon: 'pi pi-check',
+        rejectIcon: 'pi pi-times',
+        accept: async () => {
+          const newsId = await newsService.getNewsId(e.target.parentNode.children[0].children[0].querySelector("h2").innerHTML);
+          await publicationService.deletePublication(await newsId);    let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken')
+          userService.getToken(token).then(user =>{
+          publicationService.getPublicationByUserId(user.userId).then(data =>{
+            console.log(data)
+          authorContent.value = data;
+      })
+     })
+            toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Удаленение подтверждено', life: 3000 });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Удаленение отменено', life: 3000 });
+
+        }
+    });
+  }
   const changeSideMenuContentHandler = (e) => {
     switch(e.target.innerHTML) {
       case 'Ваши статьи': contentValue.value = 'news' 
@@ -69,6 +111,8 @@
       case 'Список пользователей' : contentValue.value = 'usersList'
       break;
       case 'Импортировать статьи' : contentValue.value = 'imoprtsNews'
+      break;
+      case 'Статистика' : contentValue.value = "statistics";
       break;
       default: contentValue.value;
     }
@@ -84,7 +128,7 @@
   }
 
   const findTargetName = (e) =>{
-    if(e.target.getAttribute('class') ==='news-name'){
+    if(e.target.getAttribute('class') === 'news-name'){
       return e.target.innerHTML
     }
     if(e.target.getAttribute('class') ==='news'){
@@ -103,12 +147,11 @@
         router.push(`/newsTime/news/${path.filePath.split('/')[1]}`)
       })
     }
-    
   }
 
   onMounted(() => {
     let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken')
-    userService.getUserByToken({"token": token}).then(user =>{
+    userService.getToken(token).then(user =>{
       publicationService.getPublicationByUserId(user.userId).then(data =>{
         authorContent.value = data;
       })
@@ -142,7 +185,20 @@
     box-shadow: 1px 0px 14px 10px rgba(34, 60, 80, 0.08) inset;
     border-radius: 10px;
     width: 110vh;
+    padding: 10px;
   }
+
+  .icons {
+    margin-left: 100px;
+    color:#FF0000;
+    transition: all 500ms;
+  }
+
+  .icons:hover {
+    transform: rotate(20deg);
+  }
+
+
 
   .content-header {
     margin: 10px;
@@ -166,10 +222,13 @@
 
   .side-menu__item {
     color:#FFFFFF;
+    transition: all 200ms;
   }
 
   .news {
-    width: 100vh;
+    display: flex;
+    align-items: center;
+    width: 100%;
     border-bottom: 3px solid #e2e2e2;
     padding: 10px;
 

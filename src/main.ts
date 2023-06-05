@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.use(json({ limit: '50mb' }));
-  app.use(ErrorMidleWare)
+  app.use(ErrorMidleWare);
   await app.listen(PORT,() =>{console.log(`PORT ${PORT}`)});
   
 }

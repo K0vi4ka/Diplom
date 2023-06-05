@@ -17,4 +17,9 @@ export default class LinkedNewsService{
     console.log(responce.data)
     return await responce.data
   }
+
+  async getContent(id) {
+    const responce = await api.get(`http://localhost:5000/linkednews/id/${id}`);
+    return await responce.data
+  } 
 }

@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateLikesDto } from './dto/create-likes.dto';
 import { Likes } from './likes.model';
 import { User } from 'src/user/user.model';
-import { where } from 'sequelize';
+import { and, where } from 'sequelize';
+import { Op } from 'sequelize';
 import { Publication } from 'src/publication/publication.model';
 
 @Injectable()
@@ -13,6 +14,11 @@ export class LikesService {
   async createLikes(dto: CreateLikesDto){
     console.log(dto)
     const likes = await this.likesRepository.create(dto);
+    return likes;
+  }
+
+  async getUsersLike() {
+    const likes = await this.likesRepository.findAll();
     return likes;
   }
 
@@ -26,7 +32,24 @@ export class LikesService {
     catch{
       return false;
     }
-    
+  }
+
+  async getUserLikeCount(categotyId,startDate,stopDate) {
+    const likes = await this.likesRepository.count({
+      include: [
+        {
+          model: Publication,
+          where: {categoryId: categotyId}
+        }
+      ],
+      where: {
+        createdAt: 
+        {
+          [Op.between] :  [startDate,stopDate]
+        }
+      }
+    })
+    return await likes;
   }
 
   async getPublicationLikes(publicationId:number) {
@@ -46,11 +69,37 @@ export class LikesService {
   }
 
   async isUserLikePublication(publicationId:number,userId:number){
-    console.log(publicationId,userId)
     const likes = await this.likesRepository.findOne({where: {
       publicId: publicationId,
       userId: userId
     }})
     return await likes
   }
+
+  async getActiveUserForDate(startDate,stopDate) {
+    const users = await this.likesRepository.findAll({
+      where: {
+        createdAt: 
+        {
+          [Op.between] :  [startDate,stopDate]
+        },
+      },
+      limit: 3
+    });
+    return users;
+  }
+
+  async getTopUsers(userId,startDate,stopDate){
+    const count = await this.likesRepository.count({
+        where: {
+          userId: userId,
+          createdAt: 
+          {
+            [Op.between] :  [startDate,stopDate]
+          },
+        }
+      })
+      const obj = {"user": await userId, "count": await count}
+      return obj
+  }    
 }

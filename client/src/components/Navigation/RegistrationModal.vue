@@ -57,13 +57,17 @@
     </div>
 
   </form>
+
+  <Dialog v-model:visible="visible" modal header="Уведомление" :style="{ width: '50vw' }">
+    <p>Для входа в аккаунт подтвердите его. Сообщение отправлено на адрес {{ userEmail }}</p>
+  </Dialog>
 </template>
 <script setup>
   import {ref,inject} from "vue";
-  import { AuthStore } from "@/service/pinia-store";
   import ValidateUserData from "@/service/ValidateUserData"
   import InputMask from 'primevue/inputmask';
   import AuthService from '@/service/AuthService';
+  import Dialog from 'primevue/dialog';
 
   const nameInp = ref("");
   const emailInp = ref("");
@@ -80,10 +84,11 @@
   const accesspassInpRef= ref();
   const phoneInpRef = ref();
   const dialogRef = inject("dialogRef");
+  const userEmail = ref()
+  const visible = ref(false)
 
   
 
-  const authStore = new AuthStore();
   const validUserData = new ValidateUserData();
   const authService = new AuthService();
 
@@ -110,14 +115,9 @@
     })
     
 
-    const {accessToken,refreshToken,user} = await authService.registration(sendRegInp);
-   
-      if(accessToken)
-      {
-        sessionStorage.setItem('authtoken',accessToken);
-        sessionStorage.setItem('refreshToken',refreshToken);
-        authStore.updateUserId(user.id);
-      }  
+    const {user} = await authService.registration(sendRegInp);
+      userEmail.value = await user.email
+      visible.value = true;
       dialogRef.value.close();  
     }
 

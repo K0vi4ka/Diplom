@@ -9,10 +9,6 @@
         <InputText v-model="nickname" v-bind:value="user.nickname " @input="inputNickname" />
     </div>
     <div class="item">
-      <p>Email</p>
-        <InputText id="email" v-model="email" v-bind:value="user.email" @input="inputEmail" />
-    </div>
-    <div class="item">
       <p>Телефон</p>
         <InputText id="phone" v-model="phone" v-bind:value="user.phone"  @input="inputPhone" />
     </div>
@@ -27,15 +23,16 @@
   import { ref,onMounted,inject } from 'vue';
   import { AuthStore } from '@/service/pinia-store';
   import UserService from '@/service/UserService';
+  import { useToast } from 'primevue/usetoast';
 
   const authStore = AuthStore();
   const userService = new UserService();
   const user = ref({});
   const fio = ref("");
   const nickname = ref("")
-  const email = ref("")
   const phone = ref("");
   const dialogRef = inject("dialogRef");
+  const toast = useToast();
 
 
   onMounted(() => {
@@ -50,19 +47,26 @@
     nickname.value = e.target
   }
 
-  const inputEmail = (e) => {
-    email.value = e.target
-  }
-
   const inputPhone = (e) => {
     phone.value = e.target
   }
 
-
   const changeDataHandler = async () => {
-    console.log(user.value.id,nickname.value,email.value,fio.value,phone.value)
-    await userService.updateUserData(user.value.id,nickname.value,email.value,fio.value,phone.value);
-    closeDialog();
+    const sendNick = nickname.value.value?nickname.value.value: user.value.nickname;
+    const sendFio =  fio.value.value?fio.value.value: user.value.fio;
+    const sendEmail = user.value.email;
+    const sendPhone = phone.value.value? phone.value.value: user.value.phone;
+    try{
+      await userService.updateUserData(user.value,sendNick,sendEmail,sendFio,sendPhone);
+      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Данные пользователя успешно изменены', life: 3000 });
+      closeDialog();
+    }
+    catch {
+      toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Данные пользователя не были изменены', life: 3000 });
+    }
+
+
+
   }
 
   const closeDialog = () => {

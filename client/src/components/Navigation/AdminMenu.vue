@@ -9,7 +9,7 @@
     <transition name="bounce">
       <div class="user-option-menu" v-if="showMenu">
         <UserInfoButton/>
-        <a href="#newsTime/editorMain" class="user-option-menu__link">Редактор</a>
+        <p class="user-option-menu__link" @click="openEditorMenu">Редактор</p>
         <ExitButton class="user-option-menu__link"/>
       </div>
     </transition>
@@ -22,8 +22,13 @@
   import UserInfoButton from './UserInfoButton.vue';
   import ExitButton from './ExitButton.vue';
   import {ref} from 'vue'
+  import router from '@/router/router';
 
-  const showMenu = ref(false)
+  const showMenu = ref(false);
+
+  const openEditorMenu = () => {
+    router.push("/newsTime/editorMain");
+  }
 
   const menuHandler = (e) =>{
     if(!e.target.classList.contains("btn_rotate-active") && !e.target.classList.contains("btn_rotate-unactive")){

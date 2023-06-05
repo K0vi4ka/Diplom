@@ -19,7 +19,6 @@ export class NewsService {
       var hash = createHash('sha256').update(fileName).digest('hex') 
       path =`${path}/${hash}`
       const file = await this.createNewsFile(path, data);
-      console.log(file)
       if(!file){
         throw new HttpException('ФАЙЛ УЖЕ ЕСТЬ, ДИБИЛ',HttpStatus.BAD_REQUEST)
       }
@@ -53,8 +52,34 @@ export class NewsService {
   }
 
   async getNewsIdByPath(filePath: string) {
-    console.log(filePath)
     return await this.newstRepository.findOne({where:{filePath}})
+  }
+
+  async getNewsNameById(id:number) {
+    const news = await this.newstRepository.findOne({
+      where: {
+        id: id
+      }
+    })
+    return await news.newsName;
+  }
+
+  async getNewsIdByName(newsName:string) {
+    const news= await this.newstRepository.findOne( {
+      where: {
+        newsName: newsName
+      }
+    })
+    return news;
+  }
+
+  async deleteNews(newsId: number) {
+    const news = await this.newstRepository.destroy({
+      where: {
+        id: newsId
+      }
+    })
+    return await news;
   }
 
 }

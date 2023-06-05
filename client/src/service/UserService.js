@@ -3,7 +3,7 @@ import api from "@/auth-axios.js"
 export default class UserService {
 
   async getUser(id) {
-    let responce = await api.get(`http://localhost:5000/users/${id}`)
+    let responce = await api.get(`http://localhost:5000/users/${id}`);
     return responce.data;
   }
 
@@ -12,24 +12,25 @@ export default class UserService {
     return responce.data;
   }
   
-  async getUserByToken(token){
-    let responce = await api.post('http://localhost:5000/token', token)
+  async getToken(token){
+    let responce = await api.post('http://localhost:5000/token',
+    {"myToken" : token})
     return responce.data
   }
 
   async getAllUsers() {
     let responce =  await api.get('http://localhost:5000/users');
-    console.log(responce.data)
     return responce.data;
   }
 
   async getUserByID(id) {
     let responce = await api.get(`http://localhost:5000/users/${id}`);
-    return responce.data;
+    return await responce.data;
   }
 
   async updateUserData(id,nickname,email,fio,phone){
-    let responce = await api.post(`http://localhost:5000/users/update:${id}`,{
+    console.log(id,nickname,email,fio,phone)
+    let responce = await api.post(`http://localhost:5000/users/update/${id.id}`,{
       "nickname": nickname,
       "email": email,
       "FIO" : fio,
@@ -39,7 +40,8 @@ export default class UserService {
   }
 
   async chagePassword(obj) {
-      let responce = await api.post("http://localhost:5000/users/update/password",obj)
+      console.log(obj)
+      let responce = await api.post("http://localhost:5000/users/update/data/password",obj)
       return responce.data
   }
 }

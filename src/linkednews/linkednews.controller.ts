@@ -11,6 +11,13 @@ export class LinkednewsController {
     return await this.linkedNewsService.getAllLinkedNews();
   }
 
+  @Get("/id/:id")
+  async getLinkedNewsContent(@Param("id") id:number) {
+    const content = await this.linkedNewsService.getLinkContent(id);
+    return await content;
+  }
+
+  
   @Post("createLinkedNews")
   async createLinkedNews(@Body() linkedNewsDto: CreateLinkedNewsDto) {
     const linkedNews = await this.linkedNewsService.createLinkdeNews(linkedNewsDto)

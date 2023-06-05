@@ -17,4 +17,9 @@ export default class UserService {
     const responce = await axios.post("http://localhost:5000/auth/registration",respObj)
     return responce.data
   }
+
+  async isUserConfirmEmail(userId) {
+    const responce = await api.get(`http://localhost:5000/unconfirm-user/isUserConfirm/${userId}`)
+    return await responce.data
+  }
 }

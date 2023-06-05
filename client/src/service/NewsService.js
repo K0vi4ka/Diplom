@@ -15,4 +15,19 @@ export default class NewsService {
     const responce = await api.get(`http://localhost:5000/news/id/${path}`)
     return await responce.data;
   }
+
+  async getNewsName(id) {
+    const responce = await api.get(`http://localhost:5000/news/name/${id}`);
+    return await responce.data
+  }
+
+  async getNewsId(name) {
+    const responce = await api.get(`http://localhost:5000/news/newsname/${name}`);
+    return responce.data
+  }
+
+  async deleteNews(id) {
+    const responce = await api.delete(`http://localhost:5000/news/delete/${id}`)
+    return responce.data
+  }
 }

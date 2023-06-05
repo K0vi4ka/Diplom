@@ -1,5 +1,4 @@
 <template>
-  <h1>Список пользователей</h1>
   <div class="list">
     <DataTable :value="allUsers" @row-click="itemClickHandler($event.data)">
       <Column field="id" style="width: 50px; text-align: center;"/>
@@ -9,9 +8,9 @@
       <Column field="phone" header="Телефон пользователя" style="padding: 20px; border-bottom: 1px solid #000000; text-align: center;"> </Column>
     </DataTable>
     <DynamicDialog />
+    <Toast/>
   </div>
  
-
 </template>
 <script setup>
   import {ref,onMounted, defineAsyncComponent,provide } from 'vue';
@@ -32,12 +31,13 @@
   const validateUserData = new VaidateUserData();
 
 
-  const itemClickHandler = (data) => {
+  const itemClickHandler = async data => {
+    console.log(data)
     authStore.updateSelctedUser(data);
         provide("dynamicDialog",dynamicDialog)
         dynamicDialog.open(SelectUserModal, {
         props: {
-            header: 'Ваши данные',
+            header: 'Пользователь ' + data.nickname + ", роль " + await userService.getUserRoles(data.id),
             style: {
                 width: '50vw',
             },
@@ -60,21 +60,12 @@
   onMounted(async () => {
     allUsers.value = await userService.getAllUsers();
     
+    
     allUsers.value.forEach(item => {
       validateUserData.validateUserData(item);
     }) 
   })
 
-  // const getUserData = (data) => {
-  //   console.log(data)
-  //     // const childrenList = e.target.parentNode.children
-  //     // const item = [...childrenList][0].innerHTML;
-  //     // const userIdx = item[item.length -1]
-  //     // const user = [...allUsers.value].find(item => item.id = userIdx)
-  //     // console.log(userIdx);
-  //     // console.log(user)
-  //     // return user;
-  // }
 
 </script>
 <style scoped>

@@ -34,5 +34,7 @@ export const AuthStore = defineStore('authstore',{
     getCurrentPublicationId() {
       return this.currentPublication
     }
+
+
   }
 })

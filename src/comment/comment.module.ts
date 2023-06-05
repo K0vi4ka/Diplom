@@ -13,6 +13,7 @@ import { User } from 'src/user/user.model';
 
   imports: [
     SequelizeModule.forFeature([User,Comment,Publication,PublicComment]),
+    CommentModule
   ],
 
   exports:[

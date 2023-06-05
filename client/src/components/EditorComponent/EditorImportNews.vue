@@ -1,11 +1,9 @@
 <template>
-  <h1>Импорт Статей</h1>
-
   <h2>Выберите категорию получаемых статей</h2>
 
-  <select name="" id="" @click="LoadContent" v-model="importsType">
+  <select name="categorySelect" id="categorySelect" @click="LoadContent" v-model="importsType">
     <option value=""></option>
-    <option value="sport">Спорт</option>
+    <option value="sports">Спорт</option>
     <option value="scince">Наука</option>
     <option value="business">Политика</option>
   </select>
@@ -30,6 +28,7 @@
   import ImportsService from '@/service/ImportsService';
   import LinkedNewsService from '@/service/LinkedNewsService';
   import LinkeSourceService from '@/service/LinkeSource';
+  import { useToast } from 'primevue/usetoast';
 
   const importService = new ImportsService();
   const linkedNewsService =new LinkedNewsService();
@@ -37,6 +36,7 @@
 
   const importsType = ref("");
   const content = ref([]);
+  const toast = useToast();
 
   const categoryIdObj = {
     "sports" : 1,
@@ -46,16 +46,23 @@
 
   const LoadContent = async () => {
     const type = importsType.value;
-    console.log(importsType.value)
-    switch(type) {
-      case "sport" : content.value = await importService.getSportsNews();
-      break;
-      case "scince" : content.value = await  importService.getScienceNews();
-      break;
-      case "business" : content.value = await importService.getBusinessNews();
-      break;
-      default: break;
+    if(type === "") return
+    try {
+        switch(type) {
+        case "sports" : content.value = await importService.getSportsNews();
+        break;
+        case "scince" : content.value = await  importService.getScienceNews();
+        break;
+        case "business" : content.value = await importService.getBusinessNews();
+        break;
+        default: break;
+      }
+      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Загруженные статьи теперь доступны', life: 3000 });
     }
+    catch{
+      toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Данные на данный момент не достпуны', life: 3000 });
+    }
+    
   }
 
   const changeDataHandler = () => {
@@ -75,14 +82,19 @@
       const sourceId = await linkeSourceService.createLinkeSource(elem.author);
       const obj = {
         "title": elem.title,
-        "source": await sourceId,
+        "source": await sourceId[0].id,
         "link": elem.url,
         "categoryId": categoryIdObj[importsType.value],
         "date": elem.publishedAt
       }
+      try {
+        await linkedNewsService.createLinkedNews(await obj);
+        toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Публикации успешно импортированы', life: 3000 });
+      }
+      catch{
+        toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Публикации не были импортированы', life: 3000 });
+      }
 
-      console.log(obj)
-      linkedNewsService.createLinkedNews(obj);
     })
   }
 

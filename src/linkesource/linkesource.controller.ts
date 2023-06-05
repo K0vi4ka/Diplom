@@ -7,12 +7,8 @@ export class LinkesourceController {
 
   @Get(":value")
   async createLinkeSource(@Param("value") value: string) {
-    try {
-      const source = await this.linkeSourceService.createLinkeSource(value);
-      return await source.id;
-    }catch(ApiError) {
-      throw new ApiError.BadRequst("Ошибка, пользователь уже создан");
-    }
+      const source = await this.linkeSourceService.getLinkedSourceByValue(value);
+      return await source;
   }
 
 }

@@ -1,18 +1,27 @@
 <template>
-  <router-view />
+<router-view>
+
+</router-view>
 </template>
 
 <script setup>
 
   import { onMounted } from 'vue';
-  import router from './router/router';
-  
+  import { AuthStore } from './service/pinia-store';
+  import UserService from './service/UserService';
 
-  onMounted(() => {
-    router.push('newsTime');
-  })
+  const store = AuthStore();
+  const userService = new UserService();
 
 
+  onMounted(async () => {
+    const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    if(refreshToken) {
+      const token = await userService.getToken(refreshToken);
+      store.userId = await token.userId;
+     }
+    }
+  )
 </script>
 
 <style>

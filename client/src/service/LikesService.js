@@ -34,4 +34,33 @@ export default class LikesService{
     })
     return await responce.data
   }
+
+  async getAllUsersLikeForDate(date) {
+    const likes = await api.get(`http://localhost:5000/likes/statistics/${date}`);
+    return await likes.data;
+  }
+
+  async getCategoryLikeCount(categoryId,date) {
+    const obj = {
+      "date" : date,
+      "categoryId": categoryId
+    };
+    const likes = await api.post("http://localhost:5000/likes/statistics/likecount/count",obj)
+    return await likes.data
+  }
+
+  async getActiveUsersForDate(date) {
+    const responce = await api.post("http://localhost:5000/likes/statistics/active/users",{
+      "date" : date
+    })
+    return await responce.data
+  }
+
+  async getActiveUsersStats(userId,date) {
+    const responce = await api.post("http://localhost:5000/likes/statistics/active/users/counts", {
+      "userId": userId,
+      "date":date
+    })
+    return await responce.data
+  }
 }

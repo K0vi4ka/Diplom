@@ -27,7 +27,11 @@ export class TokenService {
   async saveToken(userId,refreshToken){
     const tokenData = await this.tokenRepository.findOne({where:userId})
     if(tokenData){
-      tokenData.token = refreshToken 
+      await this.tokenRepository.update({token: refreshToken},{
+        where: {
+          userId: userId
+        }
+      })
       return tokenData.save();
     }
 
@@ -46,13 +50,16 @@ export class TokenService {
 
   async findUserByToken(accessToken){
     try{
-      console.log(accessToken)
-      const user = await this.tokenRepository.findOne({where:{token: accessToken.token}})
-      console.log(user)
-      return user
+      const user = await this.tokenRepository.findOne({
+        where: {
+          token: accessToken
+        }
+      })
+
+      return await user
     }
     catch(e){
-      console.log(e, "Что за хуйня?")
+
     }
       
   }

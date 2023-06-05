@@ -1,4 +1,5 @@
 <template lang="">
+  <DynamicDialog />
   <main class="main">
 
     <div v-if="store.categoryName === 'Популярное' && publicDateArr.length !== 0" class="popular-news">
@@ -8,7 +9,6 @@
           <p>Выберит нужную вам дату</p>
           <Dropdown v-model="publicDate" editable :options="publicDateArr" optionLabel="name" placeholder="Select a City" @change="selectDate" class="dropdown-menu"/>
         </div>
-        
       </div>
       
     </div>
@@ -24,12 +24,12 @@
       </div>
     </div>
 
-    <div v-if="pageContent.length === 0 && importContent.length == 0">Ошибка загрузки</div>
+    <div v-if="pageContent.length === 0 && importContent.length == 0" class="public-error">Извините, публикации недоступны</div>
   </main>
 </template>
 <script setup>
 
-
+  import DynamicDialog from 'primevue/dynamicdialog';
   import NewsItem from '@/components/NewsItem.vue'
   import { ref, onMounted, watch} from 'vue';
   import { PublicationService } from '@/service/PublicationService';
@@ -82,7 +82,7 @@
   }
   
   onMounted(async ()=>{
-    const date = await publicationService.getPublicationDate()
+    const date = await publicationService.getPublicationDate();
     publicDateArr.value = publicationService.parsePopularPublicationDate(await date);
     publicDate.value = publicDateArr.value[0];
     
@@ -157,6 +157,7 @@
     padding: 20px;
     height: 150px;
     border-bottom: 2px solid #000000;
+    transition: all 200ms;
   }
 
   .news:hover {
@@ -196,5 +197,10 @@
 
   .popular_header {
     margin-left: 50px;
+  }
+
+  .public-error {
+    font-size: 1.5rem;
+    margin-left: 30px;
   }
 </style>

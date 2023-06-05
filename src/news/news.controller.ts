@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post,Delete } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
 import { NewsCreateDto } from './dto/news-create.dto';
@@ -15,6 +15,12 @@ export class NewsController {
     return this.newsService.getNewsById(id)
   }
 
+  @Get("name/:id")
+  async getNewsNameById(@Param("id") id:number) {
+    const news = await this.newsService.getNewsNameById(id);
+    return await news
+  }
+
   @Post('create-news')
   createNews(@Body() dto){
     try{
@@ -28,7 +34,6 @@ export class NewsController {
 
   @Post('file-name')
   getFilePathByName(@Body() attr) {
-    console.log(attr)
     const fileName = attr.fileName;
     return this.newsService.getFilePathByName(fileName);
   }
@@ -44,4 +49,18 @@ export class NewsController {
     const news = this.newsService.getNewsIdByPath("news-storage/"+path)
     return news
   }
+
+  @Get("newsname/:name") 
+  async getNewsIdByName(@Param("name") newsName:string) {
+    const newsId = await this.newsService.getNewsIdByName(newsName);
+    return await newsId.id;
+  }
+
+  @Delete("delete/:id")
+  async deleteNews(@Param("id") newsId: number) {
+    console.log('this' + newsId)
+    const deleteNews = await this.newsService.deleteNews(newsId);
+    return deleteNews;
+  }
+  
 }
