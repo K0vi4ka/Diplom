@@ -19,8 +19,9 @@
     </div>
 
     <div class="news-create-btns">
-      <button class="news-create-btns__item">Отмена</button>
       <button class="news-create-btns__item" @click="createPublication">Сохранить новость</button>
+      <button class="news-create-btns__item">Отмена</button>
+
     </div>
 
   </div>
@@ -66,7 +67,7 @@ const createPublication = async () => {
       categorName.value,
       (await token).userId
     )
-    toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Публикация успешно создана', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Публикация успешно создана', life: 3000 });
   }
   catch {
     toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Публикация не была создана', life: 3000 });
@@ -81,6 +82,11 @@ const categoryHandler = (e) => {
 <style>
 img {
   max-height: 400px;
+}
+
+.editor {
+  height: auto;
+  min-height: 500px;
 }
 
 .news-info {
@@ -102,12 +108,12 @@ img {
 }
 
 .news-create-btns {
-  position: absolute;
   display: flex;
   justify-content: space-evenly;
   bottom: 20px;
   right: 20px;
   width: 250px;
+  margin: 20px;
 }
 
 .news-create-btns__item {

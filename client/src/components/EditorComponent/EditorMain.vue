@@ -94,7 +94,7 @@
           authorContent.value = data;
       })
      })
-            toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Удаленение подтверждено', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Удаленение подтверждено', life: 3000 });
         },
         reject: () => {
             toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Удаленение отменено', life: 3000 });

@@ -118,7 +118,10 @@
     const {user} = await authService.registration(sendRegInp);
       userEmail.value = await user.email
       visible.value = true;
-      dialogRef.value.close();  
+      setTimeout(()=>{
+        dialogRef.value.close();  
+      },5000)
+      
     }
 
   const inputValidHandler = async (input) => {

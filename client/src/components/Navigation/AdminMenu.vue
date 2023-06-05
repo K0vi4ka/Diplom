@@ -10,6 +10,7 @@
       <div class="user-option-menu" v-if="showMenu">
         <UserInfoButton/>
         <p class="user-option-menu__link" @click="openEditorMenu">Редактор</p>
+        <AboutBtn/>
         <ExitButton class="user-option-menu__link"/>
       </div>
     </transition>
@@ -20,6 +21,7 @@
 
 <script setup>
   import UserInfoButton from './UserInfoButton.vue';
+  import AboutBtn from './AboutBtn.vue';
   import ExitButton from './ExitButton.vue';
   import {ref} from 'vue'
   import router from '@/router/router';

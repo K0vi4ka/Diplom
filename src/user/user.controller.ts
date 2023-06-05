@@ -46,7 +46,7 @@ export class UserController {
       return true
     }
     catch{
-      return false
+      throw new Error("Ошибка, пароли не совпадают")
     }
   }
 
@@ -60,7 +60,6 @@ export class UserController {
   async userExist(@Param('nickname') nickname: string) {
     const user = await this.userService.getExistByUsername(nickname)
     if(user) {
-      //User exist -> can't create user
       return false
     }
     return true;
@@ -70,7 +69,6 @@ export class UserController {
   async emailExist(@Param('email') nickname: string) {
     const user = await this.userService.getExistByEmail(nickname)
     if(user) {
-      //User exist -> can't create user
       return false
     }
     return true;

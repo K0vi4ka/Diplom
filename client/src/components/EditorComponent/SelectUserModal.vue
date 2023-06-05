@@ -35,8 +35,8 @@
   const toast = useToast();
 
 
-  onMounted(() => {
-    user.value = authStore.selectedUser;
+  onMounted(async () => {
+    user.value = await userService.getUserByID(authStore.selectedUser.id);
   })
 
   const inputFIO = (e) => {
@@ -57,19 +57,18 @@
     const sendEmail = user.value.email;
     const sendPhone = phone.value.value? phone.value.value: user.value.phone;
     try{
-      await userService.updateUserData(user.value,sendNick,sendEmail,sendFio,sendPhone);
-      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Данные пользователя успешно изменены', life: 3000 });
-      closeDialog();
+      user.value = await userService.updateUserData(user.value,sendNick,sendEmail,sendFio,sendPhone);
+      toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Данные пользователя успешно изменены', life: 3000 });
+      dialogRef.value.close();
     }
     catch {
       toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Данные пользователя не были изменены', life: 3000 });
     }
 
-
-
   }
 
-  const closeDialog = () => {
+  const closeDialog = async () => {
+    toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Данные пользователя не были изменены', life: 3000 });
     dialogRef.value.close();
   }
 </script>

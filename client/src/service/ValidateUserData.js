@@ -53,7 +53,7 @@ export default class VaidateUserData {
   }
 
   validateUserData(item) {
-    item.FIO = item.FIO == null? " - ": item.FIO;
+    item.FIO = item.FIO === null ? " - ": item.FIO;
     item.email = item.email == null? " - ": item.email;
     item.phone = item.phone == null? " - ": item.phone;
   }

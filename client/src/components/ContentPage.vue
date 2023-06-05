@@ -12,17 +12,23 @@
       </div>
       
     </div>
-    <div class="publication-wrapper" @click="selectNewsHandler">
-      <div class="news" v-for="content in pageContent" :key="content">
-          <NewsItem :content="content"/>
+    
+    <div class="allnews-wrapper">
+      <div>
+          <div class="publication-wrapper"  v-if="pageContent.length > 0"  @click="selectNewsHandler">
+            <div class="news" v-for="content in pageContent" :key="content">
+                <NewsItem :content="content"/>
+            </div>
+          </div>
+      </div>
+
+      <div class="publication-wrapper" v-if="importContent.length > 0">
+        <div class="import-news imports" v-for="item in importContent" :key="item" v-bind:href = "item.link" target="_blank" @click="OpenFrame">
+            <ImportsItem :item="item"/>
+        </div>
       </div>
     </div>
-  
-    <div class="publication-wrapper">
-      <div class="news imports" v-for="item in importContent" :key="item" v-bind:href = "item.link" target="_blank" @click="OpenFrame">
-          <ImportsItem :item="item"/>
-      </div>
-    </div>
+    
 
     <div v-if="pageContent.length === 0 && importContent.length == 0" class="public-error">Извините, публикации недоступны</div>
   </main>
@@ -78,7 +84,7 @@
          pageContent.value = content
       })
     importContent.value = await linkedNewsService.getAllLinkdeNews();
-    console.log(importContent.value)
+    
   }
   
   onMounted(async ()=>{
@@ -137,17 +143,29 @@
 </script>
 <style scoped>
 
+  .main {
+    margin-bottom: 15px;
+  }
+
+  .allnews-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2,auto);
+    margin-top: 20px;
+    margin-left: 30px;
+    grid-gap: 20px 20px;
+  }
+
 
   .publication-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns:repeat(1,1fr);
     width: 90%; 
+    min-width: 500px;
     background-color: #e8e8e8;
-    margin: 20px auto;
     margin-bottom: 0px;
     border-radius: 10px;
   }
+
 
   .publication-wrapper:nth-child(2) {
     margin-top: 0;
@@ -155,16 +173,30 @@
 
   .news {
     padding: 20px;
-    height: 150px;
     border-bottom: 2px solid #000000;
     transition: all 200ms;
+    height: 200px;
   }
 
-  .news:hover {
-    font-size: 1.2rem;
+  .import-news {
+    padding: 20px;
+    border-bottom: 2px solid #000000;
+    transition: all 200ms;
+    height: 200px;
+  }
+
+  .import-news:hover {
+    font-size: 1.05rem;
     -webkit-box-shadow: -24px 6px 5px -5px rgba(183, 194, 202, 0.6);
     -moz-box-shadow: -24px 6px 5px -5px rgba(183, 194, 202, 0.6);
     box-shadow: -24px 6px 5px -5px rgba(183, 194, 202, 0.6);
+  }
+
+  .news:hover {
+    font-size: 1.05rem;
+    -webkit-box-shadow: 24px 6px 5px -5px rgba(183, 194, 202, 0.6);
+    -moz-box-shadow: 24px 6px 5px -5px rgba(183, 194, 202, 0.6);
+    box-shadow: 24px 6px 5px -5px rgba(183, 194, 202, 0.6);
   }
 
   .news-author {

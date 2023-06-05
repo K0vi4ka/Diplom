@@ -57,7 +57,6 @@
         break;
         default: break;
       }
-      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Загруженные статьи теперь доступны', life: 3000 });
     }
     catch{
       toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Данные на данный момент не достпуны', life: 3000 });
@@ -89,7 +88,7 @@
       }
       try {
         await linkedNewsService.createLinkedNews(await obj);
-        toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Публикации успешно импортированы', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Публикации успешно импортированы', life: 3000 });
       }
       catch{
         toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Публикации не были импортированы', life: 3000 });
