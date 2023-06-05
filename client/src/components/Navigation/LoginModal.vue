@@ -38,6 +38,11 @@
     try
     {
       const {accessToken,refreshToken,user} = await authService.login({email: loginInp.value,password: passInp.value})
+      const confirmUser = await authService.isUserConfirmEmail(await user.id)
+      if(!await confirmUser) {
+        warningMesssage.value = "Ваш аккаунт не подтвержден. Пожалуйста перейдите на свою почту и подтвердите его"
+        return
+      }
 
       if(memberInp.value){
         console.log(refreshToken)
@@ -82,7 +87,7 @@
     display: flex;
     justify-content: flex-end;
     color: #ff0000;
-    transform: translateX(-10%);
+    transform: translateX(10px);
   }
 
   input .warning {

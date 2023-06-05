@@ -26,5 +26,12 @@ export class LinkesourceService {
 
     return source;
   }
+
+  async getLinkedSourceByValue(value: string) {
+    const source = await this.linkeSourceService.findOrCreate({
+      where:{source: value},
+    })
+    return await source;
+  }
 }
 

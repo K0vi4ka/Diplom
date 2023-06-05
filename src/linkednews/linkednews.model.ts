@@ -25,7 +25,7 @@ export class LinkdedNews extends Model<LinkdedNews,CreateLinkedNews>{
   @Column({type: DataType.INTEGER, unique: true})
   source: number;
 
-  @Column({type: DataType.STRING, unique: true})
+  @Column({type: DataType.STRING(500,true), unique: true})
   link: string;
 
   @ForeignKey(() => Category)

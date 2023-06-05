@@ -27,7 +27,6 @@ export class AuthController {
   @Post('/registration')
   async registration(@Body() attr){
     try{
-      const {email, password} = attr;
       const user = await this.authService.registration(attr);
       return user
     }

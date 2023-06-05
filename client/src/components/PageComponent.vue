@@ -146,7 +146,10 @@
 
   })
 
-  setInterval(async () => {
+  const interval = setInterval(async () => {
+    if(router.currentRoute.value.path.split('/').reverse()[1] !== "news"){
+      clearInterval(interval)
+    }
     const commentsLength = comments.value.length;
       try {
         const newCommet =  await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
@@ -250,6 +253,7 @@
             }
         },
     })
+    return
     }
       const heart = document.querySelector(".heart")
       console.log(heart)
@@ -275,7 +279,7 @@
     position: relative;
     bottom: 20px;
     left: 90%;
-    transform: scale(4);
+    transform: scale(3);
   }
 
   .heart-scale {
@@ -292,25 +296,25 @@
   
   @keyframes unscale {
     0% {
-      transform: scale(4);
-    }
-    50% {
       transform: scale(3);
     }
+    50% {
+      transform: scale(2);
+    }
     100% {
-      transform: scale(4);
+      transform: scale(3);
     }
   }
 
   @keyframes scale {
     0% {
-      transform: scale(4);
+      transform: scale(3);
     }
     50% {
-      transform: scale(6);
+      transform: scale(4);
     }
     100% {
-      transform: scale(4);
+      transform: scale(3);
     }
     
   }

@@ -24,6 +24,8 @@ import { LinkdedNews } from "./linkednews/linkednews.model";
 import { LinkednewsModule } from "./linkednews/linkednews.module";
 import { LinkesourceModule } from './linkesource/linkesource.module';
 import { LinkeSource } from "./linkesource/linkesource-model";
+import { UnconfirmUserModule } from './unconfirm_user/unconfirm_user.module';
+import { UnconfirmUser } from "./unconfirm_user/unconfirm_user_model";
 
 @Module({
   controllers: [],
@@ -40,7 +42,7 @@ import { LinkeSource } from "./linkesource/linkesource-model";
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      models: [User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment,Likes,LinkdedNews,LinkeSource],
+      models: [UnconfirmUser,User,Roles,UserRoles,Publication,Category,News,Comment,PublicComment,Likes,LinkdedNews,LinkeSource],
       autoLoadModels: true,
     }),
     UserModule,
@@ -53,7 +55,8 @@ import { LinkeSource } from "./linkesource/linkesource-model";
     LikesModule,
     LinkednewsModule,
     LinkesourceModule,
-    CommentModule
+    CommentModule,
+    UnconfirmUserModule
   ],
 })
 export class AppModule{}

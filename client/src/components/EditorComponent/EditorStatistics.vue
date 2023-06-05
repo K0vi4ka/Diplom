@@ -148,6 +148,7 @@
         "category" :  await categoryService.getCategoryName(await item.categoryId),
         "views" : item.views
       }
+      publicationPopular.value=[]
       publicationPopular.value.push(buffObj);
     })
     
@@ -161,6 +162,7 @@
         "user": buff.nickname,
         "count" : usersStats.count
       }
+      activeUsersStats.value = []
       activeUsersStats.value.push(buffObj); 
     })
   }

@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div v-if="pageContent.length === 0 && importContent.length == 0">Ошибка загрузки</div>
+    <div v-if="pageContent.length === 0 && importContent.length == 0" class="public-error">Извините, публикации недоступны</div>
   </main>
 </template>
 <script setup>
@@ -82,7 +82,7 @@
   }
   
   onMounted(async ()=>{
-    const date = await publicationService.getPublicationDate()
+    const date = await publicationService.getPublicationDate();
     publicDateArr.value = publicationService.parsePopularPublicationDate(await date);
     publicDate.value = publicDateArr.value[0];
     
@@ -197,5 +197,10 @@
 
   .popular_header {
     margin-left: 50px;
+  }
+
+  .public-error {
+    font-size: 1.5rem;
+    margin-left: 30px;
   }
 </style>

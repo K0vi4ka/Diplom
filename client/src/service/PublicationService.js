@@ -46,7 +46,7 @@ export class PublicationService{
     const mounthArray = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"]
     let date = value.split("T")[0].split('-').reverse();
     let newDate = date.reduce((preValue,item,index) =>{
-      return index === 1? preValue+ mounthArray[parseInt(item)]+" ": preValue+item+" "
+      return index === 1? preValue+ mounthArray[parseInt(item) - 1]+" ": preValue+item+" "
     },"")
     return newDate;
   }

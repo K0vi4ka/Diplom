@@ -8,12 +8,14 @@ import { Sequelize } from 'sequelize';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Token } from 'src/token/token.model';
 import { RolesModule } from 'src/roles/roles.module';
+import { UnconfirmUserModule } from 'src/unconfirm_user/unconfirm_user.module';
+import { UnconfirmUser } from 'src/unconfirm_user/unconfirm_user_model';
 
 @Module({
   providers: [AuthService],
   controllers: [AuthController],
   imports: [
-    SequelizeModule.forFeature([Token]),
+    SequelizeModule.forFeature([Token,UnconfirmUser]),
     forwardRef(()=>UserModule),
     JwtModule.register({
       secret: process.env.PRIVATE_KEY || "SECRET",
@@ -22,7 +24,8 @@ import { RolesModule } from 'src/roles/roles.module';
       }
     }),
     TokenModule,
-    RolesModule
+    RolesModule,
+    UnconfirmUserModule
    
   ],
   exports: [

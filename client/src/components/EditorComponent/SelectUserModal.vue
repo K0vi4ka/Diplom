@@ -9,10 +9,6 @@
         <InputText v-model="nickname" v-bind:value="user.nickname " @input="inputNickname" />
     </div>
     <div class="item">
-      <p>Email</p>
-        <InputText id="email"  v-model="email" v-bind:value="user.email" @input="inputEmail" />
-    </div>
-    <div class="item">
       <p>Телефон</p>
         <InputText id="phone" v-model="phone" v-bind:value="user.phone"  @input="inputPhone" />
     </div>
@@ -34,7 +30,6 @@
   const user = ref({});
   const fio = ref("");
   const nickname = ref("")
-  const email = ref("")
   const phone = ref("");
   const dialogRef = inject("dialogRef");
   const toast = useToast();
@@ -52,20 +47,14 @@
     nickname.value = e.target
   }
 
-  const inputEmail = (e) => {
-    email.value = e.target
-  }
-
   const inputPhone = (e) => {
     phone.value = e.target
   }
 
-
-
   const changeDataHandler = async () => {
     const sendNick = nickname.value.value?nickname.value.value: user.value.nickname;
     const sendFio =  fio.value.value?fio.value.value: user.value.fio;
-    const sendEmail = email.value.value?email.value.value: user.value.email;
+    const sendEmail = user.value.email;
     const sendPhone = phone.value.value? phone.value.value: user.value.phone;
     try{
       await userService.updateUserData(user.value,sendNick,sendEmail,sendFio,sendPhone);

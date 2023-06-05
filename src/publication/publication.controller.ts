@@ -14,7 +14,7 @@ export class PublicationController {
     const response = [];
     [...publication].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname){
-        response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
+        response.push([item.news.newsName,item.category.value, item.user.nickname,item.createdAt])
       }
     })
     
@@ -33,7 +33,7 @@ export class PublicationController {
     const response = [];
     [...publications].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname)
-      response.push([item.news.newsName,item.category.value, item.user.nickname, item.updatedAt])
+      response.push([item.news.newsName,item.category.value, item.user.nickname, item.createdAt])
     })
     return response.reverse();
   }
@@ -44,7 +44,7 @@ export class PublicationController {
     const response = [];
     [...publications].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname)
-      response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
+      response.push([item.news.newsName,item.category.value, item.user.nickname,item.createdAt])
     })
     return response.reverse();
   }
@@ -58,7 +58,7 @@ export class PublicationController {
         "nickname": item.user.nickname,
         "newsName": item.news.newsName,
         "categoryName": item.category.value, 
-        "updateDate": item.news.updatedAt
+        "updateDate": item.news.createdAt
       }
     })
     return obj
@@ -74,6 +74,7 @@ export class PublicationController {
   async getPublicationDate() {
     const publication = await this.publicationService.getAllPublicationDate();
     const set = new Set();
+    console.log(await publication)
     await publication.forEach(item => {
       item = item + ""
       const dateArr = item.split(" ");
@@ -86,7 +87,7 @@ export class PublicationController {
   async getPublicationByDate(@Param("date") date:string) {
     const publication = await this.publicationService.getAllPublicaton();
     const publicData = await publication.filter(item => {
-      const publicDate = item.updatedAt + ""
+      const publicDate = item.createdAt + ""
       const dateArr = publicDate.split(" ");
       if(dateArr[1]+"-"+dateArr[3] === date && item.views > 30 ) {
         return item
@@ -96,7 +97,7 @@ export class PublicationController {
     const response = [];
     [...publicData].forEach(item =>{
       if(item.news.newsName && item.category.value && item.user.nickname){
-        response.push([item.news.newsName,item.category.value, item.user.nickname,item.updatedAt])
+        response.push([item.news.newsName,item.category.value, item.user.nickname,item.createdAt])
       }
     })
     
