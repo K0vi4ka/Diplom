@@ -3,7 +3,7 @@
     <NavMenuVue/>
   </header>
 
-  <main class="main">
+  <main class="main" v-if="roles === 'admin'">
 
     <div class="side-menu" @click="changeSideMenuContentHandler">
       <p class="side-menu__item">Ваши статьи</p>
@@ -64,6 +64,7 @@
   const store = new AuthStore();
   const confirm = useConfirm();
   const toast = useToast();
+  const roles = ref("")
 
   const headerObj = {
     "news": "Ваши статьи",
@@ -94,7 +95,7 @@
           authorContent.value = data;
       })
      })
-            toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Удаленение подтверждено', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Удаленение подтверждено', life: 3000 });
         },
         reject: () => {
             toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Удаленение отменено', life: 3000 });
@@ -150,15 +151,22 @@
   }
 
   onMounted(() => {
-    let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken')
-    userService.getToken(token).then(user =>{
+    let token = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    if(!token) router.go(-1);
+    userService.getToken(token).then(async user =>{
+      roles.value = await userService.getUserRoles(await user.userId);
+      if(await roles.value !== 'admin') {
+        router.go(-1);
+      }
       publicationService.getPublicationByUserId(user.userId).then(data =>{
         authorContent.value = data;
       })
+      const sideMenuItem = document.querySelector('.side-menu__item');
+      sideMenuItem.classList.add('side-menu--active');
      })
+    
 
-     const sideMenuItem = document.querySelector('.side-menu__item');
-     sideMenuItem.classList.add('side-menu--active');
+
   })
 
   watch(() => contentValue.value,() => {

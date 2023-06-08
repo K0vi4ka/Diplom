@@ -37,7 +37,6 @@ export class CommentController {
     const {publicationId,commentsLength} = commentsInfo;
     const nowComments = await this.commentsService.getPublicationByPublicationId(publicationId);
     const newCommentsLength = await nowComments.length;
-    console.log(newCommentsLength, commentsLength)
     if(await newCommentsLength === commentsLength) throw new Error("Ошибка, данные отсутсвуют");
     const newComments = await this.commentsService.getLastPublication((await newCommentsLength) - commentsLength,publicationId);
     return await this.parseUserData(await newComments) 

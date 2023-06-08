@@ -1,6 +1,7 @@
 <template>
   <NavMenu/>
   <DynamicDialog />
+  <Toast/>
   <h1 class="profile_header">Ваш Профиль</h1>
 
   <div class="content-wrapper">
@@ -66,16 +67,19 @@
   import InputText from 'primevue/inputtext';
   import UserService from '@/service/UserService';
   import DynamicDialog from 'primevue/dynamicdialog';
+  import { useToast } from 'primevue/usetoast';
+  import Toast from 'primevue/toast';
 
   const SelectUserModal = defineAsyncComponent(() => import('@/components/EditorComponent/SelectUserModal.vue'));
   const dynamicDialog = useDialog();
 
-  const piniaStore = new AuthStore();
+  const piniaStore = AuthStore();
   const user = ref({})
   const validate = new VaidateUserData();
   const likesService = new LikesService();
   const categoryService = new CategoryService();
   const userService = new UserService();
+  const toast = useToast();
 
   const statisticsObj = ref({});
   const allCategory = ref()
@@ -86,9 +90,14 @@
 
 
   onMounted(async () => {
-    user.value  = await userService.getUserByID(piniaStore.userId);
-    validate.validateUserData(user.value)
-    console.log(user.value)
+    const refreshToken = localStorage.getItem('refreshToken') || sessionStorage.getItem('refreshToken');
+    if(refreshToken) {
+      const token = await userService.getToken(refreshToken);
+      piniaStore.userId = await token.userId;
+     }
+    user.value = await userService.getUserByID(piniaStore.userId)
+    piniaStore.selectedUser = user.value
+    validate.validateUserData(await user.value);
     formatDate();
 
     const category = await categoryService.getAllCategory();
@@ -113,9 +122,10 @@
       await userService.chagePassword(obj);
       oldPassword.value = "";
       newPassword.value = "";
+      toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Данные пользователя успешно изменены', life: 3000 });
     }
     catch{
-      console.log()
+      toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Пароли введены не верно', life: 3000 });
     }
 
 
@@ -154,11 +164,13 @@
               user: piniaStore.getUser(),
             },
             modal: true,
-            
-            onClose: () => {
-            
-            }
         },
+        onClose: async () => {
+          user.value = await userService.getUserByID(piniaStore.userId)
+          validate.validateUserData(await user.value);
+          formatDate();
+              
+         }
     });
   }
 </script>

@@ -33,7 +33,7 @@
 
   const itemClickHandler = async data => {
     console.log(data)
-    authStore.updateSelctedUser(data);
+    authStore.selectedUser = data
         provide("dynamicDialog",dynamicDialog)
         dynamicDialog.open(SelectUserModal, {
         props: {
@@ -50,10 +50,15 @@
             },
             modal: true,
             
-            onClose: () => {
             
-            }
         },
+        onClose: async () => {
+          allUsers.value = await userService.getAllUsers();
+    
+          allUsers.value.forEach(item => {
+            validateUserData.validateUserData(item);
+          }) 
+        }
     });
   }
 

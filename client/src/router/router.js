@@ -5,6 +5,7 @@ import EditorMain from '@/components/EditorComponent/EditorMain';
 import PersonalPage from "@/components/PersonlPage"
 import PageComponent from '@/components/PageComponent';
 
+
 const routes = [
   {
     path: "/",
@@ -16,7 +17,7 @@ const routes = [
   },
   {
     path: "/newsTime/editorMain",
-    component: EditorMain
+    component: EditorMain,
   },
   {
     path: "/newsTime/news/:value",

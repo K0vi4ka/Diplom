@@ -21,16 +21,16 @@
       <div class="share-buttons">
       <ShareNetwork
     network="facebook"
-    :url=router.currentRoute.value.path
-    :title=pageAdditionalContent.newsName
+    :url=link
+    :title=router.currentRoute.value.path 
     hashtags="vuejs,vite">
     <i class="pi pi-facebook icons" style="font-size: 2rem; color: #3b5998"></i>
     </ShareNetwork>
 
     <ShareNetwork
     network="vk"
-    :url=router.currentRoute.value.path
-    :title=pageAdditionalContent.newsName
+    :url=link
+    :title=link
     hashtags="vuejs,vite">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="39" height="39" viewBox="0 0 48 48">
 <path fill="#1976d2" d="M24,4C13,4,4,13,4,24s9,20,20,20s20-9,20-20S35,4,24,4z"></path><path fill="#fff" d="M25.2,33.2c-9,0-14.1-6.1-14.3-16.4h4.5c0.1,7.5,3.5,10.7,6.1,11.3V16.8h4.2v6.5c2.6-0.3,5.3-3.2,6.2-6.5h4.2	c-0.7,4-3.7,7-5.8,8.2c2.1,1,5.5,3.6,6.7,8.2h-4.7c-1-3.1-3.5-5.5-6.8-5.9v5.9H25.2z"></path>
@@ -39,7 +39,7 @@
 
     <ShareNetwork
     network="telegram"
-    :url=router.currentRoute.value.path
+    :url=link
     :title=pageAdditionalContent.newsName
     hashtags="vuejs,vite">
     <i class="pi pi-telegram icons" style="font-size: 2rem; color: #0088cc"></i>
@@ -47,7 +47,7 @@
 
     <ShareNetwork
     network="whatsapp"
-    :url=router.currentRoute.value.path
+    :url=link
     :title=pageAdditionalContent.newsName
     hashtags="vuejs,vite">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 58 58">
@@ -103,8 +103,10 @@
   const commentValue = ref('')
   const comments = ref([]);
   const toast = useToast();
+  const link = ref("") 
 
   onMounted(async () => {
+    link.value = "http://localhost:8080" + router.currentRoute.value.path
 
     let pathArr = router.currentRoute.value.path.split('/');
     let path = pathArr[pathArr.length - 1];
@@ -152,7 +154,14 @@
     }
     const commentsLength = comments.value.length;
       try {
-        const newCommet =  await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
+        const newCommet = await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
+        if(newCommet.length === 0) {
+          return
+        }
+        if(newCommet.length + 1 === comments.value.length) {
+          comments.value = newCommet
+          return
+        }
         comments.value.reverse()
         await newCommet.forEach(item => {
         comments.value.push(item);
@@ -219,7 +228,7 @@
       }
 
       commentValue.value = ""; 
-      toast.add({ severity: 'info', summary: 'Уведомление', detail: 'Ваш коментарий успешно создан', life: 3000 });
+      toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Ваш коментарий успешно создан', life: 3000 });
     }
     catch{
       toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Ошибка, ваш коментарий не создан', life: 3000 });
@@ -261,13 +270,15 @@
           likesService.createLike(store.getCurrentPublicationId(),store.userId)
           heart.classList.remove("heart-unscale")
           heart.setAttribute("fill","red");
-          heart.classList.add("heart-scale")
+          heart.classList.add("heart-scale");
+          toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Вы поставили лайк. Спасибо', life: 3000 });
       }
       else {
         likesService.deleteLike(store.getCurrentPublicationId(),store.userId)
         heart.classList.remove("heart-scale")
         heart.setAttribute("fill","white");
         heart.classList.add("heart-unscale")
+        toast.add({ severity: 'error', summary: 'Уведомление', detail: 'Вы убрали лайк', life: 3000 });
       }
       likeRef.value = !likeRef.value
   }
@@ -319,7 +330,9 @@
     
   }
   img {
+    position: relative;
     max-height: 400px;
+    transform: translateX(50%);
   }
 
   .wrapper {
@@ -333,7 +346,9 @@
   .news-header {
     font-size: 2.5rem;
     font-style: italic;
+    margin-left: 30px;
   }
+
 
   .news-author {
     text-align: right;

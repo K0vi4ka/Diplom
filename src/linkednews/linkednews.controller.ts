@@ -8,7 +8,7 @@ export class LinkednewsController {
 
   @Get("/all")
   async getAllLinkedNews() {
-    return await this.linkedNewsService.getAllLinkedNews();
+    return (await this.linkedNewsService.getAllLinkedNews());
   }
 
   @Get("/id/:id")

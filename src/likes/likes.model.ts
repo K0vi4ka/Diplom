@@ -27,6 +27,4 @@ export class Likes extends Model<Likes,CreateLikes>{
   @BelongsTo(()=> Publication)
   publication:Publication
 
-  
-
 }

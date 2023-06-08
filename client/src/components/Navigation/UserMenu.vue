@@ -9,6 +9,7 @@
     <transition name="bounce">
       <div class="user-option-menu" v-if="showMenu">
         <UserInfoButton/>
+        <AboutBtn/>
         <ExitButton />
       </div>
     </transition>
@@ -20,6 +21,7 @@
 <script setup>
   import UserInfoButton from './UserInfoButton.vue'
   import ExitButton from './ExitButton.vue'
+  import AboutBtn from './AboutBtn.vue'
   import {ref} from 'vue'
 
   const showMenu = ref(false)
