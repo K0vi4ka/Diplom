@@ -30,7 +30,8 @@ export class PublicationService {
         {
           model: Category
         }
-    ]
+    ],
+    order: [['createdAt','ASC']]
     });
     return await response
   }

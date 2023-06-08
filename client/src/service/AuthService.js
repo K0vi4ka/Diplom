@@ -11,7 +11,6 @@ export default class UserService {
     const respObj = {};
     const parseDataArr = regArr.map((item) =>[item.getAttribute('id').split('-')[1],item.value])
     parseDataArr.forEach(item => {
-      console.log(item)
       respObj[item[0]] = item[1]
     })
     const responce = await axios.post("http://localhost:5000/auth/registration",respObj)

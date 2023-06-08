@@ -87,6 +87,7 @@
         "date": elem.publishedAt
       }
       try {
+        console.log(obj)
         await linkedNewsService.createLinkedNews(await obj);
         toast.add({ severity: 'success', summary: 'Уведомление', detail: 'Публикации успешно импортированы', life: 3000 });
       }

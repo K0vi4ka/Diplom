@@ -3,6 +3,7 @@ import api from "@/auth-axios";
 export default class VaidateUserData {
   nameAndSurnameValid(name) {
     let check = true;
+    if(name.length === 0 ) return check
     const regx = new RegExp(/[A-Za-z]|[А-Яа-я]/,"gm");
     const nameArr = name.trim().split(' ')
     if(nameArr.length > 1) {

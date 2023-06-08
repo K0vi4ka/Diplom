@@ -85,7 +85,7 @@
 
   .warning {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     color: #ff0000;
     transform: translateX(10px);
   }

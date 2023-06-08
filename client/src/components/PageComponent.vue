@@ -106,7 +106,7 @@
   const link = ref("") 
 
   onMounted(async () => {
-    link.value = "http://localhost:8080/" + router.currentRoute.value.path
+    link.value = "http://localhost:8080" + router.currentRoute.value.path
 
     let pathArr = router.currentRoute.value.path.split('/');
     let path = pathArr[pathArr.length - 1];
@@ -155,7 +155,10 @@
     const commentsLength = comments.value.length;
       try {
         const newCommet = await commentsService.isTableHaveNewRecord(commentsLength,store.currentPublication);
-        if(newCommet.length+ 1 === comments.value.length) {
+        if(newCommet.length === 0) {
+          return
+        }
+        if(newCommet.length + 1 === comments.value.length) {
           comments.value = newCommet
           return
         }
@@ -327,7 +330,9 @@
     
   }
   img {
+    position: relative;
     max-height: 400px;
+    transform: translateX(50%);
   }
 
   .wrapper {
@@ -341,7 +346,9 @@
   .news-header {
     font-size: 2.5rem;
     font-style: italic;
+    margin-left: 30px;
   }
+
 
   .news-author {
     text-align: right;

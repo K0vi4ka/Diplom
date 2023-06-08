@@ -25,7 +25,7 @@ export class LinkednewsService {
         {model: LinkeSource}
       ]
     });
-    return await linkedNews;
+    return await linkedNews.reverse();
   }
 
   async getLinkContent(id) {
@@ -44,6 +44,6 @@ export class LinkednewsService {
       ],
       where: {categoryId:categoryId}
     })
-    return await linkedNews
+    return await linkedNews.reverse();
   }
 }

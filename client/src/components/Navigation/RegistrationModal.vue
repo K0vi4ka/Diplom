@@ -104,7 +104,8 @@
 
   const sendRegData = async (e) => {
     e.preventDefault();
-    const inpArr = [...formBlock.value.elements].filter((item,idx) => idx < 6);
+    try {
+      const inpArr = [...formBlock.value.elements].filter((item,idx) => idx < 6);
     inpArr.forEach(item => {
       inputValidHandler(item);
     })
@@ -116,18 +117,30 @@
     
 
     const {user} = await authService.registration(sendRegInp);
-      userEmail.value = await user.email
+    const phonePar = document.querySelector('.phone-warnings');
+    if(!user){
+      phonePar.innerHTML = "Ошибка, данный телефон уже используется"
+      phonePar.classList.add("warning")
+      return
+    }
+    phonePar.innerHTML = "";
+    phonePar.classList.remove("warning")
       visible.value = true;
       setTimeout(()=>{
         dialogRef.value.close();  
-      },5000)
+    },5000)
+    }
+    catch{
+      console.log()
+    }
+    
       
     }
 
   const inputValidHandler = async (input) => {
     let result;
     switch(input) {
-      case emailInpRef.value:  result = validUserData.emailValid(emailInp.value) && await validUserData.emailExist(emailInp.value);
+      case emailInpRef.value: result = validUserData.emailValid(emailInp.value) && await validUserData.emailExist(emailInp.value);
         break;
       case passInpRef.value:result = validUserData.passwordValid(passInp.value);
         break;
@@ -163,9 +176,6 @@
   }
 </script>
 <style scoped>
-  .modal {
-
-  }
 
   .modal div {
     display: flex;

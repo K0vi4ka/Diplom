@@ -65,8 +65,8 @@ export class AuthService {
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: "ubeimen9@mail.ru", // generated ethereal user
-        pass: "g6aELDdSB4sziEx6ZK3m", // generated ethereal password
+        user: "newstime@internet.ru", // generated ethereal user
+        pass: "gKMy1VuBJk4XVhvkw1fM", // generated ethereal password
       },
       
     });
@@ -74,11 +74,19 @@ export class AuthService {
 
     await transporter.sendMail(
     {
-      from: '"Иван Замиралов" ubeimen9@mail.ru',
+      from: '"Иван Замиралов" newstime@internet.ru',
         to: await user.email,
         subject: 'Подтверждение электронной почты',
         text: `Для подтверждения электронной почты перейдите по ссылке: ${process.env.APP_URL}/unconfirm-user/confirm-email/${await tokens.accessToken}`,
-        html: `<p>Для подтверждения электронной почты перейдите</p><a href="${process.env.APP_URL}/unconfirm-user/confirm-email/${await tokens.accessToken}"> по ссылке </a>`
+        html: `<div style="width: 500px;min-height: 400px; margin: 0 auto; border: 1px solid black; border-radius: 10px;padding:30px">
+        <p style="text-decoration:underline;
+          font-size: 38px; text-align: center">NewsTime
+        </p>
+        <p style="font-size: 20px">Уважаемый пользователь, с вашей электронной почты поступил запрос на регистрации на нашем сайте. Для подтверждения нажмите на следующую кнопку:</p>
+        <a href="${process.env.APP_URL}/unconfirm-user/confirm-email/${await tokens.accessToken}" style="border-radius: 10px;border: 1px solid black; padding:10px;font-size: 20px; text-decoration: none; margin-left:33%;width: 200px">
+          Подтверждение
+        </a>
+      </div>`
     });
     console.log("WORK")
 
